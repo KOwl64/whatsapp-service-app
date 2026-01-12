@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>POD Review Queue</title>
+    <link rel="stylesheet" href="/css/review.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-left">
+            <h1>POD Review Queue</h1>
+            <span class="subtitle">WhatsApp Proof of Delivery System</span>
+        </div>
+        <div class="header-right">
+            <div class="stats" id="queue-stats">
+                <span class="stat review">REVIEW: <strong id="stat-review">-</strong></span>
+                <span class="stat out">OUT: <strong id="stat-out">-</strong></span>
+                <span class="stat quarantine">QUARANTINE: <strong id="stat-quarantine">-</strong></span>
+            </div>
+            <button class="btn-refresh" onclick="refreshQueue()">Refresh</button>
+        </div>
+    </header>
+
+    <nav class="tabs">
+        <button class="tab active" data-status="REVIEW" onclick="switchTab('REVIEW')">
+            Review (<span id="tab-review-count">-</span>)
+        </button>
+        <button class="tab" data-status="OUT" onclick="switchTab('OUT')">
+            Out (<span id="tab-out-count">-</span>)
+        </button>
+        <button class="tab" data-status="QUARANTINE" onclick="switchTab('QUARANTINE')">
+            Quarantine (<span id="tab-quarantine-count">-</span>)
+        </button>
+        <button class="tab" data-status="FAILED" onclick="switchTab('FAILED')">
+            Failed (<span id="tab-failed-count">-</span>)
+        </button>
+    </nav>
+
+    <div class="toolbar">
+        <div class="bulk-actions" id="bulk-actions" style="display: none;">
+            <span class="selected-count"><span id="selected-count">0</span> selected</span>
+            <button class="btn btn-approve" onclick="bulkApprove()">Approve</button>
+            <button class="btn btn-reject" onclick="bulkReject()">Reject</button>
+            <button class="btn btn-clear" onclick="clearSelection()">Clear</button>
+        </div>
+        <div class="pagination" id="pagination">
+            <button class="btn-page" id="btn-prev" onclick="prevPage()">&laquo; Prev</button>
+            <span class="page-info">Page <span id="current-page">1</span> of <span id="total-pages">1</span></span>
+            <button class="btn-page" id="btn-next" onclick="nextPage()">Next &raquo;</button>
+        </div>
+    </div>
+
+    <main class="grid" id="attachments-grid">
+        <div class="loading">Loading...</div>
+    </main>
+
+    <!-- Attachment Detail Modal -->
+    <div class="modal" id="detail-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>POD Details</h2>
+                <button class="close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="detail-image">
+                    <img id="detail-img" src="" alt="POD Image">
+                </div>
+                <div class="detail-info">
+                    <div class="detail-row">
+                        <label>ID:</label>
+                        <span id="detail-id" class="mono"></span>
+                    </div>
+                    <div class="detail-row">
+                        <label>Received:</label>
+                        <span id="detail-received"></span>
+                    </div>
+                    <div class="detail-row">
+                        <label>From:</label>
+                        <span id="detail-sender"></span>
+                    </div>
+                    <div class="detail-row">
+                        <label>File:</label>
+                        <span id="detail-file"></span>
+                    </div>
+                    <div class="detail-row">
+                        <label>Status:</label>
+                        <span id="detail-status" class="status-badge"></span>
+                    </div>
+                    <div class="detail-row">
+                        <label>Job Ref:</label>
+                        <input type="text" id="detail-jobref" placeholder="Enter job reference">
+                    </div>
+                    <div class="detail-row">
+                        <label>Vehicle Reg:</label>
+                        <input type="text" id="detail-vehreg" placeholder="Enter vehicle registration">
+                    </div>
+                    <div class="detail-row">
+                        <label>Notes:</label>
+                        <textarea id="detail-notes" placeholder="Add notes..."></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-approve" onclick="approveFromModal()">Approve</button>
+                <button class="btn btn-reject" onclick="rejectFromModal()">Reject</button>
+                <button class="btn btn-save" onclick="saveFromModal()">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <script src="/js/review.js"></script>
+</body>
+</html>
