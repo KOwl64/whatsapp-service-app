@@ -1,0 +1,27 @@
+2026/01/13-06:38:58.069 2690b Reusing MANIFEST /home/pgooch/whatsapp-service-app/.wwebjs_auth/session/Default/IndexedDB/https_web.whatsapp.com_0.indexeddb.leveldb/MANIFEST-000001
+2026/01/13-06:38:58.070 2690b Recovering log #293
+2026/01/13-06:38:58.083 2690b Reusing old log /home/pgooch/whatsapp-service-app/.wwebjs_auth/session/Default/IndexedDB/https_web.whatsapp.com_0.indexeddb.leveldb/000293.log 
+2026/01/13-06:38:59.710 26912 Level-0 table #305: started
+2026/01/13-06:38:59.718 26912 Level-0 table #305: 331866 bytes OK
+2026/01/13-06:38:59.719 26912 Delete type=0 #293
+2026/01/13-06:38:59.719 26914 Manual compaction at level-0 from '\x009\x00\x00\x00' @ 72057594037927935 : 1 .. '\x00:\x00\x00\x00' @ 0 : 0; will stop at (end)
+2026/01/13-06:38:59.771 2690d Compacting 1@1 + 8@2 files
+2026/01/13-06:38:59.811 2690d Generated table #306@1: 34002 keys, 2190036 bytes
+2026/01/13-06:38:59.827 2690d Generated table #307@1: 2059 keys, 2149733 bytes
+2026/01/13-06:38:59.843 2690d Generated table #308@1: 1988 keys, 2153172 bytes
+2026/01/13-06:38:59.874 2690d Generated table #309@1: 17693 keys, 2218094 bytes
+2026/01/13-06:38:59.916 2690d Generated table #310@1: 25847 keys, 2248545 bytes
+2026/01/13-06:38:59.953 2690d Generated table #311@1: 51458 keys, 2187597 bytes
+2026/01/13-06:39:00.003 2690d Generated table #312@1: 106070 keys, 2256928 bytes
+2026/01/13-06:39:00.010 2690d Generated table #313@1: 13210 keys, 289432 bytes
+2026/01/13-06:39:00.010 2690d Compacted 1@1 + 8@2 files => 15693537 bytes
+2026/01/13-06:39:00.010 2690d compacted to: files[ 0 0 8 0 0 0 0 ]
+2026/01/13-06:39:00.011 2690d Delete type=2 #305
+2026/01/13-06:39:00.011 2690d Delete type=2 #299
+2026/01/13-06:39:00.011 2690d Delete type=2 #298
+2026/01/13-06:39:00.011 2690d Delete type=2 #295
+2026/01/13-06:39:00.011 2690d Delete type=2 #297
+2026/01/13-06:39:00.011 2690d Delete type=2 #296
+2026/01/13-06:39:00.011 2690d Delete type=2 #301
+2026/01/13-06:39:00.011 2690d Delete type=2 #300
+2026/01/13-06:39:00.011 2690d Delete type=2 #302

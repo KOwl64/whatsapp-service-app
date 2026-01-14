@@ -783,16 +783,20 @@ app.patch('/api/attachments/:id', (req, res) => {
     }
 });
 
-// Send message
+// Send message (handles both 'to' and 'chat_id' for compatibility)
 app.post('/api/send', async (req, res) => {
-    const { to, message } = req.body;
+    const { to, chat_id, text, message } = req.body;
+    const target = to || chat_id;
+    const msgText = text || message;
     if (!isReady) return res.status(503).json({ error: 'WhatsApp not ready' });
+    if (!target) return res.status(400).json({ error: 'Missing target (to/chat_id)' });
 
     try {
-        const chatId = to.includes('@') ? to : `${to}@c.us`;
-        await client.sendMessage(chatId, message);
-        res.json({ success: true });
+        const chatId = target.includes('@') ? target : `${target}@g.us`;  // Group IDs
+        await client.sendMessage(chatId, msgText);
+        res.json({ success: true, sent_to: chatId });
     } catch (error) {
+        console.error('[Send] Error:', error.message);
         res.status(500).json({ error: error.message });
     }
 });
