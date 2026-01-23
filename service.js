@@ -569,7 +569,7 @@ app.get('/qr', (req, res) => {
         .instructions { color: #666; margin-top: 20px; }
         .refresh { color: #999; font-size: 0.8em; margin-top: 10px; }
     </style>
-    <meta http-equiv="refresh" content="30">
+    <meta http-equiv="refresh" content="15">
 </head>
 <body>
     <h1>WhatsApp POD Service</h1>
@@ -801,6 +801,175 @@ app.post('/api/send', async (req, res) => {
     }
 });
 
+// Broadcast message to multiple recipients
+app.post('/api/broadcast/send', async (req, res) => {
+    const { recipients, message } = req.body;
+    if (!isReady) return res.status(503).json({ error: 'WhatsApp not ready' });
+    if (!recipients || !Array.isArray(recipients) || recipients.length === 0) {
+        return res.status(400).json({ error: 'Missing or empty recipients array' });
+    }
+    if (!message) return res.status(400).json({ error: 'Missing message' });
+
+    const delivered = [];
+    const failed = [];
+
+    console.log(`[Broadcast] Sending to ${recipients.length} recipients`);
+
+    // Fetch all chats/groups once to resolve names to chat objects
+    let allChats = [];
+    try {
+        allChats = await client.getChats();
+        console.log(`[Broadcast] Loaded ${allChats.length} chats/groups`);
+    } catch (error) {
+        console.error('[Broadcast] Failed to fetch chats:', error.message);
+    }
+
+    for (const recipient of recipients) {
+        try {
+            // Handle both string and object recipients
+            let chatId;
+
+            if (typeof recipient === 'string') {
+                // String recipient - check if it has @
+                if (recipient.includes('@')) {
+                    // Direct chat ID
+                    chatId = recipient;
+                } else {
+                    // Name without @ - find the chat first
+                    const chat = allChats.find(c =>
+                        c.name === recipient ||
+                        c.id._serialized === `${recipient}@c.us` ||
+                        c.id._serialized === `${recipient}@g.us` ||
+                        c.id.user === recipient
+                    );
+                    if (!chat) {
+                        throw new Error(`Chat not found: ${recipient}`);
+                    }
+                    chatId = chat.id._serialized;
+                }
+                // Send the message
+                // Add delay to ensure chat is fully loaded
+                await new Promise(resolve => setTimeout(resolve, 500));
+                // Check if chat is ready by trying to get it
+                try {
+                    await client.sendMessage(chatId, message);
+                    delivered.push(recipient);
+                    console.log(`[Broadcast] ✓ Delivered to ${chatId}`);
+                } catch (err) {
+                    // If error contains markedUnread, try once more with longer delay
+                    if (err.message.includes('markedUnread')) {
+                        await new Promise(resolve => setTimeout(resolve, 1000));
+                        await client.sendMessage(chatId, message);
+                        delivered.push(recipient);
+                        console.log(`[Broadcast] ✓ Delivered to ${chatId} (retry)`);
+                    } else {
+                        throw err;
+                    }
+                }
+            } else if (typeof recipient === 'object' && recipient !== null) {
+                // Object recipient - check for phone or group property
+                if (recipient.group) {
+                    // Group recipient - find by name and get ID
+                    const groupName = recipient.group;
+                    const chat = allChats.find(c =>
+                        c.isGroup &&
+                        (c.name === groupName ||
+                         c.id._serialized === `${groupName}@g.us`)
+                    );
+                    if (!chat) {
+                        throw new Error(`Group not found: ${groupName}`);
+                    }
+                    // Use the chat ID directly
+                    chatId = chat.id._serialized;
+                    // Add delay to ensure chat is fully loaded
+                    await new Promise(resolve => setTimeout(resolve, 500));
+                    // Check if chat is ready by trying to get it
+                    try {
+                        await client.sendMessage(chatId, message);
+                        delivered.push(recipient);
+                        console.log(`[Broadcast] ✓ Delivered to ${chat.name || chatId}`);
+                    } catch (err) {
+                        // If error contains markedUnread, try once more with longer delay
+                        if (err.message.includes('markedUnread')) {
+                            await new Promise(resolve => setTimeout(resolve, 1000));
+                            await client.sendMessage(chatId, message);
+                            delivered.push(recipient);
+                            console.log(`[Broadcast] ✓ Delivered to ${chat.name || chatId} (retry)`);
+                        } else {
+                            throw err;
+                        }
+                    }
+                } else if (recipient.phone) {
+                    // Individual phone recipient
+                    const phone = recipient.phone;
+                    if (phone.includes('@')) {
+                        chatId = phone;
+                    } else {
+                        chatId = `${phone}@c.us`;
+                    }
+                    // Add delay to ensure chat is fully loaded
+                    await new Promise(resolve => setTimeout(resolve, 500));
+                    // Check if chat is ready by trying to get it
+                    try {
+                        await client.sendMessage(chatId, message);
+                        delivered.push(recipient);
+                        console.log(`[Broadcast] ✓ Delivered to ${chatId}`);
+                    } catch (err) {
+                        // If error contains markedUnread, try once more with longer delay
+                        if (err.message.includes('markedUnread')) {
+                            await new Promise(resolve => setTimeout(resolve, 1000));
+                            await client.sendMessage(chatId, message);
+                            delivered.push(recipient);
+                            console.log(`[Broadcast] ✓ Delivered to ${chatId} (retry)`);
+                        } else {
+                            throw err;
+                        }
+                    }
+                } else {
+                    throw new Error('Invalid recipient object - must have group or phone property');
+                }
+            } else {
+                throw new Error('Invalid recipient type - must be string or object');
+            }
+        } catch (error) {
+            failed.push({ recipient, error: error.message });
+            console.error(`[Broadcast] ✗ Failed for`, recipient, ':', error.message);
+        }
+    }
+
+    res.json({
+        success: true,
+        delivered: delivered.length,
+        failed: failed.length,
+        details: { delivered, failed }
+    });
+});
+
+// Get all available groups
+app.get('/api/broadcast/groups', async (req, res) => {
+    if (!isReady) return res.status(503).json({ error: 'WhatsApp not ready' });
+
+    try {
+        const allChats = await client.getChats();
+        const groups = allChats
+            .filter(chat => chat.isGroup)
+            .map(chat => ({
+                id: chat.id._serialized,
+                name: chat.name,
+                participantCount: chat.participants ? chat.participants.length : 0
+            }))
+            .sort((a, b) => a.name.localeCompare(b.name));
+
+        res.json({
+            count: groups.length,
+            groups
+        });
+    } catch (error) {
+        console.error('[Groups] Error fetching groups:', error.message);
+        res.status(500).json({ error: error.message });
+    }
+});
+
 // Legacy endpoint for compatibility
 app.post('/send-message', async (req, res) => {
     const { number, message } = req.body;
@@ -810,6 +979,83 @@ app.post('/send-message', async (req, res) => {
         await client.sendMessage(number, message);
         res.json({ success: true });
     } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Reconnect WhatsApp (old path)
+app.post('/api/reconnect', async (req, res) => {
+    try {
+        console.log('Initiating WhatsApp reconnection...');
+        isReady = false;
+
+        // Destroy existing client
+        if (client) {
+            try {
+                await client.destroy();
+                console.log('Client destroyed');
+            } catch (error) {
+                console.error('Error destroying client:', error);
+            }
+        }
+
+        // Reinitialize
+        initWhatsApp();
+
+        res.json({
+            success: true,
+            message: 'Reconnection initiated'
+        });
+    } catch (error) {
+        console.error('[Reconnect] Error:', error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Reconnect WhatsApp (new path for /whatsapp-status/)
+app.post('/whatsapp-status/api/reconnect', async (req, res) => {
+    try {
+        console.log('Initiating WhatsApp reconnection...');
+        isReady = false;
+
+        // Destroy existing client
+        if (client) {
+            try {
+                await client.destroy();
+                console.log('Client destroyed');
+            } catch (error) {
+                console.error('Error destroying client:', error);
+            }
+        }
+
+        // Reinitialize
+        initWhatsApp();
+
+        res.json({
+            success: true,
+            message: 'Reconnection initiated'
+        });
+    } catch (error) {
+        console.error('[Reconnect] Error:', error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Restart service
+app.post('/api/restart', async (req, res) => {
+    try {
+        console.log('Restarting service...');
+        res.json({
+            success: true,
+            message: 'Restart command sent'
+        });
+
+        // Give the response time to be sent before restarting
+        setTimeout(() => {
+            process.exit(0);
+        }, 1000);
+    } catch (error) {
+        console.error('[Restart] Error:', error);
         res.status(500).json({ error: error.message });
     }
 });
