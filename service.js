@@ -1,4 +1,4 @@
-const { Client, LocalAuth } = require('whatsapp-web.js');
+const { create } = require('venom-bot');
 const qrcode = require('qrcode-terminal');
 const express = require('express');
 const fs = require('fs');
@@ -70,11 +70,12 @@ function sanitizeFilename(name) {
         .trim();
 }
 
-function initWhatsApp() {
-    client = new Client({
-        authStrategy: new LocalAuth({ dataPath: '.wwebjs_auth' }),
-        puppeteer: {
+async function initWhatsApp() {
+    try {
+        client = await create({
+            session: 'whatsapp-service',
             headless: true,
+            useChrome: false,
             args: [
                 '--no-sandbox',
                 '--disable-setuid-sandbox',
@@ -86,74 +87,98 @@ function initWhatsApp() {
                 '--disable-blink-features=AutomationControlled',
                 '--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
             ]
-        }
-    });
+        });
 
-    client.on('qr', async (qr) => {
-        console.log('\n========================================');
-        console.log('QR CODE - SCAN WITH WHATSAPP');
-        console.log('========================================\n');
-        qrcode.generate(qr, { small: true });
-
-        // Store QR for web display
-        try {
-            const QRCode = require('qrcode');
-            currentQRCode = await QRCode.toDataURL(qr);
-            currentQRCode = currentQRCode.replace('data:image/png;base64,', '');
-        } catch (err) {
-            console.error('Error generating QR for web:', err.message);
-        }
-    });
-
-    client.on('ready', () => {
-        console.log('WhatsApp POD Service Ready!');
+        // Venom-bot create() returns only when fully initialized
         isReady = true;
-        currentQRCode = null; // Clear QR after successful auth
-    });
+        console.log('WhatsApp POD Service Ready!');
+        currentQRCode = null;
 
-    client.on('authenticated', () => {
-        console.log('Authentication successful!');
-    });
+        client.on('qr', (qr) => {
+            console.log('\n========================================');
+            console.log('QR CODE - SCAN WITH WHATSAPP');
+            console.log('========================================\n');
+            qrcode.generate(qr, { small: true });
 
-    client.on('message', async (message) => {
-        const from = message.from;
-        const chat = await message.getChat();
-        const senderName = sanitizeFilename(chat.name || from);
-        const receivedAt = new Date();
-        const correlationId = audit.createNewCorrelationId();
+            // Store QR for web display
+            (async () => {
+                try {
+                    const QRCode = require('qrcode');
+                    currentQRCode = await QRCode.toDataURL(qr);
+                    currentQRCode = currentQRCode.replace('data:image/png;base64,', '');
+                } catch (err) {
+                    console.error('Error generating QR for web:', err.message);
+                }
+            })();
+        });
 
-        try {
-            console.log(`Message from ${senderName} (${from})`);
+        // Venom-bot also emits 'start' event
+        client.on('start', () => {
+            console.log('WhatsApp POD Service Started!');
+            isReady = true;
+            currentQRCode = null;
+        });
 
-            // Handle media (PODs)
-            if (message.hasMedia) {
-                await processMediaMessage(message, from, senderName, receivedAt, correlationId);
+        client.on('ready', () => {
+            console.log('WhatsApp POD Service Ready!');
+            isReady = true;
+            currentQRCode = null; // Clear QR after successful auth
+        });
+
+        // Additional state change handler for venom-bot
+        client.on('onStateChanged', (state) => {
+            console.log('State changed:', state);
+            if (state === 'CONNECTED') {
+                isReady = true;
+                console.log('WhatsApp CONNECTED via state change!');
             }
+        });
 
-            // Handle text message
-            if (message.body) {
-                await processTextMessage(message, from, senderName, receivedAt, correlationId);
+        client.on('authenticated', () => {
+            console.log('Authentication successful!');
+        });
+
+        client.on('message', async (message) => {
+            const from = message.from || message.chatId || message.chat?.id || message.id;
+            const chat = await message.getChat ? await message.getChat() : { name: from };
+            const senderName = sanitizeFilename(chat.name || from);
+            const receivedAt = new Date();
+            const correlationId = audit.createNewCorrelationId();
+
+            try {
+                console.log(`Message from ${senderName} (${from})`);
+
+                // Handle media (PODs) - venom-bot uses hasMedia property
+                if (message.hasMedia || message.hasMedia()) {
+                    await processMediaMessage(message, from, senderName, receivedAt, correlationId);
+                }
+
+                // Handle text message - venom-bot uses body or text
+                if (message.body || message.text) {
+                    await processTextMessage(message, from, senderName, receivedAt, correlationId);
+                }
+
+                audit.clearCorrelationId();
+            } catch (error) {
+                console.error('Error handling message:', error.message);
+                audit.logFailed(null, error, { from, correlationId });
+                audit.clearCorrelationId();
             }
+        });
 
-            audit.clearCorrelationId();
-        } catch (error) {
-            console.error('Error handling message:', error.message);
-            audit.logFailed(null, error, { from, correlationId });
-            audit.clearCorrelationId();
-        }
-    });
-
-    client.on('disconnected', (reason) => {
-        console.log('Client disconnected:', reason);
-        isReady = false;
-        // Auto-reconnect after 5 seconds
-        setTimeout(() => {
-            console.log('Attempting reconnection...');
-            initWhatsApp();
-        }, 5000);
-    });
-
-    client.initialize();
+        client.on('disconnected', (reason) => {
+            console.log('Client disconnected:', reason);
+            isReady = false;
+            // Auto-reconnect after 5 seconds
+            setTimeout(() => {
+                console.log('Attempting reconnection...');
+                initWhatsApp();
+            }, 5000);
+        });
+    } catch (error) {
+        console.error('Failed to initialize WhatsApp:', error);
+        process.exit(1);
+    }
 }
 
 // ============================================
@@ -161,7 +186,8 @@ function initWhatsApp() {
 // ============================================
 async function processMediaMessage(message, from, senderName, receivedAt, correlationId) {
     try {
-        const media = await message.downloadMedia();
+        // venom-bot: download media using downloadMedia() or downloadMediaStream()
+        const media = await message.downloadMedia ? await message.downloadMedia() : null;
         if (!media) {
             console.log('No media found in message');
             return;
@@ -175,7 +201,7 @@ async function processMediaMessage(message, from, senderName, receivedAt, correl
             status: 'RECEIVED',
             correlation_id: correlationId,
             metadata: {
-                whatsappMessageId: message.id._serialized,
+                whatsappMessageId: message.id?._serialized || message.id || message.msgId || 'unknown',
                 senderName
             }
         });
@@ -187,21 +213,26 @@ async function processMediaMessage(message, from, senderName, receivedAt, correl
             hasMedia: true
         });
 
-        // Determine file type
-        const mimeType = media.mimetype;
+        // Determine file type - venom-bot might have different structure
+        const mimeType = media.mimetype || media.type || 'application/octet-stream';
         const extension = mimeType.split('/')[1] || 'bin';
         const timestamp = Date.now();
-        const tempFilename = `${timestamp}_${from}_${message.id._serialized}.${extension}`;
+        const msgId = message.id?._serialized || message.id || message.msgId || timestamp;
+        const tempFilename = `${timestamp}_${from}_${msgId}.${extension}`;
         const tempPath = path.join(TEMP_DIR, tempFilename);
 
-        // Save temp file
-        fs.writeFileSync(tempPath, media.data, 'base64');
+        // Save temp file - venom-bot might store data differently
+        const mediaData = media.data || media.base64;
+        if (mediaData) {
+            fs.writeFileSync(tempPath, mediaData, 'base64');
+        }
 
-        // Process file through POD pipeline
+        // Process file through POD pipeline - handle venom-bot message structure
+        const originalFilename = message._data?.filename || message.filename || message.caption || null;
         const processed = normalise.validateAndProcessFile(tempPath, {
             receivedAt,
             mimeType,
-            originalFilename: message._data?.filename || null
+            originalFilename
         });
 
         // Move to canonical storage location
@@ -223,7 +254,7 @@ async function processMediaMessage(message, from, senderName, receivedAt, correl
             content_hash: processed.contentHash,
             file_type: processed.fileType,
             file_size: processed.fileSize,
-            original_filename: message._data?.filename || null,
+            original_filename: originalFilename,
             storage_uri: normalise.generateStorageUri(processed.storagePath),
             canonical_filename: processed.canonicalFilename,
             status: 'REVIEW',
@@ -424,6 +455,9 @@ async function processMediaMessage(message, from, senderName, receivedAt, correl
 async function processTextMessage(message, from, senderName, receivedAt, correlationId) {
     const cleanFrom = from.replace('@c.us', '').replace('@g.us', '');
 
+    // venom-bot: handle text property (different from whatsapp-web.js)
+    const body = message.body || message.text || '';
+
     // Create message record
     const messageData = models.createMessage({
         chat_id: from,
@@ -432,9 +466,9 @@ async function processTextMessage(message, from, senderName, receivedAt, correla
         status: 'RECEIVED',
         correlation_id: correlationId,
         metadata: {
-            whatsappMessageId: message.id._serialized,
+            whatsappMessageId: message.id?._serialized || message.id || message.msgId || 'unknown',
             senderName,
-            body: message.body
+            body: body
         }
     });
 
@@ -442,7 +476,7 @@ async function processTextMessage(message, from, senderName, receivedAt, correla
         sender: from,
         senderName,
         messageType: 'text',
-        preview: message.body.substring(0, 100)
+        preview: body.substring(0, 100)
     });
 
     // Save text to legacy format
@@ -452,8 +486,8 @@ async function processTextMessage(message, from, senderName, receivedAt, correla
         timestamp: receivedAt.toISOString(),
         from,
         sender: senderName,
-        body: message.body,
-        isGroup: (await message.getChat()).isGroup,
+        body: body,
+        isGroup: message.isGroup || message.isGroup === true,
         correlationId
     };
     fs.writeFileSync(textFile, JSON.stringify(textData, null, 2));
@@ -793,7 +827,7 @@ app.post('/api/send', async (req, res) => {
 
     try {
         const chatId = target.includes('@') ? target : `${target}@g.us`;  // Group IDs
-        await client.sendMessage(chatId, msgText);
+        await client.sendText(chatId, msgText);
         res.json({ success: true, sent_to: chatId });
     } catch (error) {
         console.error('[Send] Error:', error.message);
@@ -818,7 +852,7 @@ app.post('/api/broadcast/send', async (req, res) => {
     // Fetch all chats/groups once to resolve names to chat objects
     let allChats = [];
     try {
-        allChats = await client.getChats();
+        allChats = await client.getAllChats ? await client.getAllChats() : await client.getChats();
         console.log(`[Broadcast] Loaded ${allChats.length} chats/groups`);
     } catch (error) {
         console.error('[Broadcast] Failed to fetch chats:', error.message);
@@ -852,14 +886,14 @@ app.post('/api/broadcast/send', async (req, res) => {
                 await new Promise(resolve => setTimeout(resolve, 500));
                 // Check if chat is ready by trying to get it
                 try {
-                    await client.sendMessage(chatId, message);
+                    await client.sendText(chatId, message);
                     delivered.push(recipient);
                     console.log(`[Broadcast] ✓ Delivered to ${chatId}`);
                 } catch (err) {
                     // If error contains markedUnread, try once more with longer delay
                     if (err.message.includes('markedUnread')) {
                         await new Promise(resolve => setTimeout(resolve, 1000));
-                        await client.sendMessage(chatId, message);
+                        await client.sendText(chatId, message);
                         delivered.push(recipient);
                         console.log(`[Broadcast] ✓ Delivered to ${chatId} (retry)`);
                     } else {
@@ -885,14 +919,14 @@ app.post('/api/broadcast/send', async (req, res) => {
                     await new Promise(resolve => setTimeout(resolve, 500));
                     // Check if chat is ready by trying to get it
                     try {
-                        await client.sendMessage(chatId, message);
+                        await client.sendText(chatId, message);
                         delivered.push(recipient);
                         console.log(`[Broadcast] ✓ Delivered to ${chat.name || chatId}`);
                     } catch (err) {
                         // If error contains markedUnread, try once more with longer delay
                         if (err.message.includes('markedUnread')) {
                             await new Promise(resolve => setTimeout(resolve, 1000));
-                            await client.sendMessage(chatId, message);
+                            await client.sendText(chatId, message);
                             delivered.push(recipient);
                             console.log(`[Broadcast] ✓ Delivered to ${chat.name || chatId} (retry)`);
                         } else {
@@ -911,14 +945,14 @@ app.post('/api/broadcast/send', async (req, res) => {
                     await new Promise(resolve => setTimeout(resolve, 500));
                     // Check if chat is ready by trying to get it
                     try {
-                        await client.sendMessage(chatId, message);
+                        await client.sendText(chatId, message);
                         delivered.push(recipient);
                         console.log(`[Broadcast] ✓ Delivered to ${chatId}`);
                     } catch (err) {
                         // If error contains markedUnread, try once more with longer delay
                         if (err.message.includes('markedUnread')) {
                             await new Promise(resolve => setTimeout(resolve, 1000));
-                            await client.sendMessage(chatId, message);
+                            await client.sendText(chatId, message);
                             delivered.push(recipient);
                             console.log(`[Broadcast] ✓ Delivered to ${chatId} (retry)`);
                         } else {
@@ -976,7 +1010,7 @@ app.post('/send-message', async (req, res) => {
     if (!isReady) return res.status(503).json({ error: 'WhatsApp not ready' });
 
     try {
-        await client.sendMessage(number, message);
+        await client.sendText(number, message);
         res.json({ success: true });
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -992,7 +1026,7 @@ app.post('/api/reconnect', async (req, res) => {
         // Destroy existing client
         if (client) {
             try {
-                await client.destroy();
+                await client.close ? await client.close() : await client.destroy();
                 console.log('Client destroyed');
             } catch (error) {
                 console.error('Error destroying client:', error);
@@ -1021,7 +1055,7 @@ app.post('/whatsapp-status/api/reconnect', async (req, res) => {
         // Destroy existing client
         if (client) {
             try {
-                await client.destroy();
+                await client.close ? await client.close() : await client.destroy();
                 console.log('Client destroyed');
             } catch (error) {
                 console.error('Error destroying client:', error);
@@ -1063,7 +1097,9 @@ app.post('/api/restart', async (req, res) => {
 // Graceful shutdown
 process.on('SIGINT', async () => {
     console.log('Shutting down gracefully...');
-    if (client) await client.destroy();
+    if (client) {
+        await client.close ? await client.close() : await client.destroy();
+    }
     emailQueue.stopProcessor();
     process.exit(0);
 });
@@ -1924,5 +1960,9 @@ const HOST = process.env.HOST || '0.0.0.0';  // Bind to all interfaces
 app.listen(PORT, HOST, () => {
     console.log(`WhatsApp POD Service on ${HOST}:${PORT}`);
     console.log(`Email queue processor: Use /api/email/status to check status`);
-    initWhatsApp();
+    // Initialize WhatsApp client
+    initWhatsApp().catch(err => {
+        console.error('Failed to initialize WhatsApp:', err);
+        process.exit(1);
+    });
 });
