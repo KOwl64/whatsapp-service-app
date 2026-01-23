@@ -1,0 +1,881 @@
+2026-01-22T21:59:36: SQLite DB initialized: ./pod.db
+2026-01-22T21:59:36: Scheduler started, alert checker running (60000ms interval)
+2026-01-22T21:59:36: WhatsApp POD Service on 0.0.0.0:3000
+2026-01-22T21:59:36: Email queue processor: Use /api/email/status to check status
+2026-01-22T21:59:45: Client disconnected: LOGOUT
+2026-01-22T21:59:48: 
+========================================
+2026-01-22T21:59:48: QR CODE - SCAN WITH WHATSAPP
+2026-01-22T21:59:48: ========================================
+
+2026-01-22T21:59:48: ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+█ ▄▄▄▄▄ █▄ ▄▄    █▀▄▄█▀▄▀ ▄█ █  ▄▀███▄▀██▄▄▄▄▄ ▄ ██ ▄▄▄▄▄ █
+█ █   █ █ ▀ █▀▀█▄▄▀ ▄███   ██▄▄█▀█▀▀█ ▀▄▀█▄  █▀▄ ██ █   █ █
+█ █▄▄▄█ █▄▄▀▀▀▄▀▀▀█  ▀██ █▀ ▄▄▄ ▀ ▄███▄▄▄▄▀▀▀█▄▀▄██ █▄▄▄█ █
+█▄▄▄▄▄▄▄█▄█▄█▄█▄█▄▀ ▀▄▀ ▀▄█ █▄█ ▀ ▀ █ ▀▄█ █▄▀▄█▄█ █▄▄▄▄▄▄▄█
+█▄ ▄▄█▀▄▀▄█▄ ▄▀██▄▄▀▀▄  ▀▀█▄▄    █ ▄▀██▄▄▄▀ ▄▀▄▄ ▀ █▀▄▄ ▀ █
+█ ▄▀█ ▄▄ █▄▀▀▀ ▀ ▄ ██ ▄▄▀▄█▄ █  ▀▄█▄█▀ ▀▄█▀▀ █▀▀▄▀ ▀▀▄ ▄▀▄█
+█ █▄█  ▄█▄▄█▀█▄  ▄█▄▄ █▄██▄▄▄▀█▀ ▀▀▄▄   ▀▀▄█▄█▀▄▄▄▀ ███▄ ▀█
+███▀█▀▀▄█ ██▄▀▄▀▀██▄ ██ ▀  █▀█████▀▀▀▄ █▄█  ▄ ▀ ▀  ███▀▀███
+█▄█▀██▀▄█▄▄█▀▄ ▄▀ ██ █▄▀ █▄▄▄▄ ▄  ▄▀▄▀▄█ ██▄ ▄▄▀ ▄██ ██ ▀██
+█▄   ▄▀▄ █▀▄ ▄▀▀ █▄ ▄▄ ▄▀ ▀ ▀  █▀▄█▄ ▀█▄█ ██▀▄  █▄ ▀▄▀▄▄ ██
+█ █▀▄ ▀▄█▀██▀▀ ██  ▀██  ▀█▀▀█▄ ▀▄█▄█▄▀ █  █▀▀▀█▄▄ ▄█▄▄ ▀ ▀█
+█▄██▄▄▄▄█▀▀█▀▄█ ▀▄▄▄ ▄ ▄  █▀ ▄ █ ▄▀█  ▀ ▀██  █▀▄▀▀▀▀█▀▄▄█ █
+█▄█▀▀  ▄▀▀ ▄▀▀█▀ █▄▄█ ██████▀▀▄█▄▄▄█▄ ▀▀▀▀██▄█ ██▄█ ██▀█▄▄█
+███▄█ ▄▄▄ ▄▀ ▄ █ ▄▄▄▀▀█▄▄▀█ ▄▄▄ █ ▄█▄█▀▀▀▄███ ▀ ▀ ▄▄▄ █▀███
+█▀▀▀█ █▄█ █  █ █▄ █▄█▄▀▀▀▄█ █▄█ ▄▄▀ ███▄ ▀ ▄▄▄▀▀▄ █▄█ ▄▄ ▄█
+██ ▀▄▄▄▄▄▄  ▄█▄▀ ▄▀▀   ▄▀ ▄    ▄▀▀▀▀▀  ▄▄▀▀  █▄ ▄  ▄ ▄█▄ ▀█
+█▀▀ ▀ ▀▄▄ ▀█▄▀█▀▄▄▄▀ ██ ▀▀▄▀▄▄▀▀▀█ ▄▄█▀█▄   ▄▀▄█▀▄█▀▄▄█ ▄▀█
+█▄ █ █▀▄█▀█ █ ▄▀█▄▄█▄ ▀█ ▄▀▀▄█ █  █ ▀ █ █▀▀▄▀▀ ▀ ▄  ▄▀██▄▄█
+█ ▄▀▄█ ▄▀▄▄█▄██▀██ ▄▀█▀█ ▄█▀██ ▄ ▀▀▄   ▀▀██▄██▀█▀ ██▀█▄▀█▄█
+█▀▄▀▄█▀▄█▄▀▀▄ ▄  ▄██   █▄▀█  ▄▀█ █ █▀▀█ ▄ ▄ ▄ ▀▄████▀▄  █▄█
+█   ▀▀ ▄█▀ ▄▄▄▀▄▀ ██ █▀█ █▀ ▀ █▀█▄▄▀▀▀██▄▀▀▄ ▄▀  █▄▀▀▀█ ▀▄█
+█ ▀  █ ▄▀▄██▄▄ ▄█▀█▄███ ▀ ██▀█ ▄█▀▄██▄▄  ▀▀█▄▄███ ▄▀▀  █ ██
+█▄  █ █▄ ▀█▀██▀▀▄█▀▀ ▄ █▀ ▄▄█▄███▀ █▄█▀▄▄▄█ ██▄███▄▀█▄  ▀▄█
+█ ▀ ▀▀▄▄█▀ ▀▄  █ ▄█▀▀  █ █▄▀  ▀█▀  ▄▄ ▄▀█▄█▄▀▀▀▀▄   ▄█ █ ▄█
+███████▄█▀▀▀▄▄▀▄▀█  ▀ ███▄▀ ▄▄▄ ▄▀ █  ▀▀█▀▀▄ █ █▀ ▄▄▄ ▄██ █
+█ ▄▄▄▄▄ ██▄▀▀█ █ █▀▄▄ ▄▄█ ▄ █▄█ ▄ ▄▄█▄▀▄█▄  ▀▀    █▄█ ▄▀▀▀█
+█ █   █ █▀▀ ▄▄▄█▀█▄▀ ▄▀█ ▀▄▄ ▄    ▀ ▀█▄▄▄▀▄█   ▀▀ ▄▄▄▄▄▄ ▄█
+█ █▄▄▄█ █ █ ██▄▀   ▀▄▀▄▀█▀█ ▄██▀█▀ ▀█ ▀   ▄▀█▀█▄▀ ▀ ██ ▄█▀█
+█▄▄▄▄▄▄▄█▄▄█▄██▄█▄▄██▄█▄▄▄▄█▄▄███▄██▄█▄▄█▄▄███▄▄█▄▄███▄▄███
+
+2026-01-22T21:59:50: Attempting reconnection...
+2026-01-22T22:00:48: 
+========================================
+2026-01-22T22:00:48: QR CODE - SCAN WITH WHATSAPP
+2026-01-22T22:00:48: ========================================
+
+2026-01-22T22:00:48: ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+█ ▄▄▄▄▄ █▀▄▄ ▄▀▄█▀▄▀▀██▄▀ ▄▀▄█▄▄▄█▀█▀█▀▀▄▀ ▄ ▄▄▄ ██ ▄▄▄▄▄ █
+█ █   █ █▀ ▀█  ███▀▀▄▄▄▄  ▀█▄█▄▄▀▄  █▀ ▄▄█▄▀▄▄ ▄ ██ █   █ █
+█ █▄▄▄█ █▀▀▀ ▀  ▄█▄█▄  ▀▀ █ ▄▄▄ ▄▄▀▀█▄ █ ▄ ▄  ▀▀▄██ █▄▄▄█ █
+█▄▄▄▄▄▄▄█▄█ █ █ ▀▄█▄▀ █ █ █ █▄█ ▀▄█ ▀▄▀ ▀ ▀ ▀ ▀▄▀▄█▄▄▄▄▄▄▄█
+█▄ ▄▄▄█▄  ▄ █▄ █▄█▄  ▄▀▀▀ ▄▄▄   ▀█▀█▀▄▄▄██▀▀█▀██▄▀ █▄▀▄▀ ▀█
+██   ██▄█▀  ▀▄▄ █ ▀ ▀▀▀  ▀▀▄▀▀▀███▄ ▄▄ ▄▀▀  ▄▄ ▀▄ █ ▄ ▀▀███
+█▄██▄ ▄▄▄▄▄ █▀▄▄▄▄▀ ▄▄▀▄▀▀▄▀▀▀▀█ ██▄ ▄ ▄█▀▀▀▄▀██▄▀▀▄█▀█▄ ██
+█▀▄▄  ▀▄▄▀▄▄▄ █▀ ▄▀ ▀█ ▀▀▀▀█ █▀▄▄█ ██▀█▀▀▄█▄▀ ▀▀▀▀▀█▄▄█▀▄██
+█▀▀▀ ▀ ▄▀█▀▀ ▀▄█▀▄▀▄▀▄▀█▀▀ █▀ ▀ ▄▀▀█ ▄ ██▀█ █▀ █▀▀▀▄█▀▄██ █
+█▄█▀▄▄█▄ ▀█▄▄ ▀█▄▀ ▄█▄▄▄█▄▀▄█ █ ▀ ▀▄▄█▄▀▄█▀▀▄▀█ ▀  █ ▀  ▄██
+█ █▀█▄▄▄▄▀▄▄▀▄▀█▄▀  ▄█▀▀▀▄ ▀▄█  ▀▀█▄  ▀████ █▀▄█▄▀▄▄██  ▀▀█
+█▀▀▄▀▀▄▄█▄█ ▄█ █▄ █▀▄██ ▀█▀ █ ▀ ██▄▀ ▄█▀█▀▄██▄▄  ▄▀  ▀█▀▀▀█
+█ ███▀ ▄██▀▄█▄██▄█  █▄▀█▀▀█▀█▀ ▀▄  █ ▄▀██▀▀▀▄▀▄█▀▀▀▄ ▀█▀▄ █
+█▄▄▄▄ ▄▄▄ █▀ ▄ ▀▀█▄█ ▀▄█▄ ▀ ▄▄▄ ▄ █▄▄▄ ▀ ██ ▄  ▀█ ▄▄▄ ▀ ▄██
+█▄██▄ █▄█ █▄▀ ▄▀▀▄▄▀▀█▄█ ▀▀ █▄█  ██▄▄ ████▄  █▄▄█ █▄█ ▄ ▄██
+█▀█▄ ▄ ▄ ▄▄  ▀▄█▄▄▀▄ ▄▄▄█▄▄▄▄ ▄ ▀█▄▀█▄▄  ▀ █ █▄██▄   ▄▀  ██
+█▀▀ ▀▀▀▄   ▄▄ ▄▀▄█  ▀█▄▀ ▀█▀▄█▀  █▀█▄▄▄██▀ ▀▄▀█▄▀█▄▀▄██▀▀▀█
+█▄  ▄▀ ▄█▄ ▄▄█  ▀██ ▄▀▄▀▀▀█ █▄▀  ▀ ▄█   ▄▀  █▄▄▄▀▀▄▀█▄▄  ██
+█▀██ █▄▄▀  █▄ ██▀█▄ ▀▀██▄ ██▀█ ▄█▀█▄   █ █▀ ▄▀███▄█▀██ █▄▀█
+█ █▀█▄▀▄▄▄▄ ▀▄▀█▀██▄▀ ▀▄▄ ▄ ▀█▀▄▀▄▀▄▀ ▄ █▀▄▀▄▀ ██▄▄█ █ ▀▄▄█
+██▄▀▄ ▄▄▀ █  ███▄▄▄ ▄▄▄▀▀ █▀▄▄▄▄▀█▀█ ▄▀▄▀█ ▀▄█▄▄▀   ▄█▄████
+█▄▀▄▄▀ ▄▀ ▄▄█ ▀▀▀▀▀ █▀▀ █▄█▀██▄ ██ █▀ ▄▄▄▀▀▀▄ ▀███▄██ █▀ ▀█
+██▀▄▀█ ▄ ▄▄▀█▄ ▄█▄▀ ▀▄▀▄▀▀▄ ▄██▄▄▀▄▄▄▄▄███  ▄███▀█▀██▄ ▀ ▄█
+█ ▀ ▀▀▄▄▀▀████▄▄█ ▀ █▀▄█▀  ▄█▄  █▀▄ ▀█▄▄  ██▀▄ ▄▀▀▄█▄█  ▄██
+███████▄█ █▀  ▀ ██ ▄ █▄▀▀ ▀ ▄▄▄ ▄█▄█ ▄ ▄██  ▄█▄▄▀ ▄▄▄ ▀ ▀ █
+█ ▄▄▄▄▄ █▄█ ▀▄▀███▀█▀▄██  █ █▄█ █▄███▄ ▄ ▄▀  ▀  ▄ █▄█ ▄  ▀█
+█ █   █ █ ▄▄▄  ▄▄▀█▄▄█▄▀▀▄ ▄ ▄ ▄▄█▄▄ ▄ █▀██ ▄▀██▀▄ ▄  █▀███
+█ █▄▄▄█ █ █▀▄▄▀ ▄ ▄█▄█ ▀▀██▄█▀▀██▄▄▀ ▄▀▄▄  ██▄▀▄█▄▀▄▀█▄ ███
+█▄▄▄▄▄▄▄█▄██▄▄██▄█▄▄▄▄▄█▄██████▄▄▄▄▄▄▄█▄▄█▄▄▄█████████▄█▄██
+
+2026-01-22T22:01:08: 
+========================================
+2026-01-22T22:01:08: QR CODE - SCAN WITH WHATSAPP
+2026-01-22T22:01:08: ========================================
+
+2026-01-22T22:01:08: ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+█ ▄▄▄▄▄ █▄ ▄▄ ▀ ▀█▀▄▄▀ █▄ ▄█ █  ▄▀█▀▄▄ ▀▀█  ▀  ▄ ██ ▄▄▄▄▄ █
+█ █   █ █ ▀ ▀▀▀███▀ █▄██   ██▄▄██▄▀▀ ▀▀▄█▄▄ ▀▄▀▄ ██ █   █ █
+█ █▄▄▄█ █▄▄▀▄▀▄▀▀▀█  ▀██ █▀ ▄▄▄ ▄█▄█ ▄▄▄▄▀▀▀ ▄▄▀▄██ █▄▄▄█ █
+█▄▄▄▄▄▄▄█▄█ █▄█▄█▄▀ ▀▄▀ ▀▄█ █▄█ ▀ ▀ █ ▀▄█ █▄▀▄█▄█ █▄▄▄▄▄▄▄█
+█▄ ▄▄▀█▄█  █▄█▀██▄▄▀▀▄  ▀▀█▄▄    █ ▄▀██▄▄▄▀ ▄▀▄▄ ▀ █▀ ▄ ▀ █
+█ ▄▀█▀▄▄█▀▄▀ ▄ ▀ ▄ ██ ▄▄▀▄▄█▄█  ▀▄▀ █▀ █▄█▀█ ███▄▀ ▀ █ ▄▀▄█
+█ █▄   ▄▄█▀▄▀█▄  ▄█▄▄ █▄██▄█▀▀█▀ ▀ █▄  ▀▀▀█▄▄█▀▄██▀ ▀█▀▄ ▀█
+█▄▄█▄▀▀▄▄▀██▄▀▄▀▀███ █▄▄▀  █ ▄█▀██  █ ▄█▄█▀▄  ██▄▄ ██▄  ███
+█▀▄▄ █▀▄█▄▄█▀▄ ▄▀▀▀███ ▀ █▄▄▄▄ ▄  ▄ ▀▀▄█▄█▄██▄   ▄██ ██▀▀▀█
+█▄▀▀▀ ▀▄ █▀▄ ▄▀▀ ▄▄  █ ▄ ▄▀ ▀  ▄█▄█▄ ███ ▀▄█▀▄  █▄▄▀▄▀▄▄ ▀█
+█▄█▀▄  ▄█▀██ ▄ ██  ▀██  ▀█▀▀█▄ ▀▀▀▄█ █ ██ █▀▀▀█▄▄ ▀█▄▄ ▀▀▀█
+█▄██▄ █▄▀█▄▄██ █▀▄▄▄ ▄ ▄  █▀ ▄ █▀▄▀█▀▀▀ ▀██ ▀▄▀▄▀▀  ██▄▄█ █
+█▄█▀▀▀ ▄██   ▄▄▀ █▄▄█ █████▀▀▀▄█▄▄▄█▄ ▀▀▀▀██▄█ ███ ▀█▀▀█▄▄█
+███▄█ ▄▄▄  █▀█   ▄▄▄▀▀█▄▄▀█ ▄▄▄ █ ▄█▄█▀█▀▄███ █ █ ▄▄▄ ▀▀███
+█▀▀▀█ █▄█    █ █▄ █▄█▄▀▀▀▄█ █▄█ ▄▄ ▀████ ▀▀▄▄▄ ▀  █▄█ ▄▀ ▄█
+██▄██▄▄▄▄▄  ▄█▄▀ ▄▄    ▄▀ ▄    ▄▀▀ ▀▀ ▀▄▄▀██ ██▀█  ▄ ▄█▄ ▀█
+██ ██ ▀▄▄▀▀█▄▀█▀ █▄▀ ▄█  ▀▄▀▄▄▀▀▀█ ▄██▄█▄▄ ▀▀▀▄██▄█▀███ ▄▀█
+█▄   █▀▄███ █ ▄▀  ▄█▀▄▀██▄▀▀   █ ▄█  ▀▄▀▀█▀█ ▄▀  ▄  ▀▀██ ▄█
+██ ▀▄█ ▄▀▄▄██ █▀██ ▄▀█▀█ ▄█▀██▄ ▄▀▀▄█  ▀▄▀█▄ ▀▀█▀ ██▀█▄▀▄██
+█▀▄▀▄█▀▄█▄ █ ▄█▀ ▄██   █▄▀█  ▄▄▀▀█ █▀ █ █ ▄ ▄▀▀▄████▀▄  █▄█
+█   ▀▀█▄█▀▄█▀█▄█▀ ██ █▀█ █▀ ▀ █▀█▄▄▀▀▀██▄▀▀▄ ▄▀  █▄ ▀▀▀ ▀▄█
+█ ▀  █▄▄▀▄▄ ▄▄▀▄█▀█▄███ ▀ ▀█▀█ ▄█▀▄██▄   ▀█▀▄▄████▄▀▀ ██ ██
+█▄ █▄▄ ▄█ ▄▀███▀▄█▀▀ ▄ █▀ █▄█▄███▀▄█▄█▄▄▄▄▀▀█████▀█▀█▄ ▀▀▄█
+█ ▀ ▀▀▄▄██ ▀▄  █ ▄▄▀▀  ▀ █▄█  ▀█▀ ▀▄  ▄█▀▄▀██▀▄▄▀▄  ██▀█ ▄█
+███████▄▄▀▀▀▄▄▀▄█▄▄▄▄ ▀███▀ ▄▄▄ ▄▀ █▄▄▀▀██ █▀▀ ▄█ ▄▄▄ ▄█▀▄█
+█ ▄▄▄▄▄ ██▄▀▀█ █▀▄▀▄▀█▄▄  ▄ █▄█   ▄▄██▀▄▀█   ▀▀ █ █▄█ ▄▀▀██
+█ █   █ █▀▀ ▄ ▄█▀█▄▀ ▄▀█ ▀▄▄ ▄  ▄▄▀ ██▄▄ █▄██▄ ▀  ▄▄▄ ▄▄ ██
+█ █▄▄▄█ █ █▄   ▄   ▀▄▀▄▀█▀█ ▀██▀▄  ▀█▀▀  ▀▄▀█ █▄▀ ▀ ▀▀ ▄█▀█
+█▄▄▄▄▄▄▄█▄▄██████▄▄██▄█▄▄▄▄██████▄██▄█▄▄█▄▄███▄▄█▄▄██▄▄▄███
+
+2026-01-22T22:01:28: 
+========================================
+2026-01-22T22:01:28: QR CODE - SCAN WITH WHATSAPP
+2026-01-22T22:01:28: ========================================
+
+2026-01-22T22:01:28: ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+█ ▄▄▄▄▄ █▄ ▄▄ ▀▀█▀ ██▀ █▄ ▄█ █  ▄▀████▀█▄▄  ▄█ ▄ ██ ▄▄▄▄▄ █
+█ █   █ █ ▀ █▀▀█▄█▀ ████▀▀ ██▄▄█▀█▀▀▀▀▀▄▄▄▄  █▀▄ ██ █   █ █
+█ █▄▄▄█ █▄ █▄▀▄▀▀▀█  ▀██ █▀ ▄▄▄  ▀▄█▀█▄▄▀█▀▀▀▀▄▀▄██ █▄▄▄█ █
+█▄▄▄▄▄▄▄█▄▀▄█▄█▄█▄▀ ▀▄▀ ▀▄█ █▄█ ▀ ▀ █ ▀▄█ █▄▀▄█▄█ █▄▄▄▄▄▄▄█
+█▄ ▄▄▀▀▄▀ ▄█ ▄▀██▄▄▀▀▄  ▀▀█▄▄    █ ▄▀██▄▄▄▀ ▄▀▄▄▀▀ █▀ ▄ ▀ █
+█ ▄▀█ █▄ ▀▄▀██ ▀ ▄ ██ ▄▄▀▄██▄▀  ▀▄▀ █▀ █▄█▀▀ ██▀▄▄▀▀█  ▄▀▄█
+█ █▀█  ▄ ▀▀▀▀█▄  ▄█▄▄ █▄██▄▄▀██▀ ▀ ▄▄ ▄ ▀▀▄▄▄█▀██▄▀ ▀██▄ ▀█
+█▄▀▄▀▀▀▄▄▀██▄▀▄▀▀█ █ █▄▄▀  █▀██▀██▀▄▀▄█ ▄▀ ▀▄ ▀▄█  ██▄▀▀███
+█▀▄▄▄█▀▄█▄▄█▀▄ ▄▀ ▀██▄▄█▀▄▄▄▄▄ █  ▄▀ ▀█▄ ▀▀▄▄▄ ▀ ▄██ ██ ▀▀█
+██ ▀█ ▀▄ █▀▄ ▄▀▀▄▄▄  ▀ ▄▀▀▀ ▀  ██▄█▄ ▄▄▄▄█▄▄█▄▀▀█▄▄▀▄▀▄▄▄▀█
+██▄▀▄▄▀▄█▀███▀ ██  ▀██  ▀█▀▀█▄ ▀ █▄█ █ █▄▄█▀▀▀█▄▄ ▀█▄▄ ▀  █
+█▄██▄▄▄▄█▀▀▄ ▄  ▀▄▄▄ ▄ ▄  █▀ ▄ █▀▄▀█ ▀▀ ▀██ ▀▄▀▄▀▀▀▄▀▀▄▄█ █
+█▄█▀▀▄▄▄ ████▄▀  █▄▄█ █████▀▀▀▄█▄▄▄█▄ ▀▀▀▀██▄█ ██▄ ▀██▀█▄▄█
+███▄█ ▄▄▄ ▄▀▄  █ ▄▄▄▀▀█▄▄▀█ ▄▄▄ █ ▄▀▄███▀▄▀▀█ ▀▄█ ▄▄▄ ▀▀███
+█▀▀▄  █▄█  ▀ █▀ ▄ █▄█▄▀▀▀▄█ █▄█ ▄▄█ ███▄ ▀ ▄▄▄ ▀▄ █▄█ ▄  ▄█
+██▀ ▄▄▄▄ ▄  ▄█▄▀ ▄ ▄  ▄▄▀ ▄▄   ▄▀▀▀ ▀▄▄▄▄█  ▄███  ▄▄ ▄▄▄ ▀█
+████▀ ▀▄▀ ▀█▄▀█▀██▄█▀▄█   ▄▀▄█▀▀▀█ ▄▄▀ █▄▄▀▀▀█▄▄█▀█▀▄▄█▀ ██
+█▀█▀▄█▀▄█▀█ █ ▄▀  ▄█ ▀▀█▄▀▀▀▀█ █▄ █ ▄▄▄  █▀▄ ▄   ▄  ▀ ██▄ █
+██▀▀▄█ ▄▀▄▄█▄▄█▀██ ▄▀█▀█ ▄█▀██  ▀▀▀▄   ▀ ██▄▄▀▀█▀ ██▀█▄▀█▄█
+█▀▄▀▄█▀▄█▄ ▄▀▄ ▄ ▄██   █▄▀█  ▄▄▀ █ █ ▀█ ▄▀▄ █ ▀▄████▀▄  █▄█
+█   ▀ ▄▄█▀ █▀▀ ▄▀ ██ █▀█ █▀ ▀ █▀█▄▄▀▀▀██▄▀▀▄ ▄▀  ██ ▀▀▀▄▀▄█
+█ ▀  ▄█▄▀▄█▄█▀ ██▀█▄███ ▀ ██▀█ ▄█▀▄██▄▄▄ ▀▀█▄▄██▀▀▄▀▀ ▄▄ ██
+█▄ ▀▄█▄▄ ██▀███▄▄█▀▀ ▄ █▀ ███▄███▀▄▄▄█ ▄▄▄█▀██▄▄▀█  █▄▀▀▀▄█
+█ ▀ ▀▀▄▄█  ▀▄  █ ▄ █▀ ▄▀ ██▀  ▀█▀ ▀█   ██ █▄█▀▄▀▄ ▄  █ █ ▄█
+███████▄▄ ▀▀▄▄▀▄ ▄▄ ▀▀ ▀▄█▀ ▄▄▄ ▄▀ █▀ ▄▀█▀██▄█▀█▀ ▄▄▄ █▄█▄█
+█ ▄▄▄▄▄ ██▄▀▀█ █▄█▀▄ ▄▄▄█▀▄ █▄█   ▄▄▄█▀▄ ▄▀▀█ ▀▀▄ █▄█ ▄▀ ██
+█ █   █ █▀▀ ▄▄▄█▀█▄▀ ▄▀█ ▀▄▄▄   █ ▀ ██▄▄ ▀▄█▄  ▀▀ ▄▄▄▄▄▄ ██
+█ █▄▄▄█ █ ▀  █▄    ▀▄▀▄▀█▀█ ▀▀█▀▄▀ ▀█ ▀   ▄▀█▀█▄▀ ▀ ▀█ ▄█▀█
+█▄▄▄▄▄▄▄█▄▄██▄███▄▄██▄█▄▄▄▄█▄████▄██▄█▄▄█▄▄███▄▄█▄▄█▄█▄▄███
+
+You have triggered an unhandledRejection, you may have forgotten to catch a Promise rejection:
+ProtocolError: Protocol error (Runtime.callFunctionOn): Execution context was destroyed.
+    at <instance_members_initializer> (/home/pgooch/whatsapp-service-app/node_modules/puppeteer-core/lib/cjs/puppeteer/common/CallbackRegistry.js:103:14)
+    at new Callback (/home/pgooch/whatsapp-service-app/node_modules/puppeteer-core/lib/cjs/puppeteer/common/CallbackRegistry.js:107:16)
+    at CallbackRegistry.create (/home/pgooch/whatsapp-service-app/node_modules/puppeteer-core/lib/cjs/puppeteer/common/CallbackRegistry.js:25:26)
+    at Connection._rawSend (/home/pgooch/whatsapp-service-app/node_modules/puppeteer-core/lib/cjs/puppeteer/cdp/Connection.js:108:26)
+    at CdpCDPSession.send (/home/pgooch/whatsapp-service-app/node_modules/puppeteer-core/lib/cjs/puppeteer/cdp/CdpSession.js:74:33)
+    at #evaluate (/home/pgooch/whatsapp-service-app/node_modules/puppeteer-core/lib/cjs/puppeteer/cdp/ExecutionContext.js:363:50)
+    at ExecutionContext.evaluate (/home/pgooch/whatsapp-service-app/node_modules/puppeteer-core/lib/cjs/puppeteer/cdp/ExecutionContext.js:277:36)
+    at IsolatedWorld.evaluate (/home/pgooch/whatsapp-service-app/node_modules/puppeteer-core/lib/cjs/puppeteer/cdp/IsolatedWorld.js:100:30)
+    at CdpFrame.evaluate (/home/pgooch/whatsapp-service-app/node_modules/puppeteer-core/lib/cjs/puppeteer/api/Frame.js:362:43)
+    at CdpFrame.<anonymous> (/home/pgooch/whatsapp-service-app/node_modules/puppeteer-core/lib/cjs/puppeteer/util/decorators.js:109:27)
+    at CdpPage.evaluate (/home/pgooch/whatsapp-service-app/node_modules/puppeteer-core/lib/cjs/puppeteer/api/Page.js:826:43)
+    at Client.inject (/home/pgooch/whatsapp-service-app/node_modules/whatsapp-web.js/src/Client.js:124:55)
+    at async Client.initialize (/home/pgooch/whatsapp-service-app/node_modules/whatsapp-web.js/src/Client.js:373:9)
+2026-01-22T22:01:48: 
+========================================
+2026-01-22T22:01:48: QR CODE - SCAN WITH WHATSAPP
+2026-01-22T22:01:48: ========================================
+
+2026-01-22T22:01:48: ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+█ ▄▄▄▄▄ █▀▄▄ ▄ ▄ ▀█  ▀▄▄ ▄▄▀▄█▄▄▄█▀▀▄█ ▀██▄▄▀▀▄▄ ██ ▄▄▄▄▄ █
+█ █   █ █▀ ▀█  █▄█▀▀▄█▄▄▀▀▀█▄█▄▄ ▄     ▄▄█▄▀▀█ ▄ ██ █   █ █
+█ █▄▄▄█ █▀█▀▀▄  ▄█▄█▄  ▀▀ █ ▄▄▄ ▀█▀▀▄▄ █ █ ▄ ▀▀▀▄██ █▄▄▄█ █
+█▄▄▄▄▄▄▄█▄▀ █▄█ ▀▄█▄▀ █ █ █ █▄█ ▀▄█ ▀▄▀ ▀ ▀ ▀ ▀▄▀▄█▄▄▄▄▄▄▄█
+█▄ ▄▄ ▀▄▄  ▄██ █▄█▄  ▄▀▀▀   ▄   ▀█▀█▀▄▄▄██▀▀█▀██   █▄█▄▀ ▀█
+██   ██▄▀ █▀ █▄ █ ▀ ▀▀▀  ▀██▀▀▀███  ▄▄  ▀▀▄▄▄▄ ▀█▄█ ▀▀▀▀███
+█▄█ ▀ ▄▄ ▀▄▀█▀▄▄▄▄▀ ▄▄▀▄▀▀█ █▀▀█ █▄▄ ▄▀▄█▀▀▀▄▀█▄▀▀▀▄▀██▄ ██
+█▄▀▄█ ▀▄▄ ▄▄▄ █▀ ▄▀▄▀█▀▀▀▀▀█▀██ ▄██▄██▀██ █▄█▄▀  ▄▀███▄ ▄██
+█▀█▀▀▀ ▄▀█▀▀ ▀▄███ ▄ ███▀▀ █▀  ▀▄▀▀▄▄ ▄▄▄▀▀ ▄▀▄█▀▀▀▄█▀▄█▀ █
+█▀█   █▄ ▀█▄▄ ▀█▄▄ ▄█ ▄▄█▀▀▄█ █ ▀ ▀▄▄▄█ ▄█  ██▄▀▀  ▀ ▀  ▄▀█
+██ ▀█▀█▄▄▀▄▄ ▄▀█▄▀  ▄█▀▀▀▄ ▀▄█  ███▄▄▄▀█▀██ ▄█▄█▄▀█▄██    █
+█▀▀▄▀  ▄█▄▀█▀▀█▀▄ █▀▄██ ▀█▀ █ ▀ ▄█▄▀▀██▀█▀▄█▄█▄  ▄   ██▀▀▀█
+█ ███▄ ▄█▀▄█▀ █▀▄█  █▄▀█▀▀▀▀█▀ ▀▄  █ ▄▀██▀▀▀▄▀▄█▀▀▀█▀██▀▄ █
+█▄▄▄▄ ▄▄▄  ▀█▄ ▄▀█▄█ ▀▄█▄   ▄▄▄ ▄ █▄▄▄ █ ██▄▄  █▄ ▄▄▄ ▀ ▄██
+█▄█▀▄ █▄█ █▀▀   ▀▄▄▀▀█▄█ ▀▀ █▄█  █▄▄▄  ███   ██▄▀ █▄█ ▄▀▄██
+█▄ ▄▀ ▄▄ ▄▄  ▀▄█▄▄█▄ ▄█▀█▄▄ ▄ ▄ ▀█▄▀▀▄ ▀ █▀  ▀ ▀█▄ ▄ ▄   ██
+█ █▄▄▀▀▄ ▀ ▄▄ ▄▀█▄▀▄▀▄█▀ ▀█▀█▄▀  █▀█▀  ▄██▀ ▄▀███▀▄▀▄██▀█▀█
+█▀▄██▀ ▄▄▄ ▄▄█  ███ ▀█▄▀█ █  ▄▀ ▄▀ ▄ ▄ ▀ █  ▀ █▄▀▀▄▀ █▄ ▄██
+█▄ █ █▄▄▀  ██▀██▀█▄ ▀▀██▄ ██▀█ ▄▄▀█▄ ▄ ██▀▀  ████▄█▀██ ██▀█
+█ █▀█▄▀▄▄▄ ▄ ██ ▀██▄▀ ▀▄▄ ▄ ▀█   █▀▄ ▀▄ █ ▄▀▄  ██▄▄█ █ ▀▄▄█
+██▄▀▄▀ ▄▀ ▄▀ ██▄▄▄▄ ▄▄▄▀▀ █▀▄▄▄▄▀█▀█ ▄▀▄▀█ ▀▄█▄▄▀  ▀▄█▄▀███
+█▄▀▄▄ █▄▀ █ ▀█▄▀▀▀▀ █▀▀ █▄█▀██▄ ██ █▀  ▄▄▀█▀▄ ██▀█▄▀█    ▀█
+██▀██ ▄▄ █ ▀█▄█▀█▄▀ ▀▄▀▄▀▀██▄██▄▄▀██▄▄▀▄██  ▄█▀▄▀▄█▀▀▄██ ▄█
+█ ▀ ▀▀▄▄  ████▄▄█   █▀██▀   █▄  █▀▄ ▀▀██  ▀ ▀ ▀▄██▄█▄▀▀ ▄██
+███████▄▄▀█▀  ▀ ▄█▀▄▄▄█▀ ▀▀ ▄▄▄ ▄█▄█▄  ▄█▀▀▀▄▀█▄▀ ▄▄▄ ▀▀▀ █
+█ ▄▄▄▄▄ █▄█ ▀▄▀███▀██▄█████ █▄█ █ ██▄▀▀█ █▀ ▄█  ▄ █▄█ ▄ ███
+█ █   █ █ ▄▄█  ▄▄▀█▄▄█▄▀▀▄ ▄   ▄ █▄▄ ▄ ██▀█ ▄███ ▄ ▄▄▄█▀▄██
+█ █▄▄▄█ █  ▀█▄▄▄▄ ▄█▄█ ▀▀██▄█▀▀██▄▄▀▀█▀▄▄▀ █▄█▀▄█▄▀▄█▀▄ ███
+█▄▄▄▄▄▄▄█▄█▄▄█▄█▄█▄▄▄▄▄█▄███▄██▄▄▄▄▄▄▄█▄▄█▄▄▄███████▄▄▄█▄██
+
+2026-01-22T22:02:08: 
+========================================
+2026-01-22T22:02:08: QR CODE - SCAN WITH WHATSAPP
+2026-01-22T22:02:08: ========================================
+
+2026-01-22T22:02:08: ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+█ ▄▄▄▄▄ █▀▄▄ ▄▀▄▀▀▄▀▀▀▄▄▀ ▄▀▄█▄▄▄█▀██  █▄▄▄▄▄█▄▄ ██ ▄▄▄▄▄ █
+█ █   █ █▀ ▀█▄ ███▀▀▄▄▄▄  ▀█▄█▄▄ █   ▀ ▄▄█▄▀▀█ ▄ ██ █   █ █
+█ █▄▄▄█ █▀▀▀██  ▄█▄█▄  ▀▀ █ ▄▄▄ ▄█▀▀▄▄ █ █ ▄█▄▀▀▄██ █▄▄▄█ █
+█▄▄▄▄▄▄▄█▄█ █▄█ ▀▄█▄▀ █ █ █ █▄█ ▀▄█ ▀▄▀ ▀ ▀ ▀ ▀▄▀▄█▄▄▄▄▄▄▄█
+█▄ ▄▄▄█▄▄▄▀▀▄▀ █▄█▄  ▄▀▀▀  ▄▄   ▀█▀█▀▄▄▄██▀▀█▀██▀  █▄▀▄▀ ▀█
+██   ▄▄▄▀█ ▄▄▄▄ █ ▀ ▀▀▀  ▀ ▄▀▀▀███  ▄▄▄▄▀▀ ▄▄▄▄█ ▀█ ▀▀▀▀███
+█▄█▄▄ ▄▄▄▀▄▀█▀▄▄▄▄▀ ▄▄▀▄▀▀█▀▀█▀█ ███ ▄▄▄█▀█▀▄▀█▄▄▀▀▄▀▀█  ██
+█▄▀▄▄ ▀▄▄▀▄▄▄ █▀ ▄█▀▀█▄ ▀▀▀█ ▄▀ ▄█▄ ▀█▄ ▀ ▀██▄▀  ▀▀█▄█  ▄██
+█▀▄▀▄▀ ▄▀█▀▀ ▀▄█▀▄ ▄▀███▀▀ █▀  ▀▄▀▀█  ▀▄██▀ ▄███▀▀▀▄█▀███▄█
+█ ██▀ █▄ ▀█▄▄ ▀█▄█ ▄▄█▄▄▀▄▀▄█ █▀▀ ▀▄  ▄▀▄   █▄▄ ▀ ▄█ ▀  ▄██
+███▀█▄ ▄▄▀▄▄▄▄▀█▄▀  ▄█▀▀▀▄ ▀▄█  ▄▀█▄▄▄▀█▄██ ▄▀▄█▄▀ ▄██  ▀ █
+█▀▀▄▀ ▄▄█ ▀   █▀▄ █▀▄██ ▀█▀ █ ▀ ▄█▄▀ ▄█▀▄ ▄█▄█▄  ▄▄▄▄██▀▀▀█
+█ ███ ▄▄▄ ▄ ▄▀ ▀▄█  █▄▀█▀▀▀▀█▀ ▀▄  █ ▄▀██▀▀▀▄▀▄█▀  ▄█▀█▀▄ █
+█▄▄▄▄ ▄▄▄ ▀▄▀▄▄█▀█▄█ ▀▄█▄ ▄ ▄▄▄ ▄ ▀ ▄▄ █ ██▄▄  █▄ ▄▄▄ ▀ ▄██
+█▄█ ▀ █▄█ ▄ ▀  ▀▀▄▄▀▀█▄█ ▀▀ █▄█  █▄█▄  ███ ▀ █▄▄  █▄█ ▄█▄██
+█ ▄ ▄  ▄  ▄  ▀▄█▄▄█  ▄▀██▄█ ▄ ▄ ▀██▀█▄▄▄▄▀▀  ▀█▀ ▄  ▄  ▀ ██
+█▄█▄▀▀▀▄▀▄ ▄▄ ▄▀██ ▄ ██▀▀ █▀▀▄▀  █▀█▄▄ █▄█  ██▄██▄▄▀▀▄█ ███
+█▄█▄▀▀ ▄▀▄ ▄▄█   ██ ▄█▄▀█ █ ▄ ▀ ▄▀ ▄ ▀  ▄▄  ▄█▄█ ▀▄▀ ▄▄ ▄▀█
+█▀ █ █▄▄▀  █ ▀██▀█▄ ▀▀██▄ ██▀█▄ ▄▀█▄   █▀▀▀  ▀███▄█▀██ ██▀█
+█ █▀█▄▀▄▄▄▄▄▀▀█▄▀██▄▀ ▀▄▄ ▄ ▀█▄ ▀▄▀▄▀ ▄ █▀▄▀█▀ ██▄▄█ █ ▀▄▄█
+██▄▀▄█▀▄▀ █▀  ▀█▄▄▄ ▄▄▄▀▀ █▀▄▄▄▄▀█▀█ ▄▀▄▀█ ▀▄█▄▄▀ ▀█▄█▄▀███
+█▄▀▄▄▀█▄▀ ▄ ██ █▀▀▀ █▀▀ █▄█▀██▄ ██ ▀▀ ▄▄▄▀██▄ ▀██▄▄██ █  ▀█
+██▀ ▀▀▄▄█▀ ▄█▄█▀█▄▀ ▀▄▀▄▀▀█▀▄██▄▄▀▄▄▄▄▀▄███ ▄█▄██▄█▀▄█ █ ▄█
+█ ▀ ▀▀▄▄▄▄████▄▄█ █▀█▀█▀▀  ▀█▄  █▀█▀█▀█▄▄ ▄█▀  ▀▀▄ ▀█▀▀ ▄██
+███████▄█▀█▀  ▀ ▀▄▀▄▀▄▀█  ▀ ▄▄▄ ▄█▄█ ▄ █ █▀▀█▀ █▀ ▄▄▄ ▀ █ █
+█ ▄▄▄▄▄ █▄█ ▀▄▀█▄█▀██▀██▄▀█ █▄█ ▀ ██▄  █▀▀▀ ▄█▀ █ █▄█ ▄ ▄▀█
+█ █   █ █ ▄▄▀  ▄▄▀█▄▄█▄▀▀▄ ▄   ▄▄▀▄▄   █▀██  ███ ▄ ▄▄ █▀███
+█ █▄▄▄█ █ ▄▄ ▄██▄ ▄█▄█ ▀▀██▄▀▀▀██▄▄▀ ▄▀▄▄  ███▀▄█▄▀▄▀█▄ ███
+█▄▄▄▄▄▄▄█▄▄▄▄███▄█▄▄▄▄▄█▄███▄██▄▄▄▄▄▄▄█▄▄█▄▄▄███████▄█▄█▄██
+
+2026-01-22T22:03:18: 
+========================================
+2026-01-22T22:03:18: QR CODE - SCAN WITH WHATSAPP
+2026-01-22T22:03:18: ========================================
+
+2026-01-22T22:03:18: ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+█ ▄▄▄▄▄ █▀▄▄ ▄▀▄█▀▄▀▄▀██  ▄▀▄█▄▄▄█▄▀▀▀▄▀█▄▀▄▀▄▄▄ ██ ▄▄▄▄▄ █
+█ █   █ █▀ ▀█  █▄█▀▀██▄▄  ▀█▄█▄▄▀█  ▀▀ ▄▄▄▄▀▀▄ ▄ ██ █   █ █
+█ █▄▄▄█ █▀█▀    ▄█▄█▄  ▀▀ █ ▄▄▄ ▄▄▀▀██ ██▄ ▄ ▄▀▀▄██ █▄▄▄█ █
+█▄▄▄▄▄▄▄█▄█ █▄█ ▀▄█▄▀ █ █ █ █▄█ ▀▄█ ▀▄▀ ▀ ▀ ▀ ▀▄▀▄█▄▄▄▄▄▄▄█
+█▄ ▄▄▄▀▄ ▄ █▄█ █▄█▄  ▄▀▀▀  ▄▄   ▀█▀█▀▄▄▄██▀▀█▀██ ▀ █ █▄▀ ▀█
+██   █▄▄ ▀▀▀▄█▄ █ ▀ ▀▀▀  ▀ ██▀▀███  ▄▄▄ ▀▀▄▄▄▄▄█▄▀█▀▀▀▀▀███
+█▄█▄▄ ▄▄ ▀▄ █▀▄▄▄▄▀ ▄▄▀▄▀▀█ ▄█▀█ █▄█ ▄▀██▀  ▄▀██  ▀▄ ▀▀▄ ██
+██▄   ▀▄█▀▄▄▄ █▀ ▄▄▄▀██▀▀▀▀█ █▀ ▄█▄▄▀██▀▀   ▀ ▀  █▀███▄▀▄██
+█ ▄▄▀▀ ▄▀█▀▀ ▀▄█▄▄▄ ▀█▄▀   █▀   ▄▀ █ ▄ █▀█▀ █▀▄▄▀▀▀▄█▀▄██▄█
+████▄ █▄ ▀█▄▄ ▀██▀ ▄▀▄▄▄▀ ▀▄█ ▄ ▀ ▀▄█▄▄ ▄ ▀ ▄██ ▀  ▀ ▀   ██
+█ █▀█ █▄▄▀▄▄▄ ▀█▄▀  ▄█▀▀▀▄ ▀▄█  ▄██▄▄▄▀█▄██  █▄█▄▀ ▄██   ▀█
+█▀▀▄▀ █▄▀  ▀ ██ ▄ █▀▄██ ▀█▀ █ ▀ ██▄▀ ▄█▀█ ▄█▄█▄  ▄▀▀▄██▀▀▀█
+█ ███ ▄▄▀▄▄  █▀ ▄█  █▄▀█▀▀▀▀█▀ ▀▄  █ ▄▀██▀▀▀▄▀▄█▄▀▀▄▀▀█▀▄ █
+█▄▄▄▄ ▄▄▄ ███▀█▀▀█▄█ ▀▄█▄   ▄▄▄ ▄ ▀▄▄▄▄█ ██▄▄  ██ ▄▄▄ ▀ ▄██
+█▄█▀█ █▄█ █▄▀ ▀█▀▄▄▀▀█▄█ ▀▀ █▄█  █▄▄▄ ▀▄██▄  █▄▄█ █▄█  ▀▄██
+█▀▀ ▄▄▄▄▄ ▄  ▀▄█▄▄██ ▄███▄█▄▄ ▄ ▀██▀█▄█▄▄█▄█ ▀▄▄▀ ▄▄ ▄ ▀ ██
+█▀▄ █▀▀▄   ▄▄ ▄▀▄█▀▄ ▄█▀▄▀█▀██▀  █▀█▄▄▄▄█▀▀ ▀▀ █▀█▄▀███▀▀▀█
+█▄█ █▀ ▄▄█ ▄▄█  ███ █▄▄▀█▄█ ██▀  █ ▄▄   ▀█▀▀▄██▄ ▀▄▀█▄▄ ███
+█▄ █ █▄▄▀  █▄███▀█▄ ▀▀██▄ ██▀█   ██▄▄  ███▀  ▀███▄█▀██ ██ █
+█ █▀█▄▀▄▄▄▀▀ ▄█▄▀██▄▀ ▀▄▄ ▄ ▀█▄▄▀█▀▄▀▀▄ ▄ ▄▀█  ██▄▄█ █ ▀▄▄█
+██▄▀▄▄▀▄▀ ▀▄ ▀█▄▄▄▄ ▄▄▄▀▀ █▀▄▄▄▄▀█▀█ ▄▀▄▀█ ▀▄█▄▄▀ █ ▄█ ▀███
+█▄▀▄▄▄█▄▀  ▄█ █▀▀▀▀ █▀▀ █▄█▀██▄ ██▄█▀ ▄▄▄▀▀▀▄ █▀▀█ ██ █▀ ▀█
+██▀▀▀▄█▄▀   █▄▄██▄▀ ▀▄▀▄▀▀█▀▄██▄▄▀▀█▄▄▄▄██▀▀▄█▀▄█▀▄▀██▀▀ ▄█
+█ ▀ ▀▀▄▄▀█████▄▄█ ▄▄█▀██▀  ▄█▄  █▀█ ▀██ ▄▄██▀  ▄▀ ▄▀▄▄▄ ▄██
+███████▄█▀█▀  ▀ █▄▄  ▄██▀▀▀ ▄▄▄ ▄█▄██  ██▀▀▀▄████ ▄▄▄  ▀▀ █
+█ ▄▄▄▄▄ █▄█ ▀▄▀█▄▀▀█ ███▀██ █▄█ █▄██ ▄▀██▀▀ ██▀ ▀ █▄█ ▄  ▀█
+█ █   █ █ ▄▄▄  ▄▄▀█▄▄█▄▀▀▄ ▄ ▄ ▄▄▀▄▄ ▄ █▀▀█  ▀██▀▄ ▄▄▄█▀███
+█ █▄▄▄█ █  ▄▄█▄▀▄ ▄█▄█ ▀▀██▄▀▀▀███▄▀▀█▀▄▄  █▄▄▀▄█▄▀▄█▀▄ ███
+█▄▄▄▄▄▄▄█▄█▄█▄▄█▄█▄▄▄▄▄█▄███▄▄█▄▄▄▄▄▄▄█▄▄█▄▄▄████████▄▄█▄██
+
+2026-01-22T22:04:14: 
+========================================
+2026-01-22T22:04:14: QR CODE - SCAN WITH WHATSAPP
+2026-01-22T22:04:14: ========================================
+
+2026-01-22T22:04:14: ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+█ ▄▄▄▄▄ █▄▄▀▄▀██ █ ▀ ██▄█▄ █▀██  ▀▄█▀▄█ ▄▄▄▄▄ █
+█ █   █ █ ███▀ ██▄▀▀ ▀  █▄█▀▄▄ ▄ █▀█ ▀█ █   █ █
+█ █▄▄▄█ █▄▀▀▀▄█  ▀ ▄  ▄▄▄ ▄▄▄ ██ ▄ ▄▄▄█ █▄▄▄█ █
+█▄▄▄▄▄▄▄█▄█▄█ █▄▀ █▄▀ █▄█ █▄█ ▀ ▀ ▀▄█ █▄▄▄▄▄▄▄█
+█▄  ▄█▀▄█▄ █▄ █▄ █▄█▄ ▄▄▄  █  ▀▀▀▀▄█   █▀▄  █ █
+█▀█▀█▀▄▄▀  ▀█▀▄█▀█▀█▄█▀ ▀█ ▄▀▀  ▀ █▀▀ ▀█▀ ▀█ ▄█
+█ ▄ ▄  ▄█▀ ▄ █ █ ▄  █▀  ▀ ▀ ████ ▀▄▄█▄▀▀█▀█▄▄██
+█▄█▄ ▀█▄▄ ▀▄██ █▄▀ ▄ ███ ▀▄██  ▀▄  ▀ ▄▀▄▄▄ ▀▀██
+█  ▀█ █▄██▀▄▄ █▄█  ▀▄▄▀▀ █▄▄██▀▄▄▄▀▀ █▄▄▄▀ ▄▀ █
+█ ▄  ██▄▄▀ █   ▀▀▀▀▀▄  ▄  ██▀▀▀▄█ █▀▄█▄██ ██▄██
+█▄▄█▄ ▄▄▄ █▀█▀█▀█▄▄▀█ ▄▄▄ ▄▄█▄▀ █▀▀▄▀ ▄▄▄ ▀ █▄█
+█ █▀▄ █▄█ ▄█▀▄ ▀▄▀▄▄▄ █▄█  ▀▀█ █ █▄ █ █▄█  ▄  █
+█▄▄ ▄  ▄ ▄▄▀ ▄▄ █▄▄▄▀▄▄▄ ▄▀▀▀▀▀▄▄█▀█▄▄▄  ▄█████
+██ ▀▄██▄██▄▄▄▀▄ ▄█▄ ▄▀ ▀▀▀▀█▄▀ ▄██▄ ▄█ ▀█▄  ▀██
+█▀▀▀▄▄▄▄▄▄▀▄ █▄▄  ▀▀▄ ▀█▀ ▀▄ █▀▄  ▄▀ ▀▀▀█ ▄▀ ▄█
+█ ▄▀█  ▄   ▄ █▀▀█▀▀▀▀ ▄▀█▄▄▄█ ▀▄██▄ ▀ ▄▀ █▄▄▄██
+█▀▄  ▀▀▄▀█▄▀▀█ █▄█ █ █ ▄▀█▀██ ▀ █▀██▀▄▄▄ ██ ▀▀█
+██▀▀▀ █▄▄▄█▄  ▀▄  ██▀▀▄█▄▄▄▄█▄▀▄▄▄ █▄▀ ▄ █ ▄  █
+█▄██▄▄█▄█▀█ ██▄██▄█ ▄ ▄▄▄ ▀▀▄▀█▄▄▀ ██ ▄▄▄ ▄ ▀██
+█ ▄▄▄▄▄ ██  █▄█ █▄▄█  █▄█ ▄▄ ▄▀   ▄██ █▄█ ▀ ▀▀█
+█ █   █ █▀▄ ██ █ ▀▀▀▀    ▄ ▄▄▀▀▄ ▄▀▀▄  ▄▄▄ ▄█▄█
+█ █▄▄▄█ █ █  ▄▀▄█▄ ▄▀▄▀▀ ▄▄  ▀▄▄█ ▄ ▄▄ ▀▀█▄▄█ █
+█▄▄▄▄▄▄▄█▄▄██▄██▄█▄█▄█▄▄▄████▄████████▄▄▄▄█▄███
+
+2026-01-22T22:04:18: 
+========================================
+2026-01-22T22:04:18: QR CODE - SCAN WITH WHATSAPP
+2026-01-22T22:04:18: ========================================
+
+2026-01-22T22:04:18: ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+█ ▄▄▄▄▄ █ ▄▀ ▀ ▀▄▀█▄█ ▄ █ ▀▄██▄▄▀█▄██▀█▄█▄▄ ▀ ▀▄ ██ ▄▄▄▄▄ █
+█ █   █ █ ▀█ █▀██▀██▄█▀▀▄█▀█▀▀ ▀ ▄▄ ███ █▀  ▀▄ ▄ ██ █   █ █
+█ █▄▄▄█ █▀█▀█ ▄▀▀█▄ ▀█ ▄▀   ▄▄▄  ▄▀▀ ▀▀ ▀▀▄ ██▄▀▄██ █▄▄▄█ █
+█▄▄▄▄▄▄▄█▄▀▄▀ █ ▀ █▄▀ █▄▀▄█ █▄█ ▀▄█▄█ █▄▀ ▀▄█▄▀ █ █▄▄▄▄▄▄▄█
+█ ▄██▄ ▄▀▀▀▀▄█ ▄▄▄  █▀▄█▄▀▀ ▄   ▄ ▄█▀ █▀ ▀▀▀█ ▀█▀ █▀ █▄ ▄ █
+██▄█▀▄▄▄▄██▄█▀▄ ▀ ▄█▀▀▀███ ▄▀▀▄▀██▄▀▄▄█▄█▄▄█▀▄▀▄█▄█   ▄▄ ▀█
+█▄▀█▄ █▄ ▄██  ▀▀▄▄▀ ▄ ▄▄▀ █  ▀▀██ ▀▄▄ ▄  ▀ ▀▀▄ █▄▀▄▀▄█▀▄▄██
+█ █  ▄▀▄████▄▀▀ ▄▄▀█ ▀█▄█▄▄▄▀▀ ██ ██▄▀█▄▀█  ▄ ▄█▄██▀▀▀▄█ ▀█
+█▀▄ ███▄▀▄██ ▀▀ ▀█  ▄  █ ▀██▄   █▄▄█ ▄█ ▄▀█ ▀▄▀█▄▀▄ ▄▀▀▀▀██
+█  █▄ ▄▄▀▀▄▀██▀█▄▀▀█▄▀▄ ▀▄▀▄█▀▄████▀ ▀█▀ ▄▄▄█▀██   █▀▄▄█ ▀█
+█▄█ █▀█▄ ▀▄▀█▀▄ ▀▀▀▄▀  █▀▄▄█▄▀▀ █  █  █▀▄▀  ▀▄▀█▄▀█  ▀▀▀▄▄█
+█▀▄ ▀██▄▀ ██▀▄█ ▄█ █▄█ ▄▄ ▀   █ ▄██▄██  ▀▄██ █  ▀ ▄ ████▀▀█
+█   ██ ▄▀▄▄▀▄█▀█ ▄ ▄ ▀▄▀ ▀▄  █▀▀▀███ ▄█ ▄▀  █▄ ▄▀▀█▀▀█▄▀▀██
+█ █▀  ▄▄▄ ▀█▄█▄█ █▀  ▀▄ ██  ▄▄▄  ▄▀██ ▀ ▀▄ ▄▄█▄▄▀ ▄▄▄ ▄██▀█
+█ █▀█ █▄█  ▀▀ ▀█▀█▄▀▄▀▀█▄▀  █▄█ ▀ ▀█▄▄▄ ▀▀█▀█▄▄█▄ █▄█ █▀▀▀█
+█▀█▄▄ ▄▄▄ ▀▄  ▀ █▀  █ ▀▄▀█▄▄   ▄▀▀▄▄█▀█▀█▄  ▄██▀█    ▄▀▄▄▀█
+█▀ ▄█▄▀▄▀▀ ▄▄▄▄█▀██▄█ █▀ ▀  ▀▄▀ █▄▄█  ▄ ▀█ ▀▀  ▄██▄ ▀█ █▀▀█
+█▄ ▄▄█▀▄▀▀█ █▄▀ ▄▀▄██▀  █▄▀ ▄ ▄█   █▄ ▄ █▄▀█ █▀█▄ █▀ ▄█▄ ██
+█  ▀▄█ ▄▄ █▄█▄ ▄▄█ ▄▄▄▄█▄ ▀█▄█▀██ ▀▄▀ ▄▀▀▀ ▀█▄▀▄▀▀ █▀█▀  ▄█
+█▄▀ ▄▄ ▄▄▀█▀▄▄ ▀▀ ▀▀▀  ▄▀█▄▀▀ ▀▀▀▄▀ ▀▀█▀▀ ▄█ ▀█ ▄▀▄█ ▀██▄▄█
+█▄   ▀▀▄ ▄▄  ██ ▀▄  ▀▀ █▄▀ ▄ ███▄ ▄█▄▄▄▀ █▀ █  ▄▀  ▄▀▄▀   █
+██▀█▄ ▄▄▀█▀▀ ▀▄██▀▄███▀█▀ ▀▀█ ▄▀▀▀▄▄▄▄█   ▀▀▀   ▀  ▀▀▀██▄██
+█ ▀▀▀▀▀▄ █ ███▄ ▄▄▀ █ ▄▄▀▀▀▄▄▄  █▄█▄▄ ▀ ▄█ ▀ ▄█████▄ ▄█▀ ██
+█ ▀ ▀▀▄▄▄ █▄▀ ██ ▀▄   ▄████▄  █▀▄▀███▀ ▄ ▀█▄ █▀▀█ ▄▀█▀▄█ ▀█
+███████▄█  █▄▀ ▄▀█▄▄▄ ▄█▀▀  ▄▄▄ ▀▄██▄▄▄▀ ▀ ▀▀ ▄██ ▄▄▄ ▀▄███
+█ ▄▄▄▄▄ █▀▀██▀█ █ ▀█  ▀▄█ █ █▄█ ▄▀▀▀▄ ▄ ▀█ ▀██▀▀▄ █▄█ ▄▄█▀█
+█ █   █ █▄ ▄ ▄ █▀▀ ▄▀ ▄▀▀▄▀ ▄▄ ▄▀▄ ▄  █▀ █▄ ▀▄ █▀  ▄ ▄  ▀▀█
+█ █▄▄▄█ █▀▄▄▀█ █▄█▄▀▄█ ▀▄  █▀▄▄ ▄█████▄▀▄█▀▄▀█▄▄▀▀ ▄█▄█████
+█▄▄▄▄▄▄▄█▄▄███▄▄▄▄█▄███████▄█▄█▄███▄▄▄█▄██▄▄█▄██▄███▄▄▄██▄█
+
+2026-01-22T22:05:22: Authentication successful!
+2026-01-22T22:05:23: WhatsApp POD Service Ready!
+2026-01-22T22:06:11: Message from Turners Drivers ETA Meriden (120363402178297218@g.us)
+2026-01-22T22:06:11: Message from Turners Drivers ETA Meriden (120363402178297218@g.us)
+2026-01-22T22:06:11: Message from Turners Drivers ETA Meriden (120363402178297218@g.us)
+2026-01-22T22:06:11: Message from Turners Drivers ETA Meriden (120363402178297218@g.us)
+2026-01-22T22:06:11: Message from Turners Drivers ETA Meriden (120363402178297218@g.us)
+2026-01-22T22:55:54: Message from Turners (CEMEX NIGHTS) (120363417226459920@g.us)
+2026-01-22T22:55:54: Message from Turners (CEMEX NIGHTS) (120363417226459920@g.us)
+2026-01-22T22:55:54: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-22T22:55:54: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-22T22:55:54: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-22T22:55:54: Message from Turners (CEMEX NIGHTS) (120363417226459920@g.us)
+2026-01-22T22:55:55: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-22T22:55:55: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-22T22:55:55: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-22T23:08:56: Message from Turners (CEMEX NIGHTS) (120363417226459920@g.us)
+2026-01-22T23:08:57: Message from Turners (CEMEX NIGHTS) (120363417226459920@g.us)
+2026-01-22T23:08:57: Message from Turners (CEMEX NIGHTS) (120363417226459920@g.us)
+2026-01-22T23:08:58: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-22T23:08:58: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-22T23:08:58: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-22T23:08:58: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-22T23:08:58: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-22T23:08:58: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T00:20:30: Message from Turners (CEMEX NIGHTS) (120363417226459920@g.us)
+2026-01-23T00:20:30: Text saved: 1769127630898_120363417226459920.json
+2026-01-23T00:43:50: Message from Turners (CEMEX) (120363422434666568@g.us)
+2026-01-23T00:43:50: Message from Turners (CEMEX) (120363422434666568@g.us)
+2026-01-23T00:43:50: Message from Turners (CEMEX) (120363422434666568@g.us)
+2026-01-23T00:43:50: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T00:43:50: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T00:43:50: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T00:43:50: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T00:43:50: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T00:43:50: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T01:09:34: Message from Turners (CEMEX) (120363422434666568@g.us)
+2026-01-23T01:09:35: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T01:09:35: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T01:09:35: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T01:47:16: Message from Turners (CEMEX) (120363422434666568@g.us)
+2026-01-23T01:47:16: Text saved: 1769132836866_120363422434666568.json
+2026-01-23T05:22:19: Message from Turners (CEMENT FLEET) (120363402310898086@g.us)
+2026-01-23T05:22:19: Text saved: 1769145739164_120363402310898086.json
+2026-01-23T05:28:27: Message from Turners (CEMENT FLEET) (120363402310898086@g.us)
+2026-01-23T05:28:27: Text saved: 1769146107097_120363402310898086.json
+2026-01-23T05:42:24: Message from Turners (CEMEX) (120363422434666568@g.us)
+2026-01-23T05:42:25: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T05:42:25: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T05:42:25: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T05:42:33: Message from Turners (CEMEX) (120363422434666568@g.us)
+2026-01-23T05:42:33: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T05:42:33: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T05:42:33: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T05:44:31: Message from Turners (CEMENT FLEET) (120363402310898086@g.us)
+2026-01-23T05:44:31: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T05:44:31: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T05:44:31: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T05:45:52: Message from Turners (CEMEX) (120363422434666568@g.us)
+2026-01-23T05:45:53: Message from Turners (CEMEX) (120363422434666568@g.us)
+2026-01-23T05:45:54: Message from Turners (CEMEX) (120363422434666568@g.us)
+2026-01-23T05:45:54: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T05:45:54: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T05:45:54: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T05:45:54: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T05:45:54: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T05:45:54: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T05:51:17: Message from Turners (CEMENT FLEET) (120363402310898086@g.us)
+2026-01-23T05:51:17: Text saved: 1769147477532_120363402310898086.json
+2026-01-23T05:52:00: Message from Turners (CEMENT FLEET) (120363402310898086@g.us)
+2026-01-23T05:52:00: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T05:52:00: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T05:52:00: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T05:59:04: Message from Turners (CEMEX) (120363422434666568@g.us)
+2026-01-23T05:59:04: Message from Turners (CEMEX) (120363422434666568@g.us)
+2026-01-23T05:59:04: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T05:59:04: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T05:59:04: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T05:59:04: Message from Turners (CEMEX) (120363422434666568@g.us)
+2026-01-23T05:59:04: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T05:59:04: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T05:59:04: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T06:00:16: Message from Turners (CEMENT FLEET) (120363402310898086@g.us)
+2026-01-23T06:00:16: Text saved: 1769148016582_120363402310898086.json
+2026-01-23T06:01:27: Message from Turners (CEMENT FLEET) (120363402310898086@g.us)
+2026-01-23T06:01:27: Text saved: 1769148087154_120363402310898086.json
+2026-01-23T06:10:38: Message from Turners (CEMEX) (120363422434666568@g.us)
+2026-01-23T06:10:38: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T06:10:38: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T06:10:38: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T06:16:52: Message from Turners (CEMENT FLEET) (120363402310898086@g.us)
+2026-01-23T06:16:52: Text saved: 1769149012636_120363402310898086.json
+2026-01-23T06:22:43: Message from Turners (CEMENT FLEET) (120363402310898086@g.us)
+2026-01-23T06:22:43: Text saved: 1769149363718_120363402310898086.json
+2026-01-23T06:24:33: Message from Turners (CEMEX) (120363422434666568@g.us)
+2026-01-23T06:24:34: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T06:24:34: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T06:24:34: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T06:26:09: Message from Turners (CEMENT FLEET) (120363402310898086@g.us)
+2026-01-23T06:26:09: Text saved: 1769149569295_120363402310898086.json
+2026-01-23T06:57:55: Message from Turners (CEMEX) (120363422434666568@g.us)
+2026-01-23T06:57:58: Message from Turners (CEMEX) (120363422434666568@g.us)
+2026-01-23T06:57:58: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T06:57:58: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T06:57:58: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T06:57:58: Message from Turners (CEMEX) (120363422434666568@g.us)
+2026-01-23T06:57:59: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T06:57:59: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T06:57:59: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T07:07:58: Message from Turners (CEMENT FLEET) (120363402310898086@g.us)
+2026-01-23T07:07:59: Text saved: 1769152078989_120363402310898086.json
+2026-01-23T07:27:23: Message from Turners (CEMEX) (120363422434666568@g.us)
+2026-01-23T07:27:23: Message from Turners (CEMEX) (120363422434666568@g.us)
+2026-01-23T07:27:23: Message from Turners (CEMEX) (120363422434666568@g.us)
+2026-01-23T07:27:24: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T07:27:24: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T07:27:24: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T07:27:24: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T07:27:24: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T07:27:24: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T07:36:11: Message from Turners (CEMENT FLEET) (120363402310898086@g.us)
+2026-01-23T07:36:11: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T07:36:11: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T07:36:11: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T07:36:15: Message from Turners (CEMENT FLEET) (120363402310898086@g.us)
+2026-01-23T07:36:15: Text saved: 1769153775837_120363402310898086.json
+2026-01-23T07:37:17: Message from Turners (CEMENT FLEET) (120363402310898086@g.us)
+2026-01-23T07:37:17: Text saved: 1769153837119_120363402310898086.json
+2026-01-23T07:48:02: Message from Turners (CEMENT FLEET) (120363402310898086@g.us)
+2026-01-23T07:48:03: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T07:48:03: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T07:48:03: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T07:48:13: Message from Turners (CEMENT FLEET) (120363402310898086@g.us)
+2026-01-23T07:48:13: Text saved: 1769154493356_120363402310898086.json
+2026-01-23T07:57:33: Message from Turners Drivers ETA Meriden (120363402178297218@g.us)
+2026-01-23T07:57:33: Text saved: 1769155053149_120363402178297218.json
+2026-01-23T07:58:43: Message from Turners (CEMENT FLEET) (120363402310898086@g.us)
+2026-01-23T07:58:43: Text saved: 1769155123354_120363402310898086.json
+2026-01-23T08:04:44: Message from Turners Drivers ETA Meriden (120363402178297218@g.us)
+2026-01-23T08:04:44: Text saved: 1769155484889_120363402178297218.json
+2026-01-23T08:05:25: Message from Turners Drivers ETA Meriden (120363402178297218@g.us)
+2026-01-23T08:05:25: Text saved: 1769155525678_120363402178297218.json
+2026-01-23T08:05:59: Message from Turners (CEMENT FLEET) (120363402310898086@g.us)
+2026-01-23T08:05:59: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T08:05:59: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T08:05:59: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T08:06:01: Message from Turners (CEMENT FLEET) (120363402310898086@g.us)
+2026-01-23T08:06:01: Text saved: 1769155561823_120363402310898086.json
+2026-01-23T08:06:16: Message from Turners (CEMENT FLEET) (120363402310898086@g.us)
+2026-01-23T08:06:16: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T08:06:16: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T08:06:16: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T08:06:29: Message from Turners (CEMENT FLEET) (120363402310898086@g.us)
+2026-01-23T08:06:29: Text saved: 1769155589014_120363402310898086.json
+2026-01-23T08:06:45: Message from Turners (CEMENT FLEET) (120363402310898086@g.us)
+2026-01-23T08:06:45: Text saved: 1769155605732_120363402310898086.json
+2026-01-23T08:10:28: Message from Turners (CEMENT FLEET) (120363402310898086@g.us)
+2026-01-23T08:10:28: Text saved: 1769155828933_120363402310898086.json
+2026-01-23T08:12:04: Message from Turners (CEMENT FLEET) (120363402310898086@g.us)
+2026-01-23T08:12:04: Text saved: 1769155924114_120363402310898086.json
+2026-01-23T08:12:09: Message from Turners Drivers ETA Meriden (120363402178297218@g.us)
+2026-01-23T08:12:09: Text saved: 1769155929239_120363402178297218.json
+2026-01-23T08:13:37: Message from Turners Drivers ETA Meriden (120363402178297218@g.us)
+2026-01-23T08:13:37: Text saved: 1769156017339_120363402178297218.json
+2026-01-23T08:13:46: Message from Turners (CEMENT FLEET) (120363402310898086@g.us)
+2026-01-23T08:13:46: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T08:13:46: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T08:13:46: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T08:14:01: Message from Turners (CEMENT FLEET) (120363402310898086@g.us)
+2026-01-23T08:14:01: Text saved: 1769156041650_120363402310898086.json
+2026-01-23T08:14:05: Message from Turners (CEMENT FLEET) (120363402310898086@g.us)
+2026-01-23T08:14:06: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T08:14:06: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T08:14:06: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T08:14:14: Message from Turners (CEMENT FLEET) (120363402310898086@g.us)
+2026-01-23T08:14:14: Text saved: 1769156054135_120363402310898086.json
+2026-01-23T08:15:09: Message from Turners (CEMEX) (120363422434666568@g.us)
+2026-01-23T08:15:11: Message from Turners (CEMEX) (120363422434666568@g.us)
+2026-01-23T08:15:11: Message from Turners (CEMEX) (120363422434666568@g.us)
+2026-01-23T08:15:11: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T08:15:11: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T08:15:11: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T08:15:12: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T08:15:12: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T08:15:12: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T08:15:13: Message from Turners (CEMEX) (120363422434666568@g.us)
+2026-01-23T08:15:14: Message from Turners (CEMEX) (120363422434666568@g.us)
+2026-01-23T08:15:44: Message from Turners (CEMEX) (120363422434666568@g.us)
+2026-01-23T08:15:44: Text saved: 1769156144461_120363422434666568.json
+2026-01-23T08:17:42: Message from Turners Drivers ETA Stanway (120363418565727002@g.us)
+2026-01-23T08:17:42: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T08:17:42: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T08:17:42: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T08:19:46: Message from Turners (Meriden) (120363418017149655@g.us)
+2026-01-23T08:19:46: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T08:19:46: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T08:19:46: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T08:22:07: Message from Turners (CEMEX) (120363422434666568@g.us)
+2026-01-23T08:22:09: Message from Turners (CEMEX) (120363422434666568@g.us)
+2026-01-23T08:22:09: Message from Turners (CEMEX) (120363422434666568@g.us)
+2026-01-23T08:22:10: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T08:22:10: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T08:22:10: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T08:22:10: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T08:22:10: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T08:22:10: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T08:22:11: Message from Turners (CEMEX) (120363422434666568@g.us)
+2026-01-23T08:22:12: Message from Turners (CEMEX) (120363422434666568@g.us)
+2026-01-23T08:27:23: Message from Turners Drivers ETA Meriden (120363402178297218@g.us)
+2026-01-23T08:27:23: Message from Turners Drivers ETA Meriden (120363402178297218@g.us)
+2026-01-23T08:27:23: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T08:27:23: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T08:27:23: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T08:27:23: Message from Turners Drivers ETA Meriden (120363402178297218@g.us)
+2026-01-23T08:27:23: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T08:27:23: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T08:27:23: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T08:27:24: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T08:27:24: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T08:27:24: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T08:29:16: Message from Turners (CEMENT FLEET) (120363402310898086@g.us)
+2026-01-23T08:29:16: Text saved: 1769156956473_120363402310898086.json
+2026-01-23T08:34:12: Message from Turners (CEMEX) (120363422434666568@g.us)
+2026-01-23T08:34:12: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T08:34:12: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T08:34:12: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T08:34:20: Message from Turners (CEMEX) (120363422434666568@g.us)
+2026-01-23T08:34:20: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T08:34:20: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T08:34:20: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T08:36:22: Message from Turners Drivers ETA Meriden (120363402178297218@g.us)
+2026-01-23T08:36:22: Text saved: 1769157382810_120363402178297218.json
+2026-01-23T08:36:38: Message from Turners (Meriden) (120363418017149655@g.us)
+2026-01-23T08:36:38: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T08:36:38: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T08:36:38: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T08:37:42: Message from Turners Drivers ETA Meriden (120363402178297218@g.us)
+2026-01-23T08:37:42: Text saved: 1769157462481_120363402178297218.json
+2026-01-23T08:37:50: Message from Turners Drivers ETA Meriden (120363402178297218@g.us)
+2026-01-23T08:37:50: Text saved: 1769157470803_120363402178297218.json
+2026-01-23T08:39:19: Message from Turners Drivers ETA Meriden (120363402178297218@g.us)
+2026-01-23T08:39:19: Text saved: 1769157559096_120363402178297218.json
+2026-01-23T08:39:26: Message from Turners (CEMENT FLEET) (120363402310898086@g.us)
+2026-01-23T08:39:26: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T08:39:26: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T08:39:26: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T08:39:47: Message from Turners (CEMENT FLEET) (120363402310898086@g.us)
+2026-01-23T08:39:48: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T08:39:48: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T08:39:48: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T08:41:42: Message from Turners (CEMENT FLEET) (120363402310898086@g.us)
+2026-01-23T08:41:42: Text saved: 1769157702771_120363402310898086.json
+2026-01-23T08:42:08: Message from Turners Drivers ETA Meriden (120363402178297218@g.us)
+2026-01-23T08:42:08: Text saved: 1769157728379_120363402178297218.json
+2026-01-23T08:42:28: Message from Turners (CEMENT FLEET) (120363402310898086@g.us)
+2026-01-23T08:42:28: Text saved: 1769157748042_120363402310898086.json
+2026-01-23T08:42:29: Message from Turners (CEMENT FLEET) (120363402310898086@g.us)
+2026-01-23T08:42:29: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T08:42:29: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T08:42:29: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T08:42:49: Message from Turners Drivers ETA Meriden (120363402178297218@g.us)
+2026-01-23T08:42:49: Text saved: 1769157769857_120363402178297218.json
+2026-01-23T08:49:05: Message from Turners (Meriden) (120363418017149655@g.us)
+2026-01-23T08:49:05: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T08:49:05: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T08:49:05: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T08:50:10: Message from Turners Drivers ETA Meriden (120363402178297218@g.us)
+2026-01-23T08:50:10: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T08:50:10: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T08:50:10: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T08:51:21: Message from Turners Drivers ETA Meriden (120363402178297218@g.us)
+2026-01-23T08:51:21: Text saved: 1769158281822_120363402178297218.json
+2026-01-23T08:59:42: Message from Turners Drivers ETA Meriden (120363402178297218@g.us)
+2026-01-23T08:59:42: Text saved: 1769158782408_120363402178297218.json
+2026-01-23T08:59:52: Message from Turners Drivers ETA Meriden (120363402178297218@g.us)
+2026-01-23T08:59:52: Text saved: 1769158792632_120363402178297218.json
+2026-01-23T09:02:06: Message from Turners (CEMENT FLEET) (120363402310898086@g.us)
+2026-01-23T09:02:06: Text saved: 1769158926062_120363402310898086.json
+2026-01-23T09:02:35: Message from Turners Drivers ETA Meriden (120363402178297218@g.us)
+2026-01-23T09:02:35: Text saved: 1769158955311_120363402178297218.json
+2026-01-23T09:03:43: Message from Turners (CEMENT FLEET) (120363402310898086@g.us)
+2026-01-23T09:03:43: Text saved: 1769159023614_120363402310898086.json
+2026-01-23T09:04:29: Message from Turners (CEMENT FLEET) (120363402310898086@g.us)
+2026-01-23T09:04:29: Text saved: 1769159069767_120363402310898086.json
+2026-01-23T09:07:26: Message from Turners (Meriden) (120363418017149655@g.us)
+2026-01-23T09:07:27: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T09:07:27: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T09:07:27: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T09:07:28: Message from Turners (Meriden) (120363418017149655@g.us)
+2026-01-23T09:08:46: Message from Turners (CEMENT FLEET) (120363402310898086@g.us)
+2026-01-23T09:08:46: Text saved: 1769159326145_120363402310898086.json
+2026-01-23T09:14:39: Message from Turners (CEMEX) (120363422434666568@g.us)
+2026-01-23T09:14:39: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T09:14:39: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T09:14:39: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T09:21:20: Message from Turners (CEMENT FLEET) (120363402310898086@g.us)
+2026-01-23T09:21:20: Text saved: 1769160080390_120363402310898086.json
+2026-01-23T09:24:14: Message from Turners Drivers ETA Meriden (120363402178297218@g.us)
+2026-01-23T09:24:15: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T09:24:15: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T09:24:15: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T09:24:22: Message from Turners (Meriden) (120363418017149655@g.us)
+2026-01-23T09:24:23: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T09:24:23: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T09:24:23: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T09:27:58: Message from Turners Drivers ETA Stanway (120363418565727002@g.us)
+2026-01-23T09:27:58: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T09:27:58: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T09:27:58: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T09:28:04: Message from Turners (DSM Stanway) (120363419908323614@g.us)
+2026-01-23T09:28:04: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T09:28:04: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T09:28:04: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T09:28:12: Message from Turners (CPI) (120363421965274698@g.us)
+2026-01-23T09:28:12: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T09:28:12: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T09:28:12: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T09:42:09: Message from Turners (DSM Stanway) (120363419908323614@g.us)
+2026-01-23T09:42:09: Text saved: 1769161329048_120363419908323614.json
+2026-01-23T09:42:33: Message from Turners (CEMENT FLEET) (120363402310898086@g.us)
+2026-01-23T09:42:33: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T09:42:33: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T09:42:33: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T09:43:36: Message from Turners Drivers ETA Meriden (120363402178297218@g.us)
+2026-01-23T09:43:36: Text saved: 1769161416811_120363402178297218.json
+2026-01-23T09:46:04: Message from Turners Drivers ETA Meriden (120363402178297218@g.us)
+2026-01-23T09:46:04: Text saved: 1769161564351_120363402178297218.json
+2026-01-23T09:47:12: Message from Turners Drivers ETA Meriden (120363402178297218@g.us)
+2026-01-23T09:47:12: Text saved: 1769161632133_120363402178297218.json
+2026-01-23T09:52:17: Message from Turners (CPI) (120363421965274698@g.us)
+2026-01-23T09:52:17: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T09:52:17: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T09:52:17: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T10:04:58: Message from Turners (CEMENT FLEET) (120363402310898086@g.us)
+2026-01-23T10:04:58: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T10:04:58: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T10:04:58: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T10:06:46: Message from Turners (CEMENT FLEET) (120363402310898086@g.us)
+2026-01-23T10:06:46: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T10:06:46: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T10:06:46: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T10:06:56: Message from Turners (CEMENT FLEET) (120363402310898086@g.us)
+2026-01-23T10:06:56: Text saved: 1769162816001_120363402310898086.json
+2026-01-23T10:08:50: Message from Turners (CEMENT FLEET) (120363402310898086@g.us)
+2026-01-23T10:08:50: Text saved: 1769162930448_120363402310898086.json
+2026-01-23T10:13:45: Message from Turners (DSM Stanway) (120363419908323614@g.us)
+2026-01-23T10:13:45: Text saved: 1769163225945_120363419908323614.json
+2026-01-23T10:14:28: Message from Turners (CEMEX) (120363422434666568@g.us)
+2026-01-23T10:14:28: Message from Turners (CEMEX) (120363422434666568@g.us)
+2026-01-23T10:14:28: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T10:14:28: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T10:14:28: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T10:14:28: Message from Turners (CEMEX) (120363422434666568@g.us)
+2026-01-23T10:14:28: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T10:14:28: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T10:14:28: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T10:18:25: Message from Turners Drivers ETA Stanway (120363418565727002@g.us)
+2026-01-23T10:18:25: Text saved: 1769163505503_120363418565727002.json
+2026-01-23T10:19:37: Message from Turners (DSM Stanway) (120363419908323614@g.us)
+2026-01-23T10:19:37: Text saved: 1769163577251_120363419908323614.json
+2026-01-23T10:20:29: Message from Turners (DSM Stanway) (120363419908323614@g.us)
+2026-01-23T10:20:30: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T10:20:30: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T10:20:30: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T10:21:08: Message from Turners (DSM Stanway) (120363419908323614@g.us)
+2026-01-23T10:21:08: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T10:21:08: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T10:21:08: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T10:21:51: Message from Turners Drivers ETA Stanway (120363418565727002@g.us)
+2026-01-23T10:21:51: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T10:21:51: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T10:21:51: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T10:21:56: Message from Turners Drivers ETA Stanway (120363418565727002@g.us)
+2026-01-23T10:21:56: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T10:21:56: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T10:21:56: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T10:23:54: Message from Turners (Meriden) (120363418017149655@g.us)
+2026-01-23T10:23:54: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T10:23:54: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T10:23:54: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T10:24:42: Message from Turners (CEMEX) (120363422434666568@g.us)
+2026-01-23T10:24:42: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T10:24:42: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T10:24:42: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T10:31:51: Message from Turners (CEMENT FLEET) (120363402310898086@g.us)
+2026-01-23T10:31:51: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T10:31:51: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T10:31:51: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T10:32:02: Message from Turners (CEMEX) (120363422434666568@g.us)
+2026-01-23T10:32:04: Message from Turners (CEMEX) (120363422434666568@g.us)
+2026-01-23T10:32:04: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T10:32:04: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T10:32:04: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T10:32:06: Message from Turners (CEMEX) (120363422434666568@g.us)
+2026-01-23T10:32:06: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T10:32:06: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T10:32:06: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T10:37:20: Message from Turners (CEMENT FLEET) (120363402310898086@g.us)
+2026-01-23T10:37:21: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T10:37:21: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T10:37:21: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T10:41:18: Message from Turners (CEMENT FLEET) (120363402310898086@g.us)
+2026-01-23T10:41:18: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T10:41:18: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T10:41:18: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T10:44:10: Message from Turners Drivers ETA Meriden (120363402178297218@g.us)
+2026-01-23T10:44:10: Text saved: 1769165050169_120363402178297218.json
+2026-01-23T10:46:01: Message from Turners Drivers ETA Meriden (120363402178297218@g.us)
+2026-01-23T10:46:01: Text saved: 1769165161575_120363402178297218.json
+2026-01-23T10:53:30: Message from Turners (CEMEX) (120363422434666568@g.us)
+2026-01-23T10:53:30: Message from Turners (CEMEX) (120363422434666568@g.us)
+2026-01-23T10:53:30: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T10:53:30: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T10:53:30: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T10:53:30: Message from Turners (CEMEX) (120363422434666568@g.us)
+2026-01-23T10:53:30: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T10:53:30: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T10:53:30: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T11:09:32: Message from Turners (Meriden) (120363418017149655@g.us)
+2026-01-23T11:09:32: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T11:09:32: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T11:09:32: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T11:10:13: Message from Turners (CEMENT FLEET) (120363402310898086@g.us)
+2026-01-23T11:10:14: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T11:10:14: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T11:10:14: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T11:11:51: Message from Turners (CEMENT FLEET) (120363402310898086@g.us)
+2026-01-23T11:11:51: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T11:11:51: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T11:11:51: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T11:12:06: Message from Turners (CEMENT FLEET) (120363402310898086@g.us)
+2026-01-23T11:12:06: Text saved: 1769166726714_120363402310898086.json
+2026-01-23T11:15:09: Message from Turners (CEMENT FLEET) (120363402310898086@g.us)
+2026-01-23T11:15:09: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T11:15:09: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T11:15:09: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T11:17:26: Message from Heidelberg Evolve (120363406368851068@g.us)
+2026-01-23T11:19:48: Message from Turners (CEMENT FLEET) (120363402310898086@g.us)
+2026-01-23T11:19:49: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T11:19:49: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T11:19:49: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T11:36:07: Message from Turners (CEMEX) (120363422434666568@g.us)
+2026-01-23T11:36:07: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T11:36:07: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T11:36:07: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T11:36:19: Message from Turners (CEMEX) (120363422434666568@g.us)
+2026-01-23T11:36:19: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T11:36:19: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T11:36:19: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T11:41:41: Message from Turners Drivers ETA Stanway (120363418565727002@g.us)
+2026-01-23T11:41:41: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T11:41:41: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T11:41:41: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T11:47:44: Message from Turners Drivers ETA Meriden (120363402178297218@g.us)
+2026-01-23T11:47:45: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T11:47:45: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T11:47:45: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T11:47:55: Message from Turners (CEMEX) (120363422434666568@g.us)
+2026-01-23T11:47:55: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T11:47:55: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T11:47:55: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T11:50:14: Message from Turners (CEMENT FLEET) (120363402310898086@g.us)
+2026-01-23T11:50:14: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T11:50:14: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T11:50:14: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T11:51:00: Message from Turners (CEMENT FLEET) (120363402310898086@g.us)
+2026-01-23T11:51:01: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T11:51:01: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T11:51:01: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T12:02:40: Message from Turners (Meriden) (120363418017149655@g.us)
+2026-01-23T12:02:40: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T12:02:40: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T12:02:40: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T12:02:43: Message from Turners (Meriden) (120363418017149655@g.us)
+2026-01-23T12:08:53: Message from Turners (CEMENT FLEET) (120363402310898086@g.us)
+2026-01-23T12:08:53: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T12:08:53: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T12:08:53: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T12:10:47: Message from Turners (Meriden) (120363418017149655@g.us)
+2026-01-23T12:10:47: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T12:10:47: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T12:10:47: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T12:11:42: Message from Turners Drivers ETA Meriden (120363402178297218@g.us)
+2026-01-23T12:11:42: Text saved: 1769170302765_120363402178297218.json
+2026-01-23T12:13:17: Message from Turners (CEMENT FLEET) (120363402310898086@g.us)
+2026-01-23T12:13:17: Text saved: 1769170397003_120363402310898086.json
+2026-01-23T12:13:55: Message from Turners (CEMENT FLEET) (120363402310898086@g.us)
+2026-01-23T12:13:55: Text saved: 1769170435120_120363402310898086.json
+2026-01-23T12:18:26: Message from Turners (Meriden) (120363418017149655@g.us)
+2026-01-23T12:18:26: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T12:18:26: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T12:18:26: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T12:20:37: Message from Turners (CEMEX) (120363422434666568@g.us)
+2026-01-23T12:20:37: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T12:20:37: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T12:20:37: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T12:29:34: Message from Turners (CEMENT FLEET) (120363402310898086@g.us)
+2026-01-23T12:29:35: Message from Turners (CEMENT FLEET) (120363402310898086@g.us)
+2026-01-23T12:29:35: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T12:29:35: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T12:29:35: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T12:29:35: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T12:29:35: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T12:29:35: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T12:29:35: Message from Turners (CEMENT FLEET) (120363402310898086@g.us)
+2026-01-23T12:29:35: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T12:29:35: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T12:29:35: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T12:33:17: Message from Turners (CEMEX) (120363422434666568@g.us)
+2026-01-23T12:33:18: Message from Turners (CEMEX) (120363422434666568@g.us)
+2026-01-23T12:33:19: Message from Turners (CEMEX) (120363422434666568@g.us)
+2026-01-23T12:33:19: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T12:33:19: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T12:33:19: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T12:33:19: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T12:33:19: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T12:33:19: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T12:47:31: Message from Turners (CEMEX) (120363422434666568@g.us)
+2026-01-23T12:47:32: Message from Turners (CEMEX) (120363422434666568@g.us)
+2026-01-23T12:47:32: Message from Turners (CEMEX) (120363422434666568@g.us)
+2026-01-23T12:47:33: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T12:47:33: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T12:47:33: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T12:47:33: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T12:47:33: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T12:47:33: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T12:47:59: Message from Turners (CEMEX) (120363422434666568@g.us)
+2026-01-23T12:48:00: Message from Turners (CEMEX) (120363422434666568@g.us)
+2026-01-23T12:48:01: Message from Turners (CEMEX) (120363422434666568@g.us)
+2026-01-23T12:48:01: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T12:48:01: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T12:48:01: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T12:48:02: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T12:48:02: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T12:48:02: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T12:50:22: Message from Turners (CEMENT FLEET) (120363402310898086@g.us)
+2026-01-23T12:50:22: Text saved: 1769172622332_120363402310898086.json
+2026-01-23T12:52:12: Message from Turners (CEMENT FLEET) (120363402310898086@g.us)
+2026-01-23T12:52:13: Could not get image dimensions: classify.getImageDimensions is not a function
+2026-01-23T12:52:13: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T12:52:13: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-23T12:59:58: Shutting down gracefully...

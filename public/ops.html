@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Operations Dashboard - WhatsApp POD Service</title>
+    <title>WhatsApp Admin - WPPConnect</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
@@ -12,22 +12,25 @@
             color: #eee;
             min-height: 100vh;
         }
-
         .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
             padding: 20px 30px;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
         .header h1 { font-size: 1.5rem; }
-        .header .status { font-size: 0.9rem; }
-
-        .container {
-            padding: 20px;
-            max-width: 1400px;
-            margin: 0 auto;
+        .status-badge {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
         }
+        .status-connected { background: #25D366; color: #000; }
+        .status-disconnected { background: #dc3545; color: #fff; }
+        .status-loading { background: #ffc107; color: #000; }
+
+        .container { padding: 20px; max-width: 1400px; margin: 0 auto; }
 
         .grid {
             display: grid;
@@ -44,483 +47,425 @@
         }
         .card h2 {
             font-size: 1rem;
-            color: #a0a0a0;
+            color: #25D366;
             margin-bottom: 15px;
             text-transform: uppercase;
             letter-spacing: 1px;
+            border-bottom: 1px solid #0f3460;
+            padding-bottom: 10px;
         }
 
-        .health-indicator {
+        .qr-container {
+            text-align: center;
+            padding: 20px;
+        }
+        .qr-container img {
+            max-width: 200px;
+            border-radius: 10px;
+            border: 2px solid #25D366;
+        }
+        .qr-placeholder {
+            width: 200px;
+            height: 200px;
+            background: #0f3460;
+            border-radius: 10px;
             display: flex;
             align-items: center;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-        .health-dot {
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            animation: pulse 2s infinite;
-        }
-        .health-dot.healthy { background: #00d26a; }
-        .health-dot.degraded { background: #fcd535; }
-        .health-dot.unhealthy { background: #f6465d; }
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
+            justify-content: center;
+            margin: 0 auto;
+            color: #666;
         }
 
-        .stat-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s;
         }
-        .stat {
+        .btn-primary { background: #25D366; color: #000; }
+        .btn-primary:hover { background: #128C7E; }
+        .btn-danger { background: #dc3545; color: #fff; }
+        .btn-danger:hover { background: #c82333; }
+        .btn-secondary { background: #0f3460; color: #eee; }
+        .btn-secondary:hover { background: #1a4a7a; }
+
+        .btn-group { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 15px; }
+
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; color: #aaa; }
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #0f3460;
+            background: #0a1628;
+            color: #eee;
+            font-size: 14px;
+        }
+        .form-group textarea { min-height: 100px; resize: vertical; }
+
+        .group-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .group-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
             background: #0f3460;
+            border-radius: 5px;
+            margin-bottom: 8px;
+        }
+        .group-item .name { font-weight: bold; }
+        .group-item .count { color: #888; font-size: 0.85rem; }
+
+        .log-container {
+            background: #0a1628;
+            border-radius: 5px;
             padding: 15px;
-            border-radius: 8px;
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 0.85rem;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .log-entry { margin-bottom: 5px; }
+        .log-time { color: #666; margin-right: 10px; }
+        .log-msg { color: #aaa; }
+        .log-success { color: #25D366; }
+        .log-error { color: #dc3545; }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
             text-align: center;
         }
-        .stat-value {
-            font-size: 2rem;
-            font-weight: bold;
-            color: #fff;
-        }
-        .stat-label {
-            font-size: 0.8rem;
-            color: #a0a0a0;
-            margin-top: 5px;
-        }
+        .stat-item { padding: 15px; background: #0f3460; border-radius: 8px; }
+        .stat-value { font-size: 2rem; font-weight: bold; color: #25D366; }
+        .stat-label { color: #888; font-size: 0.85rem; margin-top: 5px; }
 
-        .queue-card {
-            background: #0f3460;
-            padding: 15px;
-            border-radius: 8px;
-            display: flex;
-            justify-content: space-between;
+        .uptime { color: #888; font-size: 0.9rem; margin-top: 10px; }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
             align-items: center;
-            margin-bottom: 10px;
+            justify-content: center;
         }
-        .queue-name { font-weight: bold; }
-        .queue-count { font-size: 1.5rem; font-weight: bold; }
-        .queue-review { color: #fcd535; }
-        .queue-out { color: #00d26a; }
-        .queue-quarantine { color: #f6465d; }
-
-        .alert-item {
-            background: #0f3460;
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 10px;
-            border-left: 4px solid;
-        }
-        .alert-critical { border-color: #f6465d; }
-        .alert-warning { border-color: #fcd535; }
-        .alert-info { border-color: #667eea; }
-        .alert-header {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 5px;
-        }
-        .alert-level {
-            font-size: 0.7rem;
-            padding: 2px 8px;
-            border-radius: 4px;
-            text-transform: uppercase;
-        }
-        .alert-critical .alert-level { background: #f6465d; }
-        .alert-warning .alert-level { background: #fcd535; color: #000; }
-        .alert-message { font-size: 0.9rem; color: #ccc; }
-
-        .action-btn {
-            background: #667eea;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            margin-right: 10px;
-            margin-bottom: 10px;
-        }
-        .action-btn:hover { background: #5a6fd6; }
-        .action-btn.danger { background: #f6465d; }
-        .action-btn.danger:hover { background: #e63b50; }
-
-        .runbook-item {
-            background: #0f3460;
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 10px;
-            cursor: pointer;
-        }
-        .runbook-item:hover { background: #1a4a7a; }
-        .runbook-title { font-weight: bold; margin-bottom: 5px; }
-        .runbook-severity {
-            font-size: 0.7rem;
-            padding: 2px 8px;
-            border-radius: 4px;
-            display: inline-block;
-        }
-        .severity-critical { background: #f6465d; }
-        .severity-high { background: #ff6b6b; }
-        .severity-medium { background: #fcd535; color: #000; }
-        .severity-low { background: #00d26a; }
-
-        .metrics-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 10px 0;
-            border-bottom: 1px solid #0f3460;
-        }
-        .metrics-row:last-child { border-bottom: none; }
-
-        .activity-item {
-            display: flex;
-            gap: 15px;
-            padding: 10px 0;
-            border-bottom: 1px solid #0f3460;
-            font-size: 0.9rem;
-        }
-        .activity-time { color: #a0a0a0; min-width: 100px; }
-        .activity-action { color: #667eea; }
-
-        .refresh-bar {
-            background: #0f3460;
-            padding: 10px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            border-radius: 8px;
-        }
-        .refresh-info { color: #a0a0a0; }
-
-        .tabs {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-        .tab {
+        .modal.active { display: flex; }
+        .modal-content {
             background: #16213e;
+            border-radius: 10px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
             border: 1px solid #0f3460;
-            padding: 10px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            color: #a0a0a0;
         }
-        .tab.active {
-            background: #667eea;
-            color: white;
-            border-color: #667eea;
-        }
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
-
-        .section-title {
-            font-size: 1.2rem;
-            margin-bottom: 15px;
-            color: #fff;
-        }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .modal-close { background: none; border: none; color: #aaa; font-size: 1.5rem; cursor: pointer; }
     </style>
 </head>
 <body>
     <div class="header">
-        <h1>Operations Dashboard</h1>
-        <div class="status">WhatsApp POD Service v1.0</div>
+        <h1>WhatsApp Admin - WPPConnect</h1>
+        <span id="statusBadge" class="status-badge status-loading">Connecting...</span>
     </div>
 
     <div class="container">
-        <div class="refresh-bar">
-            <span class="refresh-info">Auto-refresh: 30s | Last updated: <span id="lastUpdate">-</span></span>
-            <div>
-                <button class="action-btn" onclick="refreshAll()">Refresh Now</button>
+        <!-- Stats Row -->
+        <div class="card" style="margin-bottom: 20px;">
+            <div class="stats">
+                <div class="stat-item">
+                    <div class="stat-value" id="uptime">--</div>
+                    <div class="stat-label">Uptime</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="groupCount">--</div>
+                    <div class="stat-label">Groups</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="connectionStatus">--</div>
+                    <div class="stat-label">Status</div>
+                </div>
             </div>
         </div>
 
         <div class="grid">
-            <!-- Health Overview -->
+            <!-- QR Code Section -->
             <div class="card">
-                <h2>System Health</h2>
-                <div class="health-indicator">
-                    <div class="health-dot" id="healthDot"></div>
-                    <div>
-                        <div id="healthStatus" style="font-size: 1.2rem; font-weight: bold;">Checking...</div>
-                        <div id="healthUptime" style="font-size: 0.8rem; color: #a0a0a0;">-</div>
+                <h2>Authentication</h2>
+                <div class="qr-container">
+                    <div id="qrImage">
+                        <div class="qr-placeholder" id="qrPlaceholder">
+                            <span>Scan QR Code<br>to Connect</span>
+                        </div>
                     </div>
                 </div>
-                <div class="stat-grid">
-                    <div class="stat">
-                        <div class="stat-value" id="healthChecks">-</div>
-                        <div class="stat-label">Checks</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value" id="healthHealthy">-</div>
-                        <div class="stat-label">Healthy</div>
-                    </div>
+                <div class="btn-group">
+                    <button class="btn btn-secondary" onclick="refreshQR()">Refresh QR</button>
+                    <button class="btn btn-primary" onclick="reconnect()">Reconnect</button>
                 </div>
             </div>
 
-            <!-- Queue Status -->
+            <!-- Broadcast Section -->
             <div class="card">
-                <h2>Queue Status</h2>
-                <div class="queue-card">
-                    <span class="queue-name">REVIEW</span>
-                    <span class="queue-count queue-review" id="queueReview">-</span>
+                <h2>Broadcast Message</h2>
+                <div class="form-group">
+                    <label>Recipients (select groups)</label>
+                    <div id="broadcastGroups" class="group-list" style="max-height: 150px; margin-bottom: 10px;">
+                        <p style="color: #666;">Loading groups...</p>
+                    </div>
                 </div>
-                <div class="queue-card">
-                    <span class="queue-name">OUT</span>
-                    <span class="queue-count queue-out" id="queueOut">-</span>
+                <div class="form-group">
+                    <label>Message</label>
+                    <textarea id="broadcastMessage" placeholder="Enter your broadcast message..."></textarea>
                 </div>
-                <div class="queue-card">
-                    <span class="queue-name">QUARANTINE</span>
-                    <span class="queue-count queue-quarantine" id="queueQuarantine">-</span>
+                <button class="btn btn-primary" onclick="sendBroadcast()">Send Broadcast</button>
+            </div>
+
+            <!-- Groups Section -->
+            <div class="card">
+                <h2>Available Groups</h2>
+                <div id="groupsList" class="group-list">
+                    <p style="color: #666;">Loading groups...</p>
                 </div>
             </div>
 
-            <!-- Active Alerts -->
+            <!-- Logs Section -->
             <div class="card">
-                <h2>Active Alerts</h2>
-                <div id="alertsList">
-                    <div style="color: #a0a0a0; text-align: center;">No active alerts</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="tabs">
-            <div class="tab active" onclick="showTab('metrics')">Metrics</div>
-            <div class="tab" onclick="showTab('actions')">Quick Actions</div>
-            <div class="tab" onclick="showTab('runbooks')">Runbooks</div>
-            <div class="tab" onclick="showTab('activity')">Activity</div>
-        </div>
-
-        <!-- Metrics Tab -->
-        <div id="metrics" class="tab-content active">
-            <div class="card">
-                <h2>Processing Metrics</h2>
-                <div class="stat-grid">
-                    <div class="stat">
-                        <div class="stat-value" id="metricProcessed">-</div>
-                        <div class="stat-label">Total Processed</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value" id="metricOutRate">-</div>
-                        <div class="stat-label">Auto-Route Rate</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value" id="metricEmailsSent">-</div>
-                        <div class="stat-label">Emails Sent</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value" id="metricArchived">-</div>
-                        <div class="stat-label">Archived</div>
+                <h2>Activity Log</h2>
+                <div class="log-container" id="activityLog">
+                    <div class="log-entry">
+                        <span class="log-time">[--:--:--]</span>
+                        <span class="log-msg">Initializing...</span>
                     </div>
                 </div>
+                <button class="btn btn-secondary" style="margin-top: 10px;" onclick="clearLog()">Clear Log</button>
             </div>
         </div>
 
-        <!-- Quick Actions Tab -->
-        <div id="actions" class="tab-content">
-            <div class="card">
-                <h2>Maintenance Actions</h2>
-                <div style="margin-bottom: 20px;">
-                    <button class="action-btn" onclick="runRetentionCleanup(true)">Dry Run Retention</button>
-                    <button class="action-btn" onclick="runRetentionCleanup(false)">Apply Retention</button>
-                </div>
-                <div style="margin-bottom: 20px;">
-                    <button class="action-btn" onclick="triggerJob('retention')">Run Cleanup Job</button>
-                    <button class="action-btn" onclick="triggerJob('archive')">Run Archive Job</button>
-                </div>
-                <div>
-                    <button class="action-btn danger" onclick="clearAlerts()">Clear All Alerts</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Runbooks Tab -->
-        <div id="runbooks" class="tab-content">
-            <div class="card">
-                <h2>Common Procedures</h2>
-                <div id="runbooksList"></div>
-            </div>
-        </div>
-
-        <!-- Activity Tab -->
-        <div id="activity" class="tab-content">
-            <div class="card">
-                <h2>Recent Activity</h2>
-                <div id="activityList">
-                    <div style="color: #a0a0a0; text-align: center;">Loading...</div>
-                </div>
+        <!-- Service Control -->
+        <div class="card">
+            <h2>Service Control</h2>
+            <div class="btn-group">
+                <button class="btn btn-primary" onclick="restartService()">Restart Service</button>
+                <button class="btn btn-danger" onclick="stopService()">Stop Service</button>
             </div>
         </div>
     </div>
 
+    <!-- Broadcast Modal -->
+    <div class="modal" id="broadcastModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Select Groups for Broadcast</h2>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div id="modalGroups" class="group-list"></div>
+            <button class="btn btn-primary" style="margin-top: 15px; width: 100%;" onclick="confirmBroadcast()">Send to Selected</button>
+        </div>
+    </div>
+
     <script>
-        let refreshInterval;
+        let status = { connected: false, uptime: 0 };
+        let groups = [];
+        let logs = [];
 
-        function showTab(tabId) {
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-            document.querySelector(`[onclick="showTab('${tabId}')"]`).classList.add('active');
-            document.getElementById(tabId).classList.add('active');
-        }
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchStatus();
+            fetchGroups();
+            setInterval(fetchStatus, 5000);
+            setInterval(fetchGroups, 30000);
+        });
 
-        async function refreshAll() {
-            const now = new Date();
-            document.getElementById('lastUpdate').textContent = now.toLocaleTimeString();
-
+        async function fetchStatus() {
             try {
-                // Health
-                const healthRes = await fetch('/health?level=full');
-                const health = await healthRes.json();
-                updateHealth(health);
-
-                // Metrics
-                const metricsRes = await fetch('/api/metrics');
-                const metrics = await metricsRes.json();
-                updateMetrics(metrics);
-
-                // Alerts
-                const alertsRes = await fetch('/api/alerts/active');
-                const alerts = await alertsRes.json();
-                updateAlerts(alerts);
-
-                // Runbooks
-                updateRunbooks();
-
-                // Activity
-                updateActivity();
-
+                const response = await fetch('/status');
+                status = await response.json();
+                updateStatusUI();
             } catch (error) {
-                console.error('Refresh error:', error);
+                logError('Failed to fetch status');
             }
         }
 
-        function updateHealth(health) {
-            const dot = document.getElementById('healthDot');
-            dot.className = 'health-dot ' + health.status;
-            document.getElementById('healthStatus').textContent = health.status.toUpperCase();
-
-            const uptime = health.uptime;
-            const hours = Math.floor(uptime / 3600);
-            const mins = Math.floor((uptime % 3600) / 60);
-            document.getElementById('healthUptime').textContent = `Uptime: ${hours}h ${mins}m`;
-
-            if (health.summary) {
-                document.getElementById('healthChecks').textContent = health.summary.total;
-                document.getElementById('healthHealthy').textContent = health.summary.healthy;
-            }
-
-            // Queue counts
-            if (health.checks?.queues) {
-                document.getElementById('queueReview').textContent = health.checks.queues.queues.REVIEW;
-                document.getElementById('queueOut').textContent = health.checks.queues.queues.OUT;
-                document.getElementById('queueQuarantine').textContent = health.checks.queues.queues.QUARANTINE;
+        async function fetchGroups() {
+            try {
+                const response = await fetch('/api/broadcast/groups');
+                const data = await response.json();
+                groups = data.groups || [];
+                updateGroupsUI();
+            } catch (error) {
+                logError('Failed to fetch groups');
             }
         }
 
-        function updateMetrics(metrics) {
-            const summary = metrics.gauges || {};
-            document.getElementById('metricProcessed').textContent = (metrics.counters?.messages_processed || 0).toLocaleString();
-            document.getElementById('metricEmailsSent').textContent = (metrics.counters?.emails_sent || 0).toLocaleString();
-            document.getElementById('metricArchived').textContent = (summary.archived_items || 0).toLocaleString();
+        function updateStatusUI() {
+            const badge = document.getElementById('statusBadge');
+            const uptimeEl = document.getElementById('uptime');
+            const connStatus = document.getElementById('connectionStatus');
 
-            // Calculate auto-route rate
-            const out = metrics.counters?.pods_routed_out || 0;
-            const total = out + (metrics.counters?.pods_routed_review || 0) + (metrics.counters?.pods_routed_quarantine || 0);
-            const rate = total > 0 ? Math.round((out / total) * 100) : 0;
-            document.getElementById('metricOutRate').textContent = rate + '%';
+            if (status.connected) {
+                badge.textContent = 'Connected';
+                badge.className = 'status-badge status-connected';
+                connStatus.textContent = 'Online';
+                connStatus.style.color = '#25D366';
+            } else {
+                badge.textContent = 'Disconnected';
+                badge.className = 'status-badge status-disconnected';
+                connStatus.textContent = 'Offline';
+                connStatus.style.color = '#dc3545';
+            }
+
+            uptimeEl.textContent = formatUptime(status.uptime);
         }
 
-        function updateAlerts(alerts) {
-            const container = document.getElementById('alertsList');
-            if (!alerts || alerts.length === 0) {
-                container.innerHTML = '<div style="color: #00d26a; text-align: center;">No active alerts</div>';
+        function updateGroupsUI() {
+            const groupsList = document.getElementById('groupsList');
+            const broadcastGroups = document.getElementById('broadcastGroups');
+
+            if (groups.length === 0) {
+                groupsList.innerHTML = '<p style="color: #666;">No groups found</p>';
+                broadcastGroups.innerHTML = '<p style="color: #666;">No groups available</p>';
                 return;
             }
 
-            container.innerHTML = alerts.map(alert => `
-                <div class="alert-item alert-${alert.level.toLowerCase()}">
-                    <div class="alert-header">
-                        <span>${alert.ruleName}</span>
-                        <span class="alert-level">${alert.level}</span>
-                    </div>
-                    <div class="alert-message">${alert.message}</div>
+            groupsList.innerHTML = groups.map(g => `
+                <div class="group-item">
+                    <span class="name">${escapeHtml(g.name)}</span>
+                    <span class="count">${g.participantCount || 0} members</span>
                 </div>
             `).join('');
-        }
 
-        function updateRunbooks() {
-            const runbooks = [
-                { id: 'WHATSAPP_DISCONNECTED', title: 'WhatsApp Disconnected', severity: 'HIGH' },
-                { id: 'QUEUE_BACKLOG', title: 'Queue Backlog', severity: 'MEDIUM' },
-                { id: 'EMAIL_FAILURE', title: 'Email Failures', severity: 'MEDIUM' },
-                { id: 'STORAGE_FULL', title: 'Storage Low', severity: 'HIGH' },
-                { id: 'DATABASE_ISSUES', title: 'Database Issues', severity: 'CRITICAL' }
-            ];
-
-            document.getElementById('runbooksList').innerHTML = runbooks.map(r => `
-                <div class="runbook-item">
-                    <div class="runbook-title">${r.title}</div>
-                    <span class="runbook-severity severity-${r.severity.toLowerCase()}">${r.severity}</span>
+            broadcastGroups.innerHTML = groups.map(g => `
+                <div class="group-item">
+                    <span><input type="checkbox" id="group_${g.id}" value="${escapeHtml(g.name)}"> ${escapeHtml(g.name)}</span>
                 </div>
             `).join('');
+
+            document.getElementById('groupCount').textContent = groups.length;
         }
 
-        function updateActivity() {
-            const activities = [
-                { time: 'Just now', action: 'System running' },
-                { time: '5m ago', action: 'Health check passed' },
-                { time: '1h ago', action: 'Retention cleanup completed' }
-            ];
-
-            document.getElementById('activityList').innerHTML = activities.map(a => `
-                <div class="activity-item">
-                    <span class="activity-time">${a.time}</span>
-                    <span class="activity-action">${a.action}</span>
-                </div>
-            `).join('');
+        function refreshQR() {
+            log('Refreshing QR code...');
+            reconnect();
         }
 
-        async function runRetentionCleanup(dryRun) {
+        async function reconnect() {
             try {
-                const res = await fetch('/api/retention/cleanup', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ dryRun, limit: 100 })
-                });
-                const result = await res.json();
-                alert(`Retention ${dryRun ? 'DRY RUN' : 'EXECUTED'}: ${result.processed} processed, ${result.deleted} deleted, ${result.archived} archived`);
+                await fetch('/api/reconnect', { method: 'POST' });
+                log('Reconnection initiated...', 'success');
+                setTimeout(fetchStatus, 2000);
             } catch (error) {
-                alert('Error: ' + error.message);
+                logError('Failed to reconnect');
             }
         }
 
-        async function triggerJob(jobName) {
-            try {
-                const res = await fetch(`/api/scheduler/run/${jobName}`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ dryRun: false })
-                });
-                const result = await res.json();
-                alert(`Job ${jobName} executed: ${JSON.stringify(result)}`);
-            } catch (error) {
-                alert('Error: ' + error.message);
+        function sendBroadcast() {
+            const message = document.getElementById('broadcastMessage').value;
+            if (!message) {
+                alert('Please enter a message');
+                return;
+            }
+
+            const selectedGroups = groups.map(g => ({
+                group: g.name
+            }));
+
+            if (selectedGroups.length === 0) {
+                alert('No groups available');
+                return;
+            }
+
+            log(`Sending broadcast to ${selectedGroups.length} groups...`);
+
+            fetch('/api/broadcast/send', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    recipients: selectedGroups,
+                    message: message
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.delivered) {
+                    log(`Broadcast sent to ${data.delivered.length} groups`, 'success');
+                    document.getElementById('broadcastMessage').value = '';
+                } else {
+                    logError('Broadcast failed: ' + (data.error || 'Unknown error'));
+                }
+            })
+            .catch(error => {
+                logError('Broadcast failed: ' + error.message);
+            });
+        }
+
+        function restartService() {
+            if (confirm('Restart the WhatsApp service?')) {
+                log('Restarting service...', 'success');
+                fetch('/api/restart', { method: 'POST' })
+                    .then(() => {
+                        setTimeout(fetchStatus, 3000);
+                    });
             }
         }
 
-        async function clearAlerts() {
-            if (confirm('Clear all active alerts?')) {
-                await fetch('/api/alerts/clear', { method: 'POST' });
-                refreshAll();
+        function stopService() {
+            if (confirm('Stop the WhatsApp service? This will disconnect all users.')) {
+                log('Service stop requested', 'error');
             }
         }
 
-        // Start auto-refresh
-        refreshAll();
-        refreshInterval = setInterval(refreshAll, 30000);
+        function log(message, type = 'info') {
+            const logContainer = document.getElementById('activityLog');
+            const time = new Date().toLocaleTimeString();
+            const entry = document.createElement('div');
+            entry.className = 'log-entry';
+            entry.innerHTML = `
+                <span class="log-time">[${time}]</span>
+                <span class="log-msg ${type === 'success' ? 'log-success' : type === 'error' ? 'log-error' : ''}">${escapeHtml(message)}</span>
+            `;
+            logContainer.insertBefore(entry, logContainer.firstChild);
+
+            // Keep only last 50 logs
+            while (logContainer.children.length > 50) {
+                logContainer.removeChild(logContainer.lastChild);
+            }
+        }
+
+        function logError(message) {
+            log(message, 'error');
+        }
+
+        function clearLog() {
+            document.getElementById('activityLog').innerHTML = '';
+        }
+
+        function formatUptime(seconds) {
+            if (!seconds) return '--';
+            const h = Math.floor(seconds / 3600);
+            const m = Math.floor((seconds % 3600) / 60);
+            return `${h}h ${m}m`;
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Initial log
+        log('WhatsApp Admin interface loaded');
+        log('Fetching current status...');
     </script>
 </body>
 </html>
