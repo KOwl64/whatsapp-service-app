@@ -1,0 +1,213 @@
+2026-01-26T04:19:54: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T04:19:54: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T04:19:55: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T04:19:55: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T05:26:18: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T05:26:18: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T05:59:09: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T05:59:09: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T06:00:16: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T06:00:16: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T06:00:16: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T06:00:16: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T06:09:17: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T06:09:17: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T06:09:18: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T06:09:18: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T06:19:05: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T06:19:05: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T06:26:21: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T06:26:21: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T06:26:21: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T06:26:21: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T06:27:00: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T06:27:00: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T06:27:01: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T06:27:01: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T06:43:53: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T06:43:53: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T07:03:14: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T07:03:14: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T07:06:03: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T07:06:03: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T07:08:20: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T07:08:20: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T07:13:39: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T07:13:39: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T07:13:48: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T07:13:48: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T07:14:26: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T07:14:26: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T07:17:14: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T07:17:14: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T07:17:14: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T07:17:14: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T07:17:15: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T07:17:15: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T07:17:31: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T07:17:31: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T07:17:47: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T07:17:47: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T07:18:03: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T07:18:03: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T07:18:11: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T07:18:11: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T07:28:47: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T07:28:47: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T07:29:24: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T07:29:24: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T07:29:24: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T07:29:24: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T07:33:07: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T07:33:07: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T07:33:15: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T07:33:15: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T07:33:24: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T07:33:24: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T07:33:40: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T07:33:40: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T07:52:12: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T07:52:12: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T07:52:12: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T07:52:12: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T07:52:13: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T07:52:13: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T07:52:13: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T07:52:13: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T07:52:13: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T07:52:13: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T07:52:13: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T07:52:13: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T07:55:11: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T07:55:11: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T08:06:12: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T08:06:12: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T08:06:19: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T08:06:19: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T08:21:42: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T08:21:42: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T08:29:34: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T08:29:34: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T08:30:06: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T08:30:06: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T08:31:44: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T08:31:44: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T08:43:57: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T08:43:57: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T08:43:57: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T08:43:57: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T08:45:20: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T08:45:20: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T08:48:08: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T08:48:08: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T08:57:00: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T08:57:00: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T09:11:44: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T09:11:44: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T09:16:28: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T09:16:28: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T09:37:52: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T09:37:52: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T09:56:51: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T09:56:51: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T10:03:39: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T10:03:39: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T10:03:39: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T10:03:39: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T10:10:03: [Broadcast] ✗ Failed for { group: 'Turners (Meriden)' } : Cannot read properties of undefined (reading 'markedUnread')
+I (https://static.whatsapp.net/rsrc.php/v4iMny4/ye/l/en_GB-j/_DpEqZQKjMf.js:1546:4178)
+Object.<anonymous> (https://static.whatsapp.net/rsrc.php/v4iMny4/ye/l/en_GB-j/_DpEqZQKjMf.js:1546:1751)
+2026-01-26T10:10:05: [Broadcast] ✗ Failed for { group: 'Turners (CEMENT FLEET)' } : Cannot read properties of undefined (reading 'markedUnread')
+I (https://static.whatsapp.net/rsrc.php/v4iMny4/ye/l/en_GB-j/_DpEqZQKjMf.js:1546:4178)
+Object.<anonymous> (https://static.whatsapp.net/rsrc.php/v4iMny4/ye/l/en_GB-j/_DpEqZQKjMf.js:1546:1751)
+2026-01-26T10:10:06: [Broadcast] ✗ Failed for { group: 'Turners (CEMEX)' } : Cannot read properties of undefined (reading 'markedUnread')
+I (https://static.whatsapp.net/rsrc.php/v4iMny4/ye/l/en_GB-j/_DpEqZQKjMf.js:1546:4178)
+Object.<anonymous> (https://static.whatsapp.net/rsrc.php/v4iMny4/ye/l/en_GB-j/_DpEqZQKjMf.js:1546:1751)
+2026-01-26T10:10:08: [Broadcast] ✗ Failed for { group: 'Turners (CEMEX NIGHTS)' } : Cannot read properties of undefined (reading 'markedUnread')
+I (https://static.whatsapp.net/rsrc.php/v4iMny4/ye/l/en_GB-j/_DpEqZQKjMf.js:1546:4178)
+Object.<anonymous> (https://static.whatsapp.net/rsrc.php/v4iMny4/ye/l/en_GB-j/_DpEqZQKjMf.js:1546:1751)
+2026-01-26T10:10:09: [Broadcast] ✗ Failed for { group: 'Turners (CPI)' } : Cannot read properties of undefined (reading 'markedUnread')
+I (https://static.whatsapp.net/rsrc.php/v4iMny4/ye/l/en_GB-j/_DpEqZQKjMf.js:1546:4178)
+Object.<anonymous> (https://static.whatsapp.net/rsrc.php/v4iMny4/ye/l/en_GB-j/_DpEqZQKjMf.js:1546:1751)
+2026-01-26T10:10:11: [Broadcast] ✗ Failed for { group: 'Turners (DSM Stanway)' } : Cannot read properties of undefined (reading 'markedUnread')
+I (https://static.whatsapp.net/rsrc.php/v4iMny4/ye/l/en_GB-j/_DpEqZQKjMf.js:1546:4178)
+Object.<anonymous> (https://static.whatsapp.net/rsrc.php/v4iMny4/ye/l/en_GB-j/_DpEqZQKjMf.js:1546:1751)
+2026-01-26T10:10:12: [Broadcast] ✗ Failed for { group: 'Turners Drivers ETA Meriden' } : Cannot read properties of undefined (reading 'markedUnread')
+I (https://static.whatsapp.net/rsrc.php/v4iMny4/ye/l/en_GB-j/_DpEqZQKjMf.js:1546:4178)
+Object.<anonymous> (https://static.whatsapp.net/rsrc.php/v4iMny4/ye/l/en_GB-j/_DpEqZQKjMf.js:1546:1751)
+2026-01-26T10:10:14: [Broadcast] ✗ Failed for { group: 'Turners Drivers ETA Stanway' } : Cannot read properties of undefined (reading 'markedUnread')
+I (https://static.whatsapp.net/rsrc.php/v4iMny4/ye/l/en_GB-j/_DpEqZQKjMf.js:1546:4178)
+Object.<anonymous> (https://static.whatsapp.net/rsrc.php/v4iMny4/ye/l/en_GB-j/_DpEqZQKjMf.js:1546:1751)
+2026-01-26T10:10:15: [Broadcast] ✗ Failed for { group: 'Turners Spare Drivers' } : Cannot read properties of undefined (reading 'markedUnread')
+I (https://static.whatsapp.net/rsrc.php/v4iMny4/ye/l/en_GB-j/_DpEqZQKjMf.js:1546:4178)
+Object.<anonymous> (https://static.whatsapp.net/rsrc.php/v4iMny4/ye/l/en_GB-j/_DpEqZQKjMf.js:1546:1751)
+2026-01-26T10:10:17: [Broadcast] ✗ Failed for { group: 'NEW TURNERS / CEMEX HANSON / ECOCEM / NORTHFLEET TICKETS' } : Cannot read properties of undefined (reading 'markedUnread')
+I (https://static.whatsapp.net/rsrc.php/v4iMny4/ye/l/en_GB-j/_DpEqZQKjMf.js:1546:4178)
+Object.<anonymous> (https://static.whatsapp.net/rsrc.php/v4iMny4/ye/l/en_GB-j/_DpEqZQKjMf.js:1546:1751)
+2026-01-26T10:10:17: [Broadcast] ✗ Failed for { group: 'Heidelberg Evolve Group' } : Group not found: Heidelberg Evolve Group
+2026-01-26T10:10:43: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T10:10:43: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T10:17:53: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T10:17:53: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T10:21:43: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T10:21:43: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T10:21:43: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T10:21:43: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T10:23:40: [Broadcast] ✗ Failed for { group: 'All Drivers' } : Group not found: All Drivers
+2026-01-26T10:25:46: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T10:25:46: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T10:25:52: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T10:25:52: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T10:33:29: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T10:33:29: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T10:33:29: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T10:33:29: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T10:34:56: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T10:34:56: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T10:41:36: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T10:41:36: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T10:46:01: [Broadcast] ✗ Failed for 120363406368851068@g.us : Cannot read properties of undefined (reading 'markedUnread')
+I (https://static.whatsapp.net/rsrc.php/v4iMny4/ye/l/en_GB-j/_DpEqZQKjMf.js:1546:4178)
+Object.<anonymous> (https://static.whatsapp.net/rsrc.php/v4iMny4/ye/l/en_GB-j/_DpEqZQKjMf.js:1546:1751)
+2026-01-26T10:46:03: [Broadcast] ✗ Failed for 120363422576368079@g.us : Cannot read properties of undefined (reading 'markedUnread')
+I (https://static.whatsapp.net/rsrc.php/v4iMny4/ye/l/en_GB-j/_DpEqZQKjMf.js:1546:4178)
+Object.<anonymous> (https://static.whatsapp.net/rsrc.php/v4iMny4/ye/l/en_GB-j/_DpEqZQKjMf.js:1546:1751)
+2026-01-26T10:46:04: [Broadcast] ✗ Failed for 120363402310898086@g.us : Cannot read properties of undefined (reading 'markedUnread')
+I (https://static.whatsapp.net/rsrc.php/v4iMny4/ye/l/en_GB-j/_DpEqZQKjMf.js:1546:4178)
+Object.<anonymous> (https://static.whatsapp.net/rsrc.php/v4iMny4/ye/l/en_GB-j/_DpEqZQKjMf.js:1546:1751)
+2026-01-26T10:46:06: [Broadcast] ✗ Failed for 120363417226459920@g.us : Cannot read properties of undefined (reading 'markedUnread')
+I (https://static.whatsapp.net/rsrc.php/v4iMny4/ye/l/en_GB-j/_DpEqZQKjMf.js:1546:4178)
+Object.<anonymous> (https://static.whatsapp.net/rsrc.php/v4iMny4/ye/l/en_GB-j/_DpEqZQKjMf.js:1546:1751)
+2026-01-26T10:46:07: [Broadcast] ✗ Failed for 120363422434666568@g.us : Cannot read properties of undefined (reading 'markedUnread')
+I (https://static.whatsapp.net/rsrc.php/v4iMny4/ye/l/en_GB-j/_DpEqZQKjMf.js:1546:4178)
+Object.<anonymous> (https://static.whatsapp.net/rsrc.php/v4iMny4/ye/l/en_GB-j/_DpEqZQKjMf.js:1546:1751)
+2026-01-26T10:46:09: [Broadcast] ✗ Failed for 120363421965274698@g.us : Cannot read properties of undefined (reading 'markedUnread')
+I (https://static.whatsapp.net/rsrc.php/v4iMny4/ye/l/en_GB-j/_DpEqZQKjMf.js:1546:4178)
+Object.<anonymous> (https://static.whatsapp.net/rsrc.php/v4iMny4/ye/l/en_GB-j/_DpEqZQKjMf.js:1546:1751)
+2026-01-26T10:46:10: [Broadcast] ✗ Failed for 120363419908323614@g.us : Cannot read properties of undefined (reading 'markedUnread')
+I (https://static.whatsapp.net/rsrc.php/v4iMny4/ye/l/en_GB-j/_DpEqZQKjMf.js:1546:4178)
+Object.<anonymous> (https://static.whatsapp.net/rsrc.php/v4iMny4/ye/l/en_GB-j/_DpEqZQKjMf.js:1546:1751)
+2026-01-26T10:46:12: [Broadcast] ✗ Failed for 120363418017149655@g.us : Cannot read properties of undefined (reading 'markedUnread')
+I (https://static.whatsapp.net/rsrc.php/v4iMny4/ye/l/en_GB-j/_DpEqZQKjMf.js:1546:4178)
+Object.<anonymous> (https://static.whatsapp.net/rsrc.php/v4iMny4/ye/l/en_GB-j/_DpEqZQKjMf.js:1546:1751)
+2026-01-26T10:46:13: [Broadcast] ✗ Failed for 120363319403586748@g.us : Cannot read properties of undefined (reading 'markedUnread')
+I (https://static.whatsapp.net/rsrc.php/v4iMny4/ye/l/en_GB-j/_DpEqZQKjMf.js:1546:4178)
+Object.<anonymous> (https://static.whatsapp.net/rsrc.php/v4iMny4/ye/l/en_GB-j/_DpEqZQKjMf.js:1546:1751)
+2026-01-26T10:46:15: [Broadcast] ✗ Failed for 120363419266877421@g.us : Cannot read properties of undefined (reading 'markedUnread')
+I (https://static.whatsapp.net/rsrc.php/v4iMny4/ye/l/en_GB-j/_DpEqZQKjMf.js:1546:4178)
+Object.<anonymous> (https://static.whatsapp.net/rsrc.php/v4iMny4/ye/l/en_GB-j/_DpEqZQKjMf.js:1546:1751)
+2026-01-26T10:46:16: [Broadcast] ✗ Failed for 120363422304897498@g.us : Cannot read properties of undefined (reading 'markedUnread')
+I (https://static.whatsapp.net/rsrc.php/v4iMny4/ye/l/en_GB-j/_DpEqZQKjMf.js:1546:4178)
+Object.<anonymous> (https://static.whatsapp.net/rsrc.php/v4iMny4/ye/l/en_GB-j/_DpEqZQKjMf.js:1546:1751)
+2026-01-26T10:54:10: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T10:54:10: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T10:54:29: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T10:54:29: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T10:54:30: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T10:54:30: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T10:55:50: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T10:55:50: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T10:57:53: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T10:57:53: Error handling message: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T11:14:13: Error processing media: UNIQUE constraint failed: attachments.content_hash
+2026-01-26T11:14:13: Error handling message: UNIQUE constraint failed: attachments.content_hash

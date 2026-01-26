@@ -940,6 +940,10 @@ app.post('/api/broadcast/send', async (req, res) => {
             failed.push({ recipient, error: error.message });
             console.error(`[Broadcast] ✗ Failed for`, recipient, ':', error.message);
         }
+
+        // Random delay between messages to prevent bot detection (1-10 seconds)
+        const randomDelay = Math.floor(Math.random() * 9000) + 1000;
+        await new Promise(resolve => setTimeout(resolve, randomDelay));
     }
 
     res.json({
@@ -1906,6 +1910,10 @@ app.post('/api/exports/:id/fail', (req, res) => {
 
 // Start scheduled jobs
 scheduler.startScheduler();
+
+// Email queue processor (stub - no interval needed)
+const processorInterval = null;
+const POLL_INTERVAL = 30000;
 
 // Start alert checker interval (every 60 seconds)
 const ALERT_CHECK_INTERVAL = 60 * 1000; // 60 seconds
