@@ -166,6 +166,62 @@ function init() {
         CREATE INDEX IF NOT EXISTS idx_exports_created_at ON exports(created_at DESC);
     `);
 
+    // Archived attachments table - stores archived POD files
+    db.exec(`
+        CREATE TABLE IF NOT EXISTS archived_attachments (
+            id TEXT PRIMARY KEY,
+            original_attachment_id TEXT NOT NULL,
+            archive_path TEXT NOT NULL,
+            archive_size INTEGER,
+            checksum TEXT,
+            archived_at TEXT DEFAULT (datetime('now')),
+            archived_by TEXT NOT NULL,
+            customer_id TEXT,
+            metadata TEXT,
+            restore_path TEXT,
+            restored_at TEXT,
+            restored_by TEXT,
+            status TEXT DEFAULT 'ARCHIVED',
+            FOREIGN KEY (original_attachment_id) REFERENCES attachments(id)
+        )
+    `);
+
+    // Archived attachments indexes
+    db.exec(`
+        CREATE INDEX IF NOT EXISTS idx_archived_original_id ON archived_attachments(original_attachment_id);
+        CREATE INDEX IF NOT EXISTS idx_archived_status ON archived_attachments(status);
+        CREATE INDEX IF NOT EXISTS idx_archived_archived_at ON archived_attachments(archived_at DESC);
+    `);
+
+    // Evidence bundles table - stores compliance export bundles
+    db.exec(`
+        CREATE TABLE IF NOT EXISTS evidence_bundles (
+            id TEXT PRIMARY KEY,
+            bundle_id TEXT UNIQUE NOT NULL,
+            reason TEXT NOT NULL,
+            requested_by TEXT NOT NULL,
+            attachment_ids TEXT NOT NULL,
+            status TEXT DEFAULT 'PENDING',
+            archive_path TEXT,
+            file_size INTEGER,
+            checksum TEXT,
+            password TEXT,
+            created_at TEXT DEFAULT (datetime('now')),
+            expires_at TEXT,
+            downloaded_at TEXT,
+            download_count INTEGER DEFAULT 0,
+            error TEXT
+        )
+    `);
+
+    // Evidence bundles indexes
+    db.exec(`
+        CREATE INDEX IF NOT EXISTS idx_evidence_bundle_id ON evidence_bundles(bundle_id);
+        CREATE INDEX IF NOT EXISTS idx_evidence_status ON evidence_bundles(status);
+        CREATE INDEX IF NOT EXISTS idx_evidence_created_at ON evidence_bundles(created_at DESC);
+        CREATE INDEX IF NOT EXISTS idx_evidence_expires_at ON evidence_bundles(expires_at);
+    `);
+
     console.log(`SQLite DB initialized: ${DB_PATH}`);
 }
 
