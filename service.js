@@ -1236,11 +1236,87 @@ app.delete('/api/email/queue/:id', (req, res) => {
 // Retention & Governance Endpoints
 // ============================================
 
+// Retention policies list
+app.get('/api/retention/policies', (req, res) => {
+    try {
+        const policies = retention.getPolicies();
+        res.json({ count: policies.length, policies });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Get single retention policy
+app.get('/api/retention/policies/:id', (req, res) => {
+    try {
+        const policy = retention.getPolicy(req.params.id);
+        if (!policy) return res.status(404).json({ error: 'Policy not found' });
+        res.json(policy);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Update retention policy
+app.put('/api/retention/policies/:id', (req, res) => {
+    try {
+        const policy = retention.setRule({ ...req.body, policy_id: req.params.id });
+        res.json({ success: true, policy });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
 // Retention stats
 app.get('/api/retention/stats', (req, res) => {
     try {
         const stats = retention.getStats();
         res.json(stats);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Get retention status for an attachment
+app.get('/api/attachments/:id/retention-status', (req, res) => {
+    try {
+        const attachment = models.getAttachmentById(req.params.id);
+        if (!attachment) return res.status(404).json({ error: 'Not found' });
+
+        const rule = retention.getRetentionExpiry(attachment);
+        const isOnHold = legalHold.isProtected(req.params.id);
+
+        res.json({
+            attachment_id: req.params.id,
+            created_at: attachment.created_at,
+            status: attachment.status,
+            retention: rule,
+            is_on_hold: isOnHold,
+            archive_eligible: rule.archive_eligible && !isOnHold,
+            delete_eligible: rule.delete_eligible && !isOnHold
+        });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Get items eligible for archive
+app.get('/api/retention/pending-archive', (req, res) => {
+    try {
+        const { limit = 100 } = req.query;
+        const items = retention.getAttachmentsEligibleForArchive({ limit: parseInt(limit) });
+        res.json({ count: items.length, items });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Get items eligible for deletion
+app.get('/api/retention/pending-delete', (req, res) => {
+    try {
+        const { limit = 100 } = req.query;
+        const items = retention.getAttachmentsEligibleForDelete({ limit: parseInt(limit) });
+        res.json({ count: items.length, items });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -1396,6 +1472,50 @@ app.post('/api/archive/:id/restore', (req, res) => {
     }
 });
 
+// Manually archive an attachment
+app.post('/api/attachments/:id/archive', (req, res) => {
+    try {
+        const { archivedBy = 'api' } = req.body;
+        const result = archive.archive(req.params.id, { archivedBy });
+        res.json(result);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Force delete an attachment (skips retention check, requires admin)
+app.post('/api/attachments/:id/delete', (req, res) => {
+    try {
+        const { deletedBy = 'api', reason = 'Manual deletion' } = req.body;
+        const result = archive.hardDelete(req.params.id, { deletedBy, reason });
+        res.json(result);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Soft delete (marks as pending delete)
+app.post('/api/attachments/:id/soft-delete', (req, res) => {
+    try {
+        const { deletedBy = 'api', reason = null } = req.body;
+        const result = archive.softDelete(req.params.id, { deletedBy, reason });
+        res.json(result);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Undelete a soft-deleted attachment
+app.post('/api/attachments/:id/undelete', (req, res) => {
+    try {
+        const { undeletedBy = 'api' } = req.body;
+        const result = archive.undelete(req.params.id, { undeletedBy });
+        res.json(result);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
 // ============================================
 // Evidence Bundle Endpoints
 // ============================================
@@ -1466,15 +1586,47 @@ app.get('/api/evidence/:bundleId/verify', async (req, res) => {
 // Download bundle (redirect to file)
 app.get('/api/evidence/:bundleId/download', (req, res) => {
     try {
+        const downloadInfo = evidence.recordDownload(req.params.bundleId);
+        if (!fs.existsSync(downloadInfo.path)) {
+            return res.status(404).json({ error: 'Bundle file not found' });
+        }
+
+        res.setHeader('Content-Type', 'application/gzip');
+        res.setHeader('Content-Disposition', `attachment; filename="${downloadInfo.filename}"`);
+        res.setHeader('Content-Length', fs.statSync(downloadInfo.path).size);
+        res.setHeader('X-Checksum-SHA256', downloadInfo.checksum);
+        res.sendFile(downloadInfo.path);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Delete evidence bundle
+app.delete('/api/evidence/:bundleId', (req, res) => {
+    try {
         const bundle = evidence.getBundle(req.params.bundleId);
         if (!bundle) return res.status(404).json({ error: 'Bundle not found' });
 
-        const zipPath = path.join(evidence.EXPORT_PATH, `${req.params.bundleId}.zip`);
-        if (!fs.existsSync(zipPath)) {
-            return res.status(404).json({ error: 'ZIP file not found' });
+        // Remove file if exists
+        if (fs.existsSync(bundle.archive_path)) {
+            fs.unlinkSync(bundle.archive_path);
         }
 
-        res.download(zipPath, `evidence-${req.params.bundleId}.zip`);
+        // Update status
+        const db = require('./db').getDb();
+        db.prepare("UPDATE evidence_bundles SET status = 'DELETED' WHERE id = ?").run(bundle.id);
+
+        res.json({ success: true, bundle_id: req.params.bundleId, deleted_at: new Date().toISOString() });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Cleanup expired bundles
+app.post('/api/evidence/cleanup', (req, res) => {
+    try {
+        const cleaned = evidence.cleanupExpiredBundles();
+        res.json({ cleaned_up: cleaned, cleaned_at: new Date().toISOString() });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
