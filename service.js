@@ -24,6 +24,11 @@ const archive = require('./archive');
 const evidence = require('./evidence');
 const scheduler = require('./scheduler');
 
+// Import Storage modules (R2)
+const presignedUrls = require('./lib/presigned-urls');
+const mimeTypes = require('./lib/mime-types');
+const storage = require('./lib/storage');
+
 // Import Phase 5 modules (Operations & Monitoring)
 const health = require('./health');
 const metrics = require('./metrics');
@@ -2054,6 +2059,196 @@ app.post('/api/exports/:id/fail', (req, res) => {
 
 // ============================================
 // End Phase 5 Endpoints
+// ============================================
+
+// ============================================
+// R2 Storage Endpoints (Plan 07-02)
+// ============================================
+
+// GET /api/storage/upload-url
+// Request: ?filename=abc.jpg&contentType=image/jpeg&category=pods
+// Response: { uploadUrl: 'https://...', key: 'pods/2024-01-01/abc123.jpg', expiresIn: 900 }
+app.get('/api/storage/upload-url', async (req, res) => {
+    try {
+        const { filename, contentType, category } = req.query;
+
+        if (!filename) {
+            return res.status(400).json({ error: 'filename is required' });
+        }
+
+        const mimeType = contentType || mimeTypes.getMimeType(filename);
+        const storageCategory = category || 'pods';
+
+        const result = await presignedUrls.getUploadUrl(
+            presignedUrls.generateStorageKey(filename, storageCategory),
+            mimeType
+        );
+
+        res.json({
+            uploadUrl: result.uploadUrl,
+            key: result.key,
+            expiresIn: result.expiresIn,
+        });
+    } catch (error) {
+        console.error('[Storage] Upload URL generation failed:', error.message);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// GET /api/storage/download-url
+// Request: ?key=pods/2024-01-01/abc123.jpg&expiresIn=3600
+// Response: { downloadUrl: 'https://...', key: '...', expiresIn: 3600 }
+app.get('/api/storage/download-url', async (req, res) => {
+    try {
+        const { key, expiresIn } = req.query;
+
+        if (!key) {
+            return res.status(400).json({ error: 'key is required' });
+        }
+
+        const result = await presignedUrls.getDownloadUrl(key, parseInt(expiresIn) || undefined);
+
+        res.json({
+            downloadUrl: result.downloadUrl,
+            key: result.key,
+            expiresIn: result.expiresIn,
+        });
+    } catch (error) {
+        console.error('[Storage] Download URL generation failed:', error.message);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// GET /api/storage/public-url/:key(*)
+// Returns public (unsigned) URL if configured
+app.get('/api/storage/public-url/:key(*)', async (req, res) => {
+    try {
+        const { key } = req.params;
+        const url = presignedUrls.getPublicUrl(key);
+
+        if (!url) {
+            return res.status(404).json({
+                error: 'Public URL not configured',
+                message: 'R2_PUBLIC_URL environment variable is not set'
+            });
+        }
+
+        res.json({ url });
+    } catch (error) {
+        console.error('[Storage] Public URL generation failed:', error.message);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// GET /api/storage/upload-and-download-urls
+// Get both URLs in single request
+// Request: ?filename=abc.jpg&contentType=image/jpeg
+// Response: { uploadUrl, downloadUrl, key, expiresIn }
+app.get('/api/storage/upload-and-download-urls', async (req, res) => {
+    try {
+        const { filename, contentType, category } = req.query;
+
+        if (!filename) {
+            return res.status(400).json({ error: 'filename is required' });
+        }
+
+        const mimeType = contentType || mimeTypes.getMimeType(filename);
+        const storageCategory = category || 'pods';
+
+        const result = await presignedUrls.getUploadAndDownloadUrls(
+            filename,
+            mimeType,
+            storageCategory
+        );
+
+        res.json(result);
+    } catch (error) {
+        console.error('[Storage] Combined URL generation failed:', error.message);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// POST /api/storage/webhook
+// R2 Worker/External service calls this after successful upload
+app.post('/api/storage/webhook', async (req, res) => {
+    try {
+        const { key, size, contentType, metadata } = req.body;
+
+        if (!key) {
+            return res.status(400).json({ error: 'key is required' });
+        }
+
+        console.log(`[Storage] Webhook received for: ${key}`);
+
+        // Log webhook event
+        audit.log({
+            action: 'R2_UPLOAD_WEBHOOK',
+            details: {
+                key,
+                size,
+                contentType,
+                metadata,
+                receivedAt: new Date().toISOString()
+            }
+        });
+
+        // Return acknowledgment
+        res.json({
+            received: true,
+            key,
+            timestamp: new Date().toISOString()
+        });
+    } catch (error) {
+        console.error('[Storage] Webhook processing failed:', error.message);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// GET /api/storage/status
+// Get storage configuration and status
+app.get('/api/storage/status', async (req, res) => {
+    try {
+        const storageStatus = await storage.getStorageStatus();
+
+        res.json({
+            configured: storageStatus.r2Configured,
+            r2Available: storageStatus.r2Available,
+            bucket: storageStatus.r2Bucket,
+            publicUrlConfigured: storageStatus.r2PublicUrlConfigured,
+            localStorageBase: storageStatus.localStorageBase,
+            uploadUrlExpiry: presignedUrls.UPLOAD_URL_EXPIRY,
+            downloadUrlExpiry: presignedUrls.DOWNLOAD_URL_EXPIRY,
+        });
+    } catch (error) {
+        console.error('[Storage] Status check failed:', error.message);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// GET /api/storage/mime-type/:filename
+// Get MIME type for a filename
+app.get('/api/storage/mime-type/:filename', (req, res) => {
+    try {
+        const { filename } = req.params;
+        const mimeType = mimeTypes.getMimeType(filename);
+        const extension = filename.includes('.') ? filename.split('.').pop().toLowerCase() : '';
+
+        res.json({
+            filename,
+            mimeType,
+            extension,
+            isImage: mimeTypes.isImage(mimeType),
+            isDocument: mimeTypes.isDocument(mimeType),
+            isValidPodType: mimeTypes.isValidPodType(mimeType),
+        });
+    } catch (error) {
+        console.error('[Storage] MIME type lookup failed:', error.message);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// ============================================
+// End R2 Storage Endpoints
 // ============================================
 
 // ============================================
