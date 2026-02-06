@@ -1,0 +1,31 @@
+{
+  "enabled": true,
+  "defaultThreshold": 0.95,
+  "supplierRules": {
+    "CEMEX": { "threshold": 0.90 },
+    "TARMAC": { "threshold": 0.92 },
+    "CPI_EUROMIX": { "threshold": 0.95 },
+    "ECOCEM": { "threshold": 0.90 },
+    "HEIDELBERG": { "threshold": 0.92 },
+    "SMARTFLOW": { "threshold": 0.95 },
+    "*": { "threshold": "${defaultThreshold}" }
+  },
+  "reviewRequired": {
+    "belowThreshold": true,
+    "lowConfidence": true,
+    "noMatch": true
+  },
+  "autoRoute": {
+    "enabled": true,
+    "defaultRecipientRule": "SUPPLIER_MATCH"
+  },
+  "confidenceWeights": {
+    "classification": 0.25,
+    "extraction": 0.35,
+    "matching": 0.40
+  },
+  "audit": {
+    "logDecisions": true,
+    "logReasonCodes": ["AUTO_SEND", "MANUAL_REVIEW", "FORCE_SEND", "REJECT"]
+  }
+}

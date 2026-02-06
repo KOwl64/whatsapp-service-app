@@ -17,6 +17,8 @@ const extractor = require('./extractor');
 const email = require('./email');
 const emailQueue = require('./emailQueue');
 const recipients = require('./recipients');
+// Import Phase 2 Auto-Send module
+const autoSend = require('./lib/auto-send');
 // Import Phase 4 modules
 const retention = require('./retention');
 const legalHold = require('./legalHold');
@@ -83,6 +85,14 @@ try {
     }
 } catch (initError) {
     console.error('Failed to initialize Phase 2 modules:', initError.message);
+}
+
+// Initialize Phase 2 Auto-Send rules
+try {
+    const autoSendConfig = autoSend.loadConfig();
+    console.log('[AutoSend] Configuration loaded:', autoSend.getConfigSummary().enabled ? 'enabled' : 'disabled');
+} catch (initError) {
+    console.error('[AutoSend] Failed to initialize:', initError.message);
 }
 
 function sanitizeFilename(name) {
@@ -414,22 +424,63 @@ async function processMediaMessage(message, from, senderName, receivedAt, correl
                 console.log(`Fallback sender match: confidence=${jobMatch.confidence}, matchType=${jobMatch.matchType}`);
             }
 
+            // ============================================
+            // Phase 2: Auto-Send Rules Evaluation
+            // ============================================
+
+            // Capture attachment ID for audit logging
+            const attachmentId = attachmentData.id;
+
+            // Evaluate auto-send decision based on confidence scores
+            const confidenceData = {
+                id: attachmentId,
+                classificationConfidence: classification.confidence,
+                extractionConfidence: extractedFields?.confidence || ocrResult?.confidence || 0,
+                supplier: extractedFields?.supplier || ocrResult?.supplier || null
+            };
+
+            const autoSendDecision = autoSend.shouldAutoSend(confidenceData, jobMatch);
+            console.log(`[AutoSend] Decision: ${autoSendDecision.decision}, Reason: ${autoSendDecision.reasonCode}`);
+
+            // Log auto-send decision
+            audit.log({
+                action: 'AUTO_SEND_DECISION',
+                attachmentId: attachmentId,
+                correlationId,
+                details: {
+                    decision: autoSendDecision.decision,
+                    reasonCode: autoSendDecision.reasonCode,
+                    reason: autoSendDecision.reason,
+                    nextAction: autoSendDecision.nextAction,
+                    overallConfidence: autoSend.calculateOverallConfidence({
+                        classification: classification.confidence,
+                        extraction: extractedFields?.confidence || ocrResult?.confidence || 0,
+                        matching: jobMatch?.match?.confidence || 0
+                    }),
+                    threshold: autoSend.getSupplierThreshold(extractedFields?.supplier || ocrResult?.supplier)
+                }
+            });
+
+            // Determine status based on auto-send decision
+            // Use OUT for AUTO_SEND, REVIEW for MANUAL_REVIEW
+            const finalStatus = autoSendDecision.nextAction === 'READY_FOR_EXPORT' ? 'OUT' : 'REVIEW';
+
             // Determine review status based on confidence
             const matchConfidence = jobMatch?.match?.confidence || 0;
-            let reviewStatus = 'REVIEW';
+            let matchStatus = 'REVIEW';
             let matchType = jobMatch?.match?.matchType || 'NO_MATCH';
 
             if (matchConfidence >= 0.95) {
-                reviewStatus = 'HIGH_CONFIDENCE';
+                matchStatus = 'HIGH_CONFIDENCE';
             } else if (matchConfidence >= 0.70) {
-                reviewStatus = 'MEDIUM_CONFIDENCE';
+                matchStatus = 'MEDIUM_CONFIDENCE';
             } else {
-                reviewStatus = 'LOW_CONFIDENCE';
+                matchStatus = 'LOW_CONFIDENCE';
             }
 
             // Log match decision
             if (jobMatch && jobMatch.match) {
-                audit.logMatch(attachmentData.id, {
+                audit.logMatch(attachmentId, {
                     jobId: jobMatch.match.jobId,
                     jobRef: jobMatch.match.jobRef,
                     confidence: jobMatch.match.confidence,
@@ -437,9 +488,9 @@ async function processMediaMessage(message, from, senderName, receivedAt, correl
                     candidates: jobMatch.candidates,
                     source: extractedFields ? 'EXTRACTOR' : 'OCR'
                 });
-                console.log(`Job match: ${jobMatch.match.jobRef}, confidence=${jobMatch.match.confidence}, type=${jobMatch.match.matchType}, status=${reviewStatus}`);
+                console.log(`Job match: ${jobMatch.match.jobRef}, confidence=${jobMatch.match.confidence}, type=${jobMatch.match.matchType}, status=${matchStatus}`);
             } else {
-                audit.logMatch(attachmentData.id, {
+                audit.logMatch(attachmentId, {
                     jobId: null,
                     jobRef: null,
                     confidence: 0,
@@ -456,14 +507,17 @@ async function processMediaMessage(message, from, senderName, receivedAt, correl
                 sender: from
             });
 
+            // Use auto-send decision for final status, fallback to routeDecision
+            const finalRouteTo = finalStatus === 'OUT' ? routeDecision.routeTo : routeDecision.routeTo;
+
             // Update attachment status with routing decision and OCR data
-            models.updateAttachmentStatus(attachmentData.id, routeDecision.routeTo, {
+            models.updateAttachmentStatus(attachmentId, finalRouteTo, {
                 classificationConfidence: classification.confidence,
                 // Match info from new match.findMatch() result structure
                 matchedJobId: jobMatch?.match?.jobId || null,
                 matchConfidence: jobMatch?.match?.confidence || 0,
                 matchType: jobMatch?.match?.matchType || null,
-                matchStatus: reviewStatus,
+                matchStatus: matchStatus,
                 // Job ref from extracted fields or match result
                 jobRef: extractedFields?.jobRef || ocrResult?.jobRef || jobMatch?.match?.jobRef || null,
                 routingDecision: routeDecision.decisionType,
@@ -473,15 +527,20 @@ async function processMediaMessage(message, from, senderName, receivedAt, correl
                 vehicleReg: extractedFields?.vehicleReg || ocrResult?.vehicleReg || null,
                 date: extractedFields?.date || ocrResult?.date || null,
                 shipmentNumber: extractedFields?.shipmentNumber || ocrResult?.shipmentNumber || null,
-                extractionConfidence: extractedFields?.confidence || ocrResult?.confidence || 0
+                extractionConfidence: extractedFields?.confidence || ocrResult?.confidence || 0,
+                // Auto-send decision metadata
+                autoSendDecision: autoSendDecision.decision,
+                autoSendReasonCode: autoSendDecision.reasonCode,
+                autoSendReason: autoSendDecision.reason
             });
 
-            audit.logRoute(attachmentData.id, routeDecision.routeTo, {
+            audit.logRoute(attachmentId, finalRouteTo, {
                 decisionType: routeDecision.decisionType,
                 confidence: routeDecision.confidence,
                 reason: routeDecision.details?.reason,
                 classification: classification,
                 match: jobMatch,
+                autoSendDecision: autoSendDecision,
                 extraction: extractedFields ? {
                     supplier: extractedFields.supplier,
                     jobRef: extractedFields.jobRef,
@@ -492,7 +551,7 @@ async function processMediaMessage(message, from, senderName, receivedAt, correl
                 } : null
             });
 
-            console.log(`Routed: ${routeDecision.routeTo} (${routeDecision.decisionType}, confidence=${routeDecision.confidence})`);
+            console.log(`Routed: ${finalRouteTo} (${routeDecision.decisionType}, autoSend=${autoSendDecision.decision}, confidence=${routeDecision.confidence})`);
         } else {
             // Not a POD - route to quarantine
             const routeDecision = autoRoute.route({ classification, match: null, sender: from });
@@ -772,6 +831,149 @@ app.post('/api/attachments/:id/reject', (req, res) => {
         audit.logReview(req.params.id, 'reviewer', 'reject', { reason, notes });
 
         res.json(models.getAttachmentById(req.params.id));
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Force-send endpoint - override auto-send threshold
+app.post('/api/attachments/:id/force-send', (req, res) => {
+    try {
+        const { reason, overrideBy } = req.body;
+
+        // Get current attachment
+        const attachment = models.getAttachmentById(req.params.id);
+        if (!attachment) return res.status(404).json({ error: 'Not found' });
+
+        // Check if already in OUT status
+        if (attachment.status === 'OUT') {
+            return res.json({
+                success: true,
+                message: 'Already in OUT status',
+                attachment
+            });
+        }
+
+        // Create force-send decision
+        const forceDecision = autoSend.shouldForceSend(
+            attachment,
+            { confidence: attachment.match_confidence || 0.5 },
+            reason || 'Manual force-send override'
+        );
+
+        // Update status to OUT
+        const result = models.updateAttachmentStatus(req.params.id, 'OUT', {
+            autoSendDecision: forceDecision.decision,
+            autoSendReasonCode: forceDecision.reasonCode,
+            autoSendReason: forceDecision.reason
+        });
+
+        if (result.changes === 0) return res.status(404).json({ error: 'Not found' });
+
+        // Audit log
+        audit.logReview(req.params.id, overrideBy || 'reviewer', 'force_send', {
+            reason,
+            overrideBy,
+            decision: forceDecision
+        });
+        audit.logRoute(req.params.id, 'OUT', {
+            reason: `Force send override: ${reason}`,
+            decision: forceDecision
+        });
+
+        res.json({
+            success: true,
+            decision: forceDecision,
+            attachment: models.getAttachmentById(req.params.id)
+        });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// ============================================
+// Auto-Send Configuration Endpoints
+// ============================================
+
+// Get auto-send configuration
+app.get('/api/auto-send/config', (req, res) => {
+    try {
+        const summary = autoSend.getConfigSummary();
+        res.json(summary);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Reload auto-send configuration
+app.post('/api/auto-send/reload', (req, res) => {
+    try {
+        const config = autoSend.reloadConfig();
+        res.json({
+            success: true,
+            message: 'Configuration reloaded',
+            config: autoSend.getConfigSummary()
+        });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Validate auto-send configuration
+app.post('/api/auto-send/validate', (req, res) => {
+    try {
+        const configFile = req.query.path || path.join(__dirname, 'config', 'auto-send.json');
+        const result = autoSend.validateConfig(configFile);
+
+        if (result.valid) {
+            res.json({ valid: true, message: 'Configuration is valid' });
+        } else {
+            res.status(400).json({ valid: false, errors: result.errors });
+        }
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Simulate auto-send decision for an attachment
+app.post('/api/auto-send/simulate', (req, res) => {
+    try {
+        const { attachmentId } = req.body;
+
+        if (!attachmentId) {
+            return res.status(400).json({ error: 'attachmentId is required' });
+        }
+
+        const attachment = models.getAttachmentById(attachmentId);
+        if (!attachment) return res.status(404).json({ error: 'Attachment not found' });
+
+        // Get match info
+        const matchResult = attachment.matched_job_id ? {
+            found: true,
+            confidence: attachment.match_confidence || 0.5,
+            supplier: attachment.supplier
+        } : {
+            found: false,
+            confidence: 0,
+            supplier: attachment.supplier
+        };
+
+        const decision = autoSend.shouldAutoSend(attachment, matchResult);
+
+        res.json({
+            attachmentId,
+            currentStatus: attachment.status,
+            simulation: {
+                overallConfidence: autoSend.calculateOverallConfidence({
+                    classification: attachment.classification_confidence || 0,
+                    extraction: attachment.extraction_confidence || 0,
+                    matching: attachment.match_confidence || 0
+                }),
+                supplier: attachment.supplier,
+                threshold: autoSend.getSupplierThreshold(attachment.supplier),
+                decision
+            }
+        });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
