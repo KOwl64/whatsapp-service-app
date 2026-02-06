@@ -335,6 +335,9 @@ async function processMediaMessage(message, from, senderName, receivedAt, correl
                 ocrResult = await ocr.extractStructured(imageBuffer, mimeType);
 
                 if (ocrResult.success) {
+                    // Parse raw OCR text using extractor module for structured fields
+                    extractedFields = extractor.extract(ocrResult.rawText || '');
+
                     // Extract structured fields from OCR result
                     const wordCount = ocrResult.rawText ? ocrResult.rawText.split(/\s+/).filter(w => w.length > 0).length : 0;
 
@@ -348,29 +351,31 @@ async function processMediaMessage(message, from, senderName, receivedAt, correl
                             confidence: ocrResult.confidence,
                             duration: ocrResult.duration,
                             fieldsFound: {
-                                supplier: ocrResult.supplier,
-                                jobRef: ocrResult.jobRef,
-                                vehicleReg: ocrResult.vehicleReg,
-                                date: ocrResult.date,
-                                shipmentNumber: ocrResult.shipmentNumber
+                                supplier: extractedFields.supplier,
+                                jobRef: extractedFields.jobRef,
+                                vehicleReg: extractedFields.vehicleReg,
+                                date: extractedFields.date,
+                                shipmentNumber: extractedFields.shipmentNumber
                             }
                         }
                     });
 
-                    console.log(`OCR: supplier=${ocrResult.supplier}, jobRef=${ocrResult.jobRef}, vehicleReg=${ocrResult.vehicleReg}, confidence=${ocrResult.confidence}`);
+                    console.log(`OCR: supplier=${extractedFields.supplier}, jobRef=${extractedFields.jobRef}, vehicleReg=${extractedFields.vehicleReg}, confidence=${extractedFields.confidence}`);
 
-                    // Log extracted fields
-                    if (extractedFields.jobRefs.length > 0 || extractedFields.vehicleRegs.length > 0) {
+                    // Log extracted fields with quality score
+                    if (extractedFields.confidence > 0) {
                         audit.log({
                             action: 'FIELDS_EXTRACTED',
                             attachmentId: attachmentData.id,
                             correlationId,
                             details: {
-                                jobRefs: extractedFields.jobRefs,
-                                vehicleRegs: extractedFields.vehicleRegs,
-                                dates: extractedFields.dates,
-                                phones: extractedFields.phones,
-                                quality: extractor.getQualityScore(extractedFields)
+                                supplier: extractedFields.supplier,
+                                jobRef: extractedFields.jobRef,
+                                vehicleReg: extractedFields.vehicleReg,
+                                date: extractedFields.date,
+                                shipmentNumber: extractedFields.shipmentNumber,
+                                confidence: extractedFields.confidence,
+                                quality: extractedFields.confidence
                             }
                         });
                     }
@@ -384,14 +389,18 @@ async function processMediaMessage(message, from, senderName, receivedAt, correl
             let jobMatch = null;
             const senderPhone = from.replace('@c.us', '').replace('@g.us', '');
 
-            if (ocrResult && ocrResult.success && (ocrResult.jobRef || ocrResult.vehicleReg)) {
+            // Use extractor-parsed fields for matching
+            const matchJobRef = extractedFields?.jobRef || ocrResult?.jobRef;
+            const matchVehicleReg = extractedFields?.vehicleReg || ocrResult?.vehicleReg;
+
+            if ((extractedFields || ocrResult) && (matchJobRef || matchVehicleReg)) {
                 // Try matching with extracted fields (prefer jobRef over vehicleReg)
-                if (ocrResult.jobRef) {
-                    console.log(`Matching with jobRef: ${ocrResult.jobRef}`);
-                    jobMatch = await match.findByJobRef(ocrResult.jobRef);
-                } else if (ocrResult.vehicleReg) {
-                    console.log(`Matching with vehicleReg: ${ocrResult.vehicleReg}`);
-                    jobMatch = await match.findByVehicleReg(ocrResult.vehicleReg);
+                if (matchJobRef) {
+                    console.log(`Matching with jobRef: ${matchJobRef}`);
+                    jobMatch = await match.findByJobRef(matchJobRef);
+                } else if (matchVehicleReg) {
+                    console.log(`Matching with vehicleReg: ${matchVehicleReg}`);
+                    jobMatch = await match.findByVehicleReg(matchVehicleReg);
                 }
             }
 
@@ -436,13 +445,13 @@ async function processMediaMessage(message, from, senderName, receivedAt, correl
                 jobRef: jobMatch?.job?.ref || null,
                 routingDecision: routeDecision.decisionType,
                 routingReason: routeDecision.details?.reason,
-                // Include OCR data
-                ocrSupplier: ocrResult?.supplier || null,
-                ocrJobRef: ocrResult?.jobRef || null,
-                ocrVehicleReg: ocrResult?.vehicleReg || null,
-                ocrDate: ocrResult?.date || null,
-                ocrShipmentNumber: ocrResult?.shipmentNumber || null,
-                ocrConfidence: ocrResult?.confidence || 0
+                // Include extracted fields from extractor module
+                supplier: extractedFields?.supplier || ocrResult?.supplier || null,
+                jobRef: extractedFields?.jobRef || ocrResult?.jobRef || null,
+                vehicleReg: extractedFields?.vehicleReg || ocrResult?.vehicleReg || null,
+                date: extractedFields?.date || ocrResult?.date || null,
+                shipmentNumber: extractedFields?.shipmentNumber || ocrResult?.shipmentNumber || null,
+                extractionConfidence: extractedFields?.confidence || ocrResult?.confidence || 0
             });
 
             audit.logRoute(attachmentData.id, routeDecision.routeTo, {
@@ -451,7 +460,14 @@ async function processMediaMessage(message, from, senderName, receivedAt, correl
                 reason: routeDecision.details?.reason,
                 classification: classification,
                 match: jobMatch,
-                ocr: ocrResult?.success ? { wordCount: ocrResult.wordCount, quality: extractor.getQualityScore(extractedFields) } : null
+                extraction: extractedFields ? {
+                    supplier: extractedFields.supplier,
+                    jobRef: extractedFields.jobRef,
+                    vehicleReg: extractedFields.vehicleReg,
+                    date: extractedFields.date,
+                    shipmentNumber: extractedFields.shipmentNumber,
+                    confidence: extractedFields.confidence
+                } : null
             });
 
             console.log(`Routed: ${routeDecision.routeTo} (${routeDecision.decisionType}, confidence=${routeDecision.confidence})`);
