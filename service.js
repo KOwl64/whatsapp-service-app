@@ -69,6 +69,22 @@ const TEMP_DIR = path.join(STORAGE_BASE, 'temp');
 normalise.ensureStorageDirectories();
 initDb();
 
+// Initialize Phase 2 modules (classification and OCR) with shared OpenAI client
+try {
+    const OpenAI = require('openai');
+    const apiKey = process.env.OPENAI_API_KEY;
+    if (apiKey) {
+        const openaiClient = new OpenAI({ apiKey });
+        classify.init({ client: openaiClient });
+        ocr.init({ client: openaiClient });
+        console.log('Phase 2 modules initialized: classify and OCR ready');
+    } else {
+        console.warn('OPENAI_API_KEY not set - classification/OCR will use fallback mode');
+    }
+} catch (initError) {
+    console.error('Failed to initialize Phase 2 modules:', initError.message);
+}
+
 function sanitizeFilename(name) {
     if (!name) return 'unknown';
     return name
@@ -217,17 +233,73 @@ async function processMediaMessage(message, from, senderName, receivedAt, correl
         // Move to canonical storage location
         normalise.moveToStorage(tempPath, processed.storagePath);
 
-        // Get image dimensions for classification
-        let width, height;
+        // ============================================
+        // Phase 2: Classification BEFORE creating attachment
+        // ============================================
+
+        // Read file buffer for classification
+        const imageBuffer = fs.readFileSync(processed.storagePath);
+
+        // Classify the image
+        let classification;
         try {
-            const dims = classify.getImageDimensions(processed.storagePath);
-            width = dims.width;
-            height = dims.height;
-        } catch (e) {
-            console.log('Could not get image dimensions:', e.message);
+            classification = await classify.classify(imageBuffer, mimeType);
+        } catch (classError) {
+            console.error('Classification error:', classError.message);
+            classification = {
+                type: 'UNKNOWN',
+                imageType: 'error',
+                confidence: 0.0,
+                isPOD: null,
+                reason: `Classification failed: ${classError.message}`
+            };
         }
 
-        // Create attachment record first (with default REVIEW status)
+        // Log classification attempt
+        audit.log({
+            action: 'CLASSIFY_ATTEMPTED',
+            attachmentId: null,
+            correlationId,
+            details: {
+                fileType: processed.fileType,
+                fileSize: processed.fileSize,
+                contentHash: processed.contentHash
+            }
+        });
+
+        console.log(`Classification: type=${classification.type}, confidence=${classification.confidence}, isPOD=${classification.isPOD}`);
+
+        // Handle NON_POD images with high confidence - skip attachment creation
+        if (classification.type === 'NON_POD' && classification.confidence >= 0.9) {
+            console.log(`Rejecting NON_POD image: ${classification.imageType} (confidence: ${classification.confidence})`);
+
+            // Log rejection
+            audit.log({
+                action: 'CLASSIFY_REJECTED',
+                attachmentId: null,
+                correlationId,
+                details: {
+                    reason: 'NON_POD classification high confidence',
+                    imageType: classification.imageType,
+                    confidence: classification.confidence,
+                    fileMovedTo: `${STORAGE_BASE}/REJECTED/${path.basename(processed.storagePath)}`
+                }
+            });
+
+            // Move to REJECTED folder
+            const rejectedDir = path.join(STORAGE_BASE, 'REJECTED', new Date().toISOString().split('T')[0]);
+            if (!fs.existsSync(rejectedDir)) {
+                fs.mkdirSync(rejectedDir, { recursive: true });
+            }
+            const rejectedPath = path.join(rejectedDir, path.basename(processed.storagePath));
+            fs.renameSync(processed.storagePath, rejectedPath);
+
+            console.log(`Image moved to REJECTED folder`);
+            return; // Skip further processing
+        }
+
+        // For POD, UNKNOWN, or low-confidence images, continue with processing
+        // Proceed to create attachment record and continue with OCR
         const attachmentData = models.createAttachment({
             message_id: messageData.id,
             content_hash: processed.contentHash,
@@ -248,39 +320,23 @@ async function processMediaMessage(message, from, senderName, receivedAt, correl
         });
 
         // ============================================
-        // Phase 2: Auto-classify, OCR, match, and route
+        // Phase 2: Run OCR on POD images
         // ============================================
 
-        // 1. Classify the attachment
-        const classification = classify.classify({
-            width,
-            height,
-            size: processed.fileSize,
-            contentHash: processed.contentHash,
-            fileType: processed.fileType
-        });
-
-        audit.logClassify(attachmentData.id, {
-            isPod: classification.is_pod,
-            confidence: classification.confidence,
-            reasons: classification.reasons
-        });
-
-        console.log(`Classification: is_pod=${classification.is_pod}, confidence=${classification.confidence}`);
-
-        // 2. If POD, run OCR and extract fields
+        // 1. Use already-classified result (classification.type is POD)
+        // Run OCR asynchronously
         let ocrResult = null;
         let extractedFields = null;
 
-        if (classification.is_pod) {
-            // Run OCR asynchronously
+        if (classification.isPOD) {
+            // Run OCR with structured extraction
             try {
-                console.log('Running OCR...');
-                ocrResult = await ocr.extractText(processed.storagePath);
+                console.log('Running structured OCR extraction...');
+                ocrResult = await ocr.extractStructured(imageBuffer, mimeType);
 
                 if (ocrResult.success) {
-                    // Extract structured fields
-                    extractedFields = extractor.fromText(ocrResult.text);
+                    // Extract structured fields from OCR result
+                    const wordCount = ocrResult.rawText ? ocrResult.rawText.split(/\s+/).filter(w => w.length > 0).length : 0;
 
                     // Log OCR extraction
                     audit.log({
@@ -288,19 +344,20 @@ async function processMediaMessage(message, from, senderName, receivedAt, correl
                         attachmentId: attachmentData.id,
                         correlationId,
                         details: {
-                            wordCount: ocrResult.wordCount,
+                            wordCount,
                             confidence: ocrResult.confidence,
                             duration: ocrResult.duration,
                             fieldsFound: {
-                                jobRefs: extractedFields.jobRefs.length,
-                                vehicleRegs: extractedFields.vehicleRegs.length,
-                                dates: extractedFields.dates.length,
-                                phones: extractedFields.phones.length
+                                supplier: ocrResult.supplier,
+                                jobRef: ocrResult.jobRef,
+                                vehicleReg: ocrResult.vehicleReg,
+                                date: ocrResult.date,
+                                shipmentNumber: ocrResult.shipmentNumber
                             }
                         }
                     });
 
-                    console.log(`OCR: ${ocrResult.wordCount} words, quality: ${extractor.getQualityScore(extractedFields).percentage}%`);
+                    console.log(`OCR: supplier=${ocrResult.supplier}, jobRef=${ocrResult.jobRef}, vehicleReg=${ocrResult.vehicleReg}, confidence=${ocrResult.confidence}`);
 
                     // Log extracted fields
                     if (extractedFields.jobRefs.length > 0 || extractedFields.vehicleRegs.length > 0) {
@@ -327,17 +384,14 @@ async function processMediaMessage(message, from, senderName, receivedAt, correl
             let jobMatch = null;
             const senderPhone = from.replace('@c.us', '').replace('@g.us', '');
 
-            if (extractedFields && (extractedFields.jobRefs.length > 0 || extractedFields.vehicleRegs.length > 0)) {
-                // Try matching with extracted fields first
-                const bestField = extractor.getBestForMatching(extractedFields);
-                console.log(`Matching with extracted ${bestField.type}: ${bestField.value}`);
-
-                if (bestField.type === 'jobRefs') {
-                    jobMatch = await match.findByJobRef(bestField.value);
-                } else if (bestField.type === 'vehicleRegs') {
-                    jobMatch = await match.findByVehicleReg(bestField.value);
-                } else if (bestField.type === 'phones') {
-                    jobMatch = await match.findByPhone(bestField.value);
+            if (ocrResult && ocrResult.success && (ocrResult.jobRef || ocrResult.vehicleReg)) {
+                // Try matching with extracted fields (prefer jobRef over vehicleReg)
+                if (ocrResult.jobRef) {
+                    console.log(`Matching with jobRef: ${ocrResult.jobRef}`);
+                    jobMatch = await match.findByJobRef(ocrResult.jobRef);
+                } else if (ocrResult.vehicleReg) {
+                    console.log(`Matching with vehicleReg: ${ocrResult.vehicleReg}`);
+                    jobMatch = await match.findByVehicleReg(ocrResult.vehicleReg);
                 }
             }
 
@@ -353,7 +407,7 @@ async function processMediaMessage(message, from, senderName, receivedAt, correl
                     confidence: jobMatch.confidence,
                     matchType: jobMatch.matchType,
                     matchedFields: jobMatch.matchedFields,
-                    source: extractedFields?.jobRefs?.length > 0 ? 'OCR' : 'SENDER'
+                    source: ocrResult?.jobRef ? 'OCR' : 'SENDER'
                 });
                 console.log(`Job match: ${jobMatch.job.ref}, confidence=${jobMatch.confidence}, type=${jobMatch.matchType}`);
             } else {
@@ -383,10 +437,12 @@ async function processMediaMessage(message, from, senderName, receivedAt, correl
                 routingDecision: routeDecision.decisionType,
                 routingReason: routeDecision.details?.reason,
                 // Include OCR data
-                ocrText: ocrResult?.success ? ocrResult.text.substring(0, 500) : null,
-                ocrConfidence: ocrResult?.confidence || 0,
-                extractedJobRefs: extractedFields?.jobRefs || [],
-                extractedVehicleRegs: extractedFields?.vehicleRegs || []
+                ocrSupplier: ocrResult?.supplier || null,
+                ocrJobRef: ocrResult?.jobRef || null,
+                ocrVehicleReg: ocrResult?.vehicleReg || null,
+                ocrDate: ocrResult?.date || null,
+                ocrShipmentNumber: ocrResult?.shipmentNumber || null,
+                ocrConfidence: ocrResult?.confidence || 0
             });
 
             audit.logRoute(attachmentData.id, routeDecision.routeTo, {
