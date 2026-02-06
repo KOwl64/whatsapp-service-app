@@ -115,6 +115,10 @@ function updateAttachmentStatus(id, status, extraFields = {}) {
         setClause += ', vehicle_reg = ?';
         params.push(extraFields.vehicle_reg);
     }
+    if (extraFields.matchedJobId !== undefined) {
+        setClause += ', matched_job_id = ?';
+        params.push(extraFields.matchedJobId);
+    }
 
     params.push(id);
 

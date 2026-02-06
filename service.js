@@ -389,43 +389,62 @@ async function processMediaMessage(message, from, senderName, receivedAt, correl
             let jobMatch = null;
             const senderPhone = from.replace('@c.us', '').replace('@g.us', '');
 
-            // Use extractor-parsed fields for matching
-            const matchJobRef = extractedFields?.jobRef || ocrResult?.jobRef;
-            const matchVehicleReg = extractedFields?.vehicleReg || ocrResult?.vehicleReg;
+            // Use new match.findMatch() for comprehensive matching
+            if (extractedFields || ocrResult) {
+                const matchFields = {
+                    jobRef: extractedFields?.jobRef || ocrResult?.jobRef || null,
+                    vehicleReg: extractedFields?.vehicleReg || ocrResult?.vehicleReg || null,
+                    date: extractedFields?.date || ocrResult?.date || null,
+                    supplier: extractedFields?.supplier || null
+                };
 
-            if ((extractedFields || ocrResult) && (matchJobRef || matchVehicleReg)) {
-                // Try matching with extracted fields (prefer jobRef over vehicleReg)
-                if (matchJobRef) {
-                    console.log(`Matching with jobRef: ${matchJobRef}`);
-                    jobMatch = await match.findByJobRef(matchJobRef);
-                } else if (matchVehicleReg) {
-                    console.log(`Matching with vehicleReg: ${matchVehicleReg}`);
-                    jobMatch = await match.findByVehicleReg(matchVehicleReg);
+                // Only attempt matching if we have at least one field
+                if (matchFields.jobRef || matchFields.vehicleReg) {
+                    console.log(`Matching with extracted fields: jobRef=${matchFields.jobRef}, vehicleReg=${matchFields.vehicleReg}`);
+                    jobMatch = await match.findMatch(matchFields, attachmentData.id);
+
+                    // Log match result with confidence
+                    console.log(`Match result: status=${jobMatch.summary?.status}, confidence=${jobMatch.match?.confidence || 0}, candidates=${jobMatch.candidates?.length || 0}`);
                 }
             }
 
-            // Fallback to sender-based matching
-            if (!jobMatch || !jobMatch.job) {
+            // Fallback to sender-based matching if no match found
+            if (!jobMatch || !jobMatch.match) {
                 jobMatch = await match.findBestMatch({ sender: senderPhone });
+                console.log(`Fallback sender match: confidence=${jobMatch.confidence}, matchType=${jobMatch.matchType}`);
             }
 
-            if (jobMatch && jobMatch.job) {
+            // Determine review status based on confidence
+            const matchConfidence = jobMatch?.match?.confidence || 0;
+            let reviewStatus = 'REVIEW';
+            let matchType = jobMatch?.match?.matchType || 'NO_MATCH';
+
+            if (matchConfidence >= 0.95) {
+                reviewStatus = 'HIGH_CONFIDENCE';
+            } else if (matchConfidence >= 0.70) {
+                reviewStatus = 'MEDIUM_CONFIDENCE';
+            } else {
+                reviewStatus = 'LOW_CONFIDENCE';
+            }
+
+            // Log match decision
+            if (jobMatch && jobMatch.match) {
                 audit.logMatch(attachmentData.id, {
-                    jobId: jobMatch.job.id,
-                    jobRef: jobMatch.job.ref,
-                    confidence: jobMatch.confidence,
-                    matchType: jobMatch.matchType,
-                    matchedFields: jobMatch.matchedFields,
-                    source: ocrResult?.jobRef ? 'OCR' : 'SENDER'
+                    jobId: jobMatch.match.jobId,
+                    jobRef: jobMatch.match.jobRef,
+                    confidence: jobMatch.match.confidence,
+                    matchType: jobMatch.match.matchType,
+                    candidates: jobMatch.candidates,
+                    source: extractedFields ? 'EXTRACTOR' : 'OCR'
                 });
-                console.log(`Job match: ${jobMatch.job.ref}, confidence=${jobMatch.confidence}, type=${jobMatch.matchType}`);
+                console.log(`Job match: ${jobMatch.match.jobRef}, confidence=${jobMatch.match.confidence}, type=${jobMatch.match.matchType}, status=${reviewStatus}`);
             } else {
                 audit.logMatch(attachmentData.id, {
                     jobId: null,
                     jobRef: null,
                     confidence: 0,
                     matchType: 'NO_MATCH',
-                    matchedFields: [],
+                    candidates: [],
                     source: 'NONE'
                 });
             }
@@ -440,14 +459,17 @@ async function processMediaMessage(message, from, senderName, receivedAt, correl
             // Update attachment status with routing decision and OCR data
             models.updateAttachmentStatus(attachmentData.id, routeDecision.routeTo, {
                 classificationConfidence: classification.confidence,
-                matchConfidence: jobMatch?.confidence || 0,
-                matchType: jobMatch?.matchType || null,
-                jobRef: jobMatch?.job?.ref || null,
+                // Match info from new match.findMatch() result structure
+                matchedJobId: jobMatch?.match?.jobId || null,
+                matchConfidence: jobMatch?.match?.confidence || 0,
+                matchType: jobMatch?.match?.matchType || null,
+                matchStatus: reviewStatus,
+                // Job ref from extracted fields or match result
+                jobRef: extractedFields?.jobRef || ocrResult?.jobRef || jobMatch?.match?.jobRef || null,
                 routingDecision: routeDecision.decisionType,
                 routingReason: routeDecision.details?.reason,
                 // Include extracted fields from extractor module
                 supplier: extractedFields?.supplier || ocrResult?.supplier || null,
-                jobRef: extractedFields?.jobRef || ocrResult?.jobRef || null,
                 vehicleReg: extractedFields?.vehicleReg || ocrResult?.vehicleReg || null,
                 date: extractedFields?.date || ocrResult?.date || null,
                 shipmentNumber: extractedFields?.shipmentNumber || ocrResult?.shipmentNumber || null,
