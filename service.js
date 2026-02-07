@@ -28,6 +28,17 @@ const scheduler = require('./scheduler');
 
 // Import Storage modules (R2)
 const presignedUrls = require('./lib/presigned-urls');
+
+// Global error handlers
+process.on('unhandledRejection', (reason, promise) => {
+    console.error('[UNHANDLED REJECTION]', reason);
+    console.error('[UNHANDLED REJECTION] Stack:', reason?.stack);
+});
+
+process.on('uncaughtException', (error) => {
+    console.error('[UNCAUGHT EXCEPTION]', error.message);
+    console.error('[UNHANDLED REJECTION] Stack:', error.stack);
+});
 const mimeTypes = require('./lib/mime-types');
 const storage = require('./lib/storage');
 
@@ -53,6 +64,28 @@ let isReady = false;
 
 // QR Code state for web display
 let currentQRCode = null;
+
+// ============================================
+// Stability & Circuit Breaker State
+// ============================================
+const stability = {
+    startTime: Date.now(),
+    restartCount: 0,
+    lastErrorTime: null,
+    lastErrorMessage: null,
+    consecutiveFailures: 0,
+    circuitState: 'closed', // closed, open, half-open
+    circuitOpenedAt: null,
+    maxFailures: 5,
+    baseDelay: 1000,
+    maxDelay: 60000,
+    memoryLogs: []
+};
+
+// Get restart count from PM2 env
+const pm2Env = process.env.pm_id ? parseInt(process.env.pm_id) : 0;
+// Track process restarts via PM2 monitoring
+
 
 // Storage directories
 const STORAGE_BASE = process.env.STORAGE_BASE_PATH || '/data/whatsapp-pod-pods';
@@ -107,10 +140,13 @@ function sanitizeFilename(name) {
 }
 
 function initWhatsApp() {
+    console.log('[INIT] initWhatsApp() called');
     client = new Client({
         authStrategy: new LocalAuth({ dataPath: '.wwebjs_auth' }),
         puppeteer: {
             headless: true,
+            dumpio: true,
+            executablePath: '/home/pgooch/.cache/puppeteer/chrome/linux-145.0.7632.46/chrome-linux64/chrome',
             args: [
                 '--no-sandbox',
                 '--disable-setuid-sandbox',
@@ -129,7 +165,7 @@ function initWhatsApp() {
         console.log('\n========================================');
         console.log('QR CODE - SCAN WITH WHATSAPP');
         console.log('========================================\n');
-        qrcode.generate(qr, { small: true });
+        qrcode.generate(qr, { small: false });
 
         // Store QR for web display
         try {
@@ -145,10 +181,33 @@ function initWhatsApp() {
         console.log('WhatsApp POD Service Ready!');
         isReady = true;
         currentQRCode = null; // Clear QR after successful auth
+
+        // Reset circuit breaker on successful connection
+        if (stability.circuitState !== 'closed') {
+            console.log('[CIRCUIT] Closed - connection restored');
+            stability.circuitState = 'closed';
+            stability.consecutiveFailures = 0;
+            stability.circuitOpenedAt = null;
+        }
     });
 
     client.on('authenticated', () => {
-        console.log('Authentication successful!');
+        console.log('[AUTH] Authentication successful!');
+    });
+
+    // Debug: Track state changes
+    client.on('change_state', (state) => {
+        console.log('[DEBUG] WhatsApp state changed to:', state);
+    });
+
+    // Debug: Track loading screen
+    client.on('loading_screen', (percent, message) => {
+        console.log(`[DEBUG] Loading screen: ${percent}% - ${message}`);
+    });
+
+    // Debug: Track any incoming events
+    client.on('incoming_call', (call) => {
+        console.log('[DEBUG] Incoming call:', call.from);
     });
 
     client.on('message', async (message) => {
@@ -180,16 +239,60 @@ function initWhatsApp() {
     });
 
     client.on('disconnected', (reason) => {
-        console.log('Client disconnected:', reason);
+        console.log('[DISCONNECT] Client disconnected:', reason);
         isReady = false;
-        // Auto-reconnect after 5 seconds
-        setTimeout(() => {
-            console.log('Attempting reconnection...');
-            initWhatsApp();
-        }, 5000);
+        stability.lastErrorTime = new Date().toISOString();
+        stability.lastErrorMessage = reason;
+        stability.consecutiveFailures++;
+
+        // Circuit breaker logic
+        if (stability.consecutiveFailures >= stability.maxFailures) {
+            stability.circuitState = 'open';
+            stability.circuitOpenedAt = Date.now();
+            const delay = Math.min(
+                stability.baseDelay * Math.pow(2, stability.consecutiveFailures - stability.maxFailures),
+                stability.maxDelay
+            );
+            console.log(`[CIRCUIT] Open - waiting ${delay}ms before retry`);
+            setTimeout(() => {
+                stability.circuitState = 'half-open';
+                console.log('[CIRCUIT] Half-open - attempting reconnect...');
+                initWhatsApp();
+            }, delay);
+        } else {
+            // Exponential backoff
+            const delay = stability.baseDelay * Math.pow(2, stability.consecutiveFailures - 1);
+            console.log(`[RECONNECT] Attempting reconnection in ${delay}ms (failure ${stability.consecutiveFailures})`);
+            setTimeout(() => {
+                initWhatsApp();
+            }, delay);
+        }
     });
 
-    client.initialize();
+    // Debug: Track remote sessions
+    client.on('remote_session', (session) => {
+        console.log('[DEBUG] Remote session:', session);
+    });
+
+    // Debug: Track revocation events
+    client.on('revoked', (info) => {
+        console.log('[DEBUG] Revoked:', info);
+    });
+
+    // Debug: Track pairing code
+    client.on('pairing_code', (code) => {
+        console.log('[DEBUG] Pairing code:', code);
+    });
+
+    console.log('[INIT] Client events registered, calling initialize()...');
+
+    try {
+        client.initialize();
+        console.log('[INIT] client.initialize() returned (async)');
+    } catch (error) {
+        console.error('[ERROR] client.initialize() threw:', error.message);
+        console.error('[ERROR] Stack:', error.stack);
+    }
 }
 
 // ============================================
@@ -750,6 +853,55 @@ app.get('/qr', (req, res) => {
 </body>
 </html>
     `);
+});
+
+// ============================================
+// Health Check Endpoint (Phase 15 - Stability)
+// ============================================
+app.get('/api/health', (req, res) => {
+    const uptime = Math.floor((Date.now() - stability.startTime) / 1000);
+    const memUsage = process.memoryUsage();
+    const memoryUsed = memUsage.heapUsed;
+    const memoryTotal = memUsage.heapTotal;
+
+    // Determine circuit state
+    let circuitStatus = stability.circuitState;
+    if (stability.circuitState === 'open') {
+        const elapsed = Date.now() - stability.circuitOpenedAt;
+        if (elapsed > stability.baseDelay * Math.pow(2, Math.min(stability.consecutiveFailures, 10))) {
+            circuitStatus = 'half-open';
+        }
+    }
+
+    // Determine overall status
+    let status = 'healthy';
+    if (!isReady) status = 'degraded';
+    if (stability.circuitState === 'open' && stability.consecutiveFailures >= stability.maxFailures) {
+        status = 'unhealthy';
+    }
+
+    res.json({
+        status,
+        timestamp: new Date().toISOString(),
+        uptime,
+        connected: isReady,
+        service: 'whatsapp-pod-service',
+        version: '1.0.0',
+        memory: {
+            heapUsed: memoryUsed,
+            heapTotal: memoryTotal,
+            unit: 'bytes'
+        },
+        circuit: {
+            state: circuitStatus,
+            consecutiveFailures: stability.consecutiveFailures,
+            maxFailures: stability.maxFailures
+        },
+        pm2: {
+            restartCount: stability.restartCount,
+            lastError: stability.lastErrorTime
+        }
+    });
 });
 
 // Queue API - Enhanced with filtering and pagination
@@ -1372,8 +1524,40 @@ app.post('/api/restart', async (req, res) => {
 
 // Graceful shutdown
 process.on('SIGINT', async () => {
-    console.log('Shutting down gracefully...');
-    if (client) await client.destroy();
+    console.log('[SHUTDOWN] Received SIGINT - graceful shutdown...');
+    try {
+        if (client && client.pupPage) {
+            await client.pupPage.close().catch(() => {});
+        }
+        if (client && client.pupBrowser) {
+            await client.pupBrowser.close().catch(() => {});
+        }
+        if (client) {
+            await client.destroy().catch(() => {});
+        }
+    } catch (e) {
+        console.log('[SHUTDOWN] Cleanup error (non-critical):', e.message);
+    }
+    emailQueue.stopProcessor();
+    process.exit(0);
+});
+
+// Also handle SIGTERM
+process.on('SIGTERM', async () => {
+    console.log('[SHUTDOWN] Received SIGTERM - graceful shutdown...');
+    try {
+        if (client && client.pupPage) {
+            await client.pupPage.close().catch(() => {});
+        }
+        if (client && client.pupBrowser) {
+            await client.pupBrowser.close().catch(() => {});
+        }
+        if (client) {
+            await client.destroy().catch(() => {});
+        }
+    } catch (e) {
+        console.log('[SHUTDOWN] Cleanup error (non-critical):', e.message);
+    }
     emailQueue.stopProcessor();
     process.exit(0);
 });
@@ -2569,6 +2753,37 @@ setInterval(async () => {
 }, ALERT_CHECK_INTERVAL);
 
 console.log(`Scheduler started, alert checker running (${ALERT_CHECK_INTERVAL}ms interval)`);
+
+// ============================================
+// Process Monitoring (Phase 15 - Stability)
+// ============================================
+const MONITOR_INTERVAL = 60000; // 1 minute
+
+const processMonitor = setInterval(() => {
+    const memUsage = process.memoryUsage();
+    const uptime = Math.floor((Date.now() - stability.startTime) / 1000);
+    const memMB = Math.round(memUsage.heapUsed / 1024 / 1024);
+
+    // Log monitoring data
+    console.log(`[MONITOR] Uptime: ${uptime}s, Memory: ${memMB}MB, Connected: ${isReady}, Circuit: ${stability.circuitState}`);
+
+    // Track memory for trend analysis
+    stability.memoryLogs.push({
+        timestamp: Date.now(),
+        heapUsed: memUsage.heapUsed,
+        heapTotal: memUsage.heapTotal
+    });
+
+    // Keep only last 100 entries
+    if (stability.memoryLogs.length > 100) {
+        stability.memoryLogs.shift();
+    }
+
+    // Warn if memory is getting high
+    if (memMB > 150) {
+        console.log(`[WARN] High memory usage: ${memMB}MB - consider restart`);
+    }
+}, MONITOR_INTERVAL);
 
 // ============================================
 // End Background Services
