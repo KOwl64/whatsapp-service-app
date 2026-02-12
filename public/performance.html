@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Performance Dashboard - WhatsApp Service</title>
+    <link rel="stylesheet" href="/css/performance.css">
+</head>
+<body>
+    <div class="dashboard">
+        <!-- Header -->
+        <header class="dashboard-header">
+            <div>
+                <h1 class="dashboard-title">Performance Dashboard</h1>
+                <p class="dashboard-subtitle">WhatsApp POD Service - Real-time Monitoring</p>
+            </div>
+            <div class="last-updated">
+                Last updated: <span id="last-updated">--</span>
+            </div>
+        </header>
+
+        <!-- Status Banner -->
+        <div id="status-banner" class="status-banner healthy">
+            <div class="status-indicator"></div>
+            <span id="status-text">Loading...</span>
+        </div>
+
+        <!-- Metric Cards -->
+        <section class="metrics-grid">
+            <!-- Memory Card -->
+            <div class="metric-card">
+                <div class="metric-header">
+                    <span class="metric-title">Memory Usage</span>
+                    <span id="memory-change" class="metric-change neutral">0%</span>
+                </div>
+                <div class="metric-value">
+                    <span id="memory-value">--</span>
+                </div>
+                <div class="mini-chart">
+                    <canvas id="memory-chart"></canvas>
+                </div>
+            </div>
+
+            <!-- CPU Card -->
+            <div class="metric-card">
+                <div class="metric-header">
+                    <span class="metric-title">CPU Usage</span>
+                    <span id="cpu-change" class="metric-change neutral">0%</span>
+                </div>
+                <div class="metric-value">
+                    <span id="cpu-value">--</span>
+                </div>
+                <div class="mini-chart">
+                    <canvas id="cpu-chart"></canvas>
+                </div>
+            </div>
+
+            <!-- Latency Card -->
+            <div class="metric-card">
+                <div class="metric-header">
+                    <span class="metric-title">P50 Latency</span>
+                    <span id="latency-change" class="metric-change neutral">0%</span>
+                </div>
+                <div class="metric-value">
+                    <span id="latency-value">--</span>
+                </div>
+                <div class="mini-chart">
+                    <canvas id="latency-chart"></canvas>
+                </div>
+            </div>
+
+            <!-- Event Loop Card -->
+            <div class="metric-card">
+                <div class="metric-header">
+                    <span class="metric-title">Event Loop Lag</span>
+                </div>
+                <div class="metric-value">
+                    <span id="eventloop-value">--</span>
+                </div>
+                <div class="mini-chart">
+                    <canvas id="eventloop-chart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Latency Histogram -->
+        <section>
+            <div class="section-header">
+                <h2 class="section-title">Latency Distribution</h2>
+                <span id="latency-total" class="section-link">0 samples</span>
+            </div>
+
+            <div class="histogram-container">
+                <div id="histogram-buckets" class="bucket-grid">
+                    <div class="loading">
+                        <div class="loading-spinner"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Latency Percentiles -->
+        <section>
+            <div class="section-header">
+                <h2 class="section-title">Latency Percentiles</h2>
+            </div>
+
+            <div class="histogram-container">
+                <table class="percentiles-table">
+                    <thead>
+                        <tr>
+                            <th>Percentile</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody id="percentiles-body">
+                        <tr><td colspan="2" class="no-data">Loading...</td></tr>
+                    </tbody>
+                </table>
+
+                <div id="latency-trend" style="margin-top: 20px; padding: 12px; background: #f9fafb; border-radius: 8px; display: flex; align-items: center; gap: 12px;">
+                    <span style="font-weight: 500; color: #6b7280;">Trend:</span>
+                    <span class="trend-indicator">Loading...</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Alerts Section -->
+        <section>
+            <div class="section-header">
+                <h2 class="section-title">Active Alerts</h2>
+                <a href="/api/metrics/alerts" class="section-link" target="_blank">View All</a>
+            </div>
+
+            <div class="alerts-container">
+                <div id="alerts-list">
+                    <div class="loading">
+                        <div class="loading-spinner"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Performance History Chart -->
+        <section class="chart-container">
+            <div class="chart-header">
+                <h3 class="chart-title">Performance History</h3>
+                <div class="chart-controls">
+                    <button class="chart-btn" data-window="1h">1H</button>
+                    <button class="chart-btn active" data-window="6h">6H</button>
+                    <button class="chart-btn" data-window="24h">24H</button>
+                </div>
+            </div>
+            <div class="chart-wrapper">
+                <canvas id="history-chart"></canvas>
+            </div>
+        </section>
+    </div>
+
+    <script src="/js/performance.js"></script>
+    <script>
+        // Initialize charts when data loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Chart.js will be loaded dynamically if available
+            if (typeof Chart !== 'undefined') {
+                // Charts would be initialized here
+                console.log('[PerformanceDashboard] Chart.js available');
+            } else {
+                console.log('[PerformanceDashboard] Chart.js not loaded');
+            }
+        });
+    </script>
+</body>
+</html>

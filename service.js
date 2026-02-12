@@ -59,6 +59,14 @@ const metrics = require('./metrics');
 const alerts = require('./alerts');
 const runbooks = require('./runbooks');
 
+// Import Phase 5 Performance modules
+const metricsCollector = require('./lib/metrics-collector');
+const latencyBuckets = require('./lib/latency-buckets');
+const anomalyDetector = require('./lib/anomaly-detector');
+
+// Redis for Socket.IO pub/sub
+const Redis = require('ioredis');
+
 const app = express();
 app.use(express.json());
 
@@ -164,6 +172,27 @@ try {
 } catch (initError) {
     console.error('[AutoSend] Failed to initialize:', initError.message);
 }
+
+// ============================================
+// Phase 5 Performance Monitoring Initialization
+// ============================================
+
+// Initialize metrics collector, latency buckets, and anomaly detector
+async function initPerformanceMonitoring() {
+    try {
+        await Promise.all([
+            metricsCollector.init(),
+            latencyBuckets.init(),
+            anomalyDetector.init()
+        ]);
+        console.log('[Performance Monitoring] All modules initialized');
+    } catch (err) {
+        console.error('[Performance Monitoring] Init failed:', err.message);
+    }
+}
+
+// Start performance monitoring
+initPerformanceMonitoring();
 
 function sanitizeFilename(name) {
     if (!name) return 'unknown';
@@ -2301,6 +2330,110 @@ app.get('/api/metrics/queues', (req, res) => {
         res.json(metrics.getQueueMetrics());
     } catch (error) {
         res.status(500).json({ error: error.message });
+    }
+});
+
+// ============================================
+// Performance Metrics Endpoints (Phase 5)
+// ============================================
+
+// System metrics (memory, CPU, event loop)
+app.get('/api/metrics/system', (req, res) => {
+    try {
+        const { windowMs } = req.query;
+        const stats = metricsCollector.getAggregatedStats(windowMs ? parseInt(windowMs) : undefined);
+
+        res.json({
+            success: true,
+            timestamp: new Date().toISOString(),
+            ...stats
+        });
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// Latency histogram data
+app.get('/api/metrics/latency', (req, res) => {
+    try {
+        const summary = latencyBuckets.getSummary();
+
+        res.json({
+            success: true,
+            timestamp: new Date().toISOString(),
+            ...summary
+        });
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// Active alerts
+app.get('/api/metrics/alerts', (req, res) => {
+    try {
+        const { acknowledged } = req.query;
+        const alerts = anomalyDetector.getAlerts({
+            acknowledged: acknowledged === 'true'
+        });
+
+        res.json({
+            success: true,
+            timestamp: new Date().toISOString(),
+            alerts,
+            count: alerts.length
+        });
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// Acknowledge alert
+app.post('/api/metrics/alerts/acknowledge', (req, res) => {
+    try {
+        const { id } = req.body;
+        const success = anomalyDetector.acknowledgeAlert(id);
+
+        res.json({
+            success,
+            message: success ? 'Alert acknowledged' : 'Alert not found'
+        });
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// Health check for performance metrics
+app.get('/api/metrics/health', (req, res) => {
+    try {
+        const health = metricsCollector.getHealthStatus();
+
+        res.json({
+            success: true,
+            timestamp: new Date().toISOString(),
+            ...health
+        });
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// Metrics history for charting
+app.get('/api/metrics/history', (req, res) => {
+    try {
+        const { windowMs, limit } = req.query;
+        const history = metricsCollector.getHistory({
+            windowMs: windowMs ? parseInt(windowMs) : undefined,
+            limit: limit ? parseInt(limit) : undefined
+        });
+
+        res.json({
+            success: true,
+            timestamp: new Date().toISOString(),
+            history,
+            count: history.length
+        });
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
     }
 });
 

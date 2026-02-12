@@ -5,7 +5,10 @@
   "main": "service.js",
   "scripts": {
     "start": "node service.js",
-    "dev": "node service.js"
+    "dev": "node service.js",
+    "test": "node tests/run.js",
+    "test:unit": "node tests/unit/latency-buckets.test.js && node tests/unit/anomaly-detector.test.js",
+    "test:watch": "nodemon -q --exec 'npm run test:unit'"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.982.0",
