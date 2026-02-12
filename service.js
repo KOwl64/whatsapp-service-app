@@ -32,6 +32,9 @@ const presignedUrls = require('./lib/presigned-urls');
 // Import Event Emitter module
 const eventEmitter = require('./lib/events');
 
+// Import Data Pump module (Phase 2 - Data Pipeline)
+const dataPump = require('./lib/data-pump');
+
 // Global error handlers
 process.on('unhandledRejection', (reason, promise) => {
     console.error('[UNHANDLED REJECTION]', reason);
@@ -111,6 +114,27 @@ initDb();
 eventEmitter.connect().catch(err => {
     console.error('[EVENTS] Failed to connect:', err.message);
 });
+
+// ============================================
+// Data Pump Initialization (Phase 2)
+// ============================================
+async function initDataPump() {
+    try {
+        await dataPump.connect();
+        console.log('[DATA PUMP] Connected and ready');
+        // Initialize queue monitoring if emailQueue is available
+        if (typeof emailQueue !== 'undefined') {
+            await dataPump.initQueueMonitoring(emailQueue);
+        }
+    } catch (err) {
+        console.error('[DATA PUMP] Init failed:', err.message);
+    }
+}
+
+// Start data pump after event emitter is connected
+setTimeout(() => {
+    initDataPump();
+}, 2000);
 
 // Initialize Phase 2 modules (classification and OCR) with shared OpenAI client
 try {
@@ -2865,6 +2889,10 @@ async function initSocketIO() {
             console.error('[SOCKET] Parse error:', e.message);
         }
     });
+
+    // Pass Socket.IO instance to data pump for metric broadcasting
+    dataPump.setSocketIO(io);
+    console.log('[SOCKET] Socket.IO passed to data pump');
 }
 
 // ============================================
