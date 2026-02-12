@@ -2300,6 +2300,70 @@ app.get('/api/metrics/queues', (req, res) => {
 });
 
 // ============================================
+// Data Pump Metrics Endpoints (Phase 2)
+// ============================================
+
+// Get all data pump metrics
+app.get('/api/pump/metrics', async (req, res) => {
+    try {
+        const metricsData = await dataPump.getMetrics();
+        res.json({
+            success: true,
+            timestamp: new Date().toISOString(),
+            ...metricsData
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            error: error.message
+        });
+    }
+});
+
+// Get metrics for a specific time window
+app.get('/api/pump/metrics/:window', async (req, res) => {
+    const { window } = req.params;
+    const validWindows = ['1m', '15m', '1h', '24h'];
+
+    if (!validWindows.includes(window)) {
+        return res.status(400).json({
+            success: false,
+            error: `Invalid window. Valid: ${validWindows.join(', ')}`
+        });
+    }
+
+    try {
+        const metricsData = await dataPump.getMetricsByWindow(window);
+        res.json({
+            success: true,
+            timestamp: new Date().toISOString(),
+            ...metricsData
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            error: error.message
+        });
+    }
+});
+
+// Get queue depth statistics
+app.get('/api/pump/queue', async (req, res) => {
+    try {
+        const queueStats = await dataPump.getQueueStats();
+        res.json({
+            success: true,
+            ...queueStats
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            error: error.message
+        });
+    }
+});
+
+// ============================================
 // Alert Endpoints
 // ============================================
 
