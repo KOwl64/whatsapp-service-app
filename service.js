@@ -233,6 +233,17 @@ function initWhatsApp() {
         const receivedAt = new Date();
         const correlationId = audit.createNewCorrelationId();
 
+        // Emit message received event
+        eventEmitter.emitMessageEvent('received', {
+            id: message.id._serialized,
+            from,
+            senderName,
+            hasMedia: message.hasMedia,
+            hasQuotedMessage: !!message.quotedMsg,
+            bodyLength: message.body?.length || 0,
+            timestamp: receivedAt.toISOString()
+        });
+
         try {
             console.log(`Message from ${senderName} (${from})`);
 
@@ -248,6 +259,14 @@ function initWhatsApp() {
 
             audit.clearCorrelationId();
         } catch (error) {
+            // Emit failed event
+            eventEmitter.emitMessageEvent('failed', {
+                id: message.id._serialized,
+                from,
+                senderName,
+                error: error.message,
+                timestamp: new Date().toISOString()
+            });
             console.error('Error handling message:', error.message);
             audit.logFailed(null, error, { from, correlationId });
             audit.clearCorrelationId();
