@@ -1314,9 +1314,26 @@ app.post('/api/send', async (req, res) => {
 
     try {
         const chatId = target.includes('@') ? target : `${target}@g.us`;  // Group IDs
+        const messageId = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
         await client.sendMessage(chatId, msgText);
-        res.json({ success: true, sent_to: chatId });
+
+        // Emit message.sent event
+        eventEmitter.emitMessageEvent('sent', {
+            id: messageId,
+            to: chatId,
+            hasMedia: false,
+            timestamp: new Date().toISOString()
+        });
+
+        res.json({ success: true, sent_to: chatId, message_id: messageId });
     } catch (error) {
+        // Emit message.failed event
+        eventEmitter.emitMessageEvent('failed', {
+            id: `failed-${Date.now()}`,
+            to: target,
+            error: error.message,
+            timestamp: new Date().toISOString()
+        });
         console.error('[Send] Error:', error.message);
         res.status(500).json({ error: error.message });
     }
@@ -1343,6 +1360,17 @@ app.post('/api/broadcast/send', async (req, res) => {
         console.log(`[Broadcast] Loaded ${allChats.length} chats/groups`);
     } catch (error) {
         console.error('[Broadcast] Failed to fetch chats:', error.message);
+    }
+
+    // Helper function to emit message events
+    function emitMessageEvent(type, chatId, error = null) {
+        eventEmitter.emitMessageEvent(type, {
+            id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+            to: chatId,
+            hasMedia: false,
+            timestamp: new Date().toISOString(),
+            error: error
+        });
     }
 
     for (const recipient of recipients) {
@@ -1375,6 +1403,7 @@ app.post('/api/broadcast/send', async (req, res) => {
                 try {
                     await client.sendMessage(chatId, message);
                     delivered.push(recipient);
+                    emitMessageEvent('sent', chatId);
                     console.log(`[Broadcast] ✓ Delivered to ${chatId}`);
                 } catch (err) {
                     // If error contains markedUnread, try once more with longer delay
@@ -1382,8 +1411,10 @@ app.post('/api/broadcast/send', async (req, res) => {
                         await new Promise(resolve => setTimeout(resolve, 1000));
                         await client.sendMessage(chatId, message);
                         delivered.push(recipient);
+                        emitMessageEvent('sent', chatId);
                         console.log(`[Broadcast] ✓ Delivered to ${chatId} (retry)`);
                     } else {
+                        emitMessageEvent('failed', chatId, err.message);
                         throw err;
                     }
                 }
@@ -1408,6 +1439,7 @@ app.post('/api/broadcast/send', async (req, res) => {
                     try {
                         await client.sendMessage(chatId, message);
                         delivered.push(recipient);
+                        emitMessageEvent('sent', chatId);
                         console.log(`[Broadcast] ✓ Delivered to ${chat.name || chatId}`);
                     } catch (err) {
                         // If error contains markedUnread, try once more with longer delay
@@ -1415,8 +1447,10 @@ app.post('/api/broadcast/send', async (req, res) => {
                             await new Promise(resolve => setTimeout(resolve, 1000));
                             await client.sendMessage(chatId, message);
                             delivered.push(recipient);
+                            emitMessageEvent('sent', chatId);
                             console.log(`[Broadcast] ✓ Delivered to ${chat.name || chatId} (retry)`);
                         } else {
+                            emitMessageEvent('failed', chatId, err.message);
                             throw err;
                         }
                     }
@@ -1434,6 +1468,7 @@ app.post('/api/broadcast/send', async (req, res) => {
                     try {
                         await client.sendMessage(chatId, message);
                         delivered.push(recipient);
+                        emitMessageEvent('sent', chatId);
                         console.log(`[Broadcast] ✓ Delivered to ${chatId}`);
                     } catch (err) {
                         // If error contains markedUnread, try once more with longer delay
@@ -1441,8 +1476,10 @@ app.post('/api/broadcast/send', async (req, res) => {
                             await new Promise(resolve => setTimeout(resolve, 1000));
                             await client.sendMessage(chatId, message);
                             delivered.push(recipient);
+                            emitMessageEvent('sent', chatId);
                             console.log(`[Broadcast] ✓ Delivered to ${chatId} (retry)`);
                         } else {
+                            emitMessageEvent('failed', chatId, err.message);
                             throw err;
                         }
                     }
