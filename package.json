@@ -12,6 +12,7 @@
     "@aws-sdk/lib-storage": "^3.982.0",
     "@aws-sdk/s3-request-presigner": "^3.982.0",
     "axios": "^1.6.2",
+    "basic-auth": "^2.0.1",
     "better-sqlite3": "^12.6.0",
     "bullmq": "^5.40.0",
     "chart.js": "^4.5.1",
