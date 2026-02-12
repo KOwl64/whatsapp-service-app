@@ -29,6 +29,9 @@ const scheduler = require('./scheduler');
 // Import Storage modules (R2)
 const presignedUrls = require('./lib/presigned-urls');
 
+// Import Event Emitter module
+const eventEmitter = require('./lib/events');
+
 // Global error handlers
 process.on('unhandledRejection', (reason, promise) => {
     console.error('[UNHANDLED REJECTION]', reason);
@@ -104,6 +107,11 @@ const TEMP_DIR = path.join(STORAGE_BASE, 'temp');
 normalise.ensureStorageDirectories();
 initDb();
 
+// Initialize event emitter
+eventEmitter.connect().catch(err => {
+    console.error('[EVENTS] Failed to connect:', err.message);
+});
+
 // Initialize Phase 2 modules (classification and OCR) with shared OpenAI client
 try {
     const OpenAI = require('openai');
@@ -146,7 +154,7 @@ function initWhatsApp() {
         puppeteer: {
             headless: true,
             dumpio: true,
-            executablePath: '/home/pgooch/.cache/puppeteer/chrome/linux-145.0.7632.46/chrome-linux64/chrome',
+            executablePath: '/usr/bin/chromium-browser',
             args: [
                 '--no-sandbox',
                 '--disable-setuid-sandbox',
