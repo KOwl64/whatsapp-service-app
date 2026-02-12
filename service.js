@@ -2828,11 +2828,75 @@ const processMonitor = setInterval(() => {
 // End Background Services
 // ============================================
 
+// ============================================
+// Socket.IO Server Setup
+// ============================================
+const http = require('http');
+const { Server } = require('socket.io');
+
+const server = http.createServer(app);
+const io = new Server(server);
+
+// Redis subscriber for events
+let redisSubscriber = null;
+
+async function initSocketIO() {
+    if (!eventEmitter.isConnected) {
+        console.log('[SOCKET] Waiting for Redis connection...');
+        await new Promise(resolve => setTimeout(resolve, 1000));
+    }
+
+    const redisUrl = process.env.REDIS_URL || 'redis://localhost:6379';
+    redisSubscriber = new Redis(redisUrl);
+
+    redisSubscriber.subscribe(eventEmitter.eventChannel, (err, count) => {
+        if (err) {
+            console.error('[SOCKET] Redis subscribe error:', err.message);
+        } else {
+            console.log('[SOCKET] Subscribed to', count, 'channel(s)');
+        }
+    });
+
+    redisSubscriber.on('message', (channel, message) => {
+        try {
+            const event = JSON.parse(message);
+            io.emit('whatsapp:events', event);
+        } catch (e) {
+            console.error('[SOCKET] Parse error:', e.message);
+        }
+    });
+}
+
+// ============================================
+// Health Check Endpoints
+// ============================================
+app.get('/health', (req, res) => {
+    res.json({
+        status: isReady ? 'ready' : 'not_ready',
+        connection: eventEmitter.isConnected ? 'connected' : 'disconnected',
+        uptime: process.uptime()
+    });
+});
+
+app.get('/status', (req, res) => {
+    res.json({
+        isReady,
+        currentQRCode: currentQRCode ? 'present' : null,
+        stability: {
+            restartCount: stability.restartCount,
+            consecutiveFailures: stability.consecutiveFailures,
+            circuitState: stability.circuitState
+        }
+    });
+});
+
 // Start server
 const PORT = process.env.PORT || 3000;
 const HOST = process.env.HOST || '0.0.0.0';  // Bind to all interfaces
-app.listen(PORT, HOST, () => {
+server.listen(PORT, HOST, () => {
     console.log(`WhatsApp POD Service on ${HOST}:${PORT}`);
     console.log(`Email queue processor: Use /api/email/status to check status`);
+    console.log(`Status dashboard: http://${HOST}:${PORT}/status.html`);
+    initSocketIO();
     initWhatsApp();
 });
