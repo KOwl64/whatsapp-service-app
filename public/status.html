@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>WhatsApp Status</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; background: #1a1a2e; color: #eee; }
+    h1 { color: #00d4ff; }
+    .status-indicator {
+      width: 100px; height: 100px; border-radius: 50%;
+      margin: 20px auto; transition: background-color 0.3s;
+      box-shadow: 0 0 20px rgba(0,0,0,0.3);
+    }
+    .connected { background-color: #00ff88; box-shadow: 0 0 30px #00ff88; }
+    .disconnected { background-color: #ff4757; box-shadow: 0 0 30px #ff4757; }
+    .qr { background-color: #ffa502; box-shadow: 0 0 30px #ffa502; }
+    .connecting { background-color: #ffc107; box-shadow: 0 0 30px #ffc107; animation: pulse 1s infinite; }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.6; }
+    }
+    .status-text { text-align: center; font-size: 24px; margin-top: 20px; color: #fff; }
+    .event-log { margin-top: 30px; padding: 15px; background: #16213e; border-radius: 10px; max-height: 400px; overflow-y: auto; font-family: monospace; }
+    .event-log h3 { color: #00d4ff; margin-top: 0; }
+    .event-item { padding: 8px 12px; margin: 5px 0; background: #0f3460; border-radius: 5px; border-left: 3px solid #00d4ff; }
+    .event-time { color: #888; font-size: 12px; }
+    .event-type { color: #00d4ff; font-weight: bold; }
+    .event-data { color: #aaa; font-size: 12px; margin-top: 4px; }
+    .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin: 20px 0; }
+    .stat-card { background: #16213e; padding: 15px; border-radius: 10px; text-align: center; }
+    .stat-value { font-size: 28px; font-weight: bold; color: #00d4ff; }
+    .stat-label { font-size: 12px; color: #888; margin-top: 5px; }
+  </style>
+</head>
+<body>
+  <h1>WhatsApp Connection Status</h1>
+
+  <div class="stats">
+    <div class="stat-card">
+      <div id="uptimeValue" class="stat-value">--</div>
+      <div class="stat-label">Uptime (seconds)</div>
+    </div>
+    <div class="stat-card">
+      <div id="messagesReceived" class="stat-value">0</div>
+      <div class="stat-label">Messages Received</div>
+    </div>
+    <div class="stat-card">
+      <div id="messagesFailed" class="stat-value">0</div>
+      <div class="stat-label">Messages Failed</div>
+    </div>
+  </div>
+
+  <div id="status" class="status-indicator disconnected"></div>
+  <div id="statusText" class="status-text">Disconnected</div>
+
+  <div class="event-log">
+    <h3>Event Log</h3>
+    <div id="events"></div>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io();
+    const statusEl = document.getElementById('status');
+    const statusText = document.getElementById('statusText');
+    const eventsEl = document.getElementById('events');
+    const uptimeEl = document.getElementById('uptimeValue');
+    const messagesReceivedEl = document.getElementById('messagesReceived');
+    const messagesFailedEl = document.getElementById('messagesFailed');
+
+    let messagesReceived = 0;
+    let messagesFailed = 0;
+
+    function updateStatus(status) {
+      statusEl.className = 'status-indicator ' + status;
+      const labels = {
+        connected: 'Connected',
+        disconnected: 'Disconnected',
+        qr: 'QR Required - Scan to Authenticate',
+        connecting: 'Connecting...'
+      };
+      statusText.textContent = labels[status] || status;
+    }
+
+    function logEvent(data) {
+      const div = document.createElement('div');
+      div.className = 'event-item';
+      const time = new Date().toLocaleTimeString();
+      div.innerHTML = `
+        <div class="event-time">${time}</div>
+        <div class="event-type">${data.type}</div>
+        <div class="event-data">${JSON.stringify(data.data || {}, null, 2)}</div>
+      `;
+      eventsEl.insertBefore(div, eventsEl.firstChild);
+    }
+
+    socket.on('connect', () => {
+      console.log('Connected to event stream');
+      logEvent({ type: 'system', data: { message: 'Connected to event stream' } });
+    });
+
+    socket.on('disconnect', () => {
+      console.log('Disconnected from event stream');
+      logEvent({ type: 'system', data: { message: 'Disconnected from event stream' } });
+    });
+
+    socket.on('whatsapp:events', (event) => {
+      console.log('Event:', event);
+
+      if (event.type === 'connection.status') {
+        updateStatus(event.data.status);
+
+        if (event.data.uptime) {
+          uptimeEl.textContent = Math.floor(event.data.uptime / 1000);
+        }
+      }
+
+      if (event.type === 'message.received') {
+        messagesReceived++;
+        messagesReceivedEl.textContent = messagesReceived;
+      }
+
+      if (event.type === 'message.failed') {
+        messagesFailed++;
+        messagesFailedEl.textContent = messagesFailed;
+      }
+
+      logEvent(event);
+    });
+  </script>
+</body>
+</html>
