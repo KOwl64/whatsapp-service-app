@@ -2364,6 +2364,155 @@ app.get('/api/pump/queue', async (req, res) => {
 });
 
 // ============================================
+// Chart Data Endpoints (Phase 3)
+// ============================================
+
+// Get 24h chart history
+app.get('/api/chart/history', async (req, res) => {
+    try {
+        const chartData = require('./lib/chart-data');
+        const history = await chartData.getLast24Hours();
+
+        res.json({
+            success: true,
+            timestamp: new Date().toISOString(),
+            dataPoints: history.length,
+            data: history
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            error: error.message
+        });
+    }
+});
+
+// Get chart history for a specific time window
+app.get('/api/chart/history/:window', async (req, res) => {
+    const { window } = req.params;
+    const windows = {
+        '1h': 60 * 60 * 1000,
+        '6h': 6 * 60 * 60 * 1000,
+        '24h': 24 * 60 * 60 * 1000,
+        '7d': 7 * 24 * 60 * 60 * 1000
+    };
+
+    if (!windows[window]) {
+        return res.status(400).json({
+            success: false,
+            error: `Invalid window. Valid: ${Object.keys(windows).join(', ')}`
+        });
+    }
+
+    try {
+        const chartData = require('./lib/chart-data');
+        const history = await chartData.getHistory(Date.now() - windows[window]);
+
+        res.json({
+            success: true,
+            window,
+            dataPoints: history.length,
+            data: history
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            error: error.message
+        });
+    }
+});
+
+// ============================================
+// Failed Messages Endpoints (Phase 3)
+// ============================================
+
+// Initialize failed messages store
+const failedMessages = require('./lib/failed-messages');
+
+// Initialize after Redis is ready
+setTimeout(async () => {
+    try {
+        await failedMessages.connect();
+    } catch (err) {
+        console.error('[FAILED MESSAGES] Init error:', err.message);
+    }
+}, 1000);
+
+// Get recent failures
+app.get('/api/failures', async (req, res) => {
+    try {
+        const { limit, offset, errorCode, recipient, startTime, endTime } = req.query;
+
+        const result = await failedMessages.getRecentFailures({
+            limit: parseInt(limit) || 50,
+            offset: parseInt(offset) || 0,
+            errorCode,
+            recipient,
+            startTime,
+            endTime
+        });
+
+        res.json({
+            success: true,
+            ...result
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            error: error.message
+        });
+    }
+});
+
+// Get failure statistics
+app.get('/api/failures/stats', async (req, res) => {
+    try {
+        const stats = await failedMessages.getFailureStats();
+        res.json({
+            success: true,
+            ...stats
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            error: error.message
+        });
+    }
+});
+
+// Get error code breakdown
+app.get('/api/failures/codes', async (req, res) => {
+    try {
+        const codes = await failedMessages.getErrorCodes();
+        res.json({
+            success: true,
+            codes
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            error: error.message
+        });
+    }
+});
+
+// Clear all failures
+app.delete('/api/failures', async (req, res) => {
+    try {
+        await failedMessages.clearFailures();
+        res.json({
+            success: true,
+            message: 'All failures cleared'
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            error: error.message
+        });
+    }
+});
+
+// ============================================
 // Alert Endpoints
 // ============================================
 
