@@ -35,6 +35,11 @@ const eventEmitter = require('./lib/events');
 // Import Data Pump module (Phase 2 - Data Pipeline)
 const dataPump = require('./lib/data-pump');
 
+// Import Phase 4 Security modules
+const { requireAuth, optionalAuth } = require('./lib/auth-middleware');
+const healthCheck = require('./lib/health-check');
+const ipWhitelist = require('./lib/ip-whitelist');
+
 // Global error handlers
 process.on('unhandledRejection', (reason, promise) => {
     console.error('[UNHANDLED REJECTION]', reason);
@@ -3168,6 +3173,235 @@ app.get('/status', (req, res) => {
     });
 });
 
+// ============================================
+// Phase 4: Protected Dashboard Routes
+// ============================================
+
+// Dashboard - require authentication
+app.get('/status.html', requireAuth, (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'status.html'));
+});
+
+// Protected API endpoints
+app.get('/api/metrics', requireAuth, async (req, res) => {
+    try {
+        const metricsData = await dataPump.getMetrics();
+        res.json({
+            success: true,
+            authenticatedBy: req.authenticatedUser,
+            ...metricsData
+        });
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+app.get('/api/chart/history', requireAuth, async (req, res) => {
+    try {
+        const chartData = require('./lib/chart-data');
+        const history = await chartData.getLast24Hours();
+
+        res.json({
+            success: true,
+            authenticatedBy: req.authenticatedUser,
+            dataPoints: history.length,
+            data: history
+        });
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+app.get('/api/chart/history/:window', requireAuth, async (req, res) => {
+    const { window } = req.params;
+    const windows = { '1h': 3600000, '6h': 21600000, '24h': 86400000, '7d': 604800000 };
+
+    if (!windows[window]) {
+        return res.status(400).json({ success: false, error: 'Invalid window' });
+    }
+
+    try {
+        const chartData = require('./lib/chart-data');
+        const history = await chartData.getHistory(Date.now() - windows[window]);
+
+        res.json({
+            success: true,
+            authenticatedBy: req.authenticatedUser,
+            window,
+            dataPoints: history.length,
+            data: history
+        });
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+app.get('/api/failures', requireAuth, async (req, res) => {
+    try {
+        const { limit, offset, errorCode, recipient } = req.query;
+        const failedMessages = require('./lib/failed-messages');
+        const result = await failedMessages.getRecentFailures({
+            limit: parseInt(limit) || 50,
+            offset: parseInt(offset) || 0,
+            errorCode,
+            recipient
+        });
+
+        res.json({
+            success: true,
+            authenticatedBy: req.authenticatedUser,
+            ...result
+        });
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+app.get('/api/failures/stats', requireAuth, async (req, res) => {
+    try {
+        const failedMessages = require('./lib/failed-messages');
+        const stats = await failedMessages.getFailureStats();
+
+        res.json({
+            success: true,
+            authenticatedBy: req.authenticatedUser,
+            ...stats
+        });
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// Queue API - protected
+app.get('/api/queue', requireAuth, async (req, res) => {
+    try {
+        const queueData = await dataPump.getQueueMetrics();
+
+        res.json({
+            success: true,
+            authenticatedBy: req.authenticatedUser,
+            ...queueData
+        });
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// ============================================
+// Phase 4: Enhanced Health Check Endpoints
+// ============================================
+
+// Initialize health check module
+setTimeout(async () => {
+    await healthCheck.connect();
+}, 1000);
+
+// Full health check
+app.get('/health', async (req, res) => {
+    const health = await healthCheck.getHealth();
+    const statusCode = health.status === 'healthy' ? 200 :
+                       health.status === 'degraded' ? 200 : 503;
+    res.status(statusCode).json(health);
+});
+
+// Liveness probe
+app.get('/health/live', (req, res) => {
+    const liveness = healthCheck.getLiveness();
+    res.json(liveness);
+});
+
+// Readiness probe
+app.get('/health/ready', async (req, res) => {
+    const readiness = await healthCheck.getReadiness();
+    const statusCode = readiness.ready ? 200 : 503;
+    res.status(statusCode).json(readiness);
+});
+
+// Detailed health with history
+app.get('/health/details', async (req, res) => {
+    const health = await healthCheck.getHealth();
+    const history = healthCheck.getHistory(24); // Last 24 hours
+
+    res.json({
+        current: health,
+        history: {
+            count: history.length,
+            samples: history.slice(-10) // Last 10 checks
+        },
+        system: {
+            nodeVersion: process.version,
+            platform: process.platform,
+            arch: process.arch,
+            pid: process.pid,
+            uptime: process.uptime()
+        }
+    });
+});
+
+// Public status endpoint (no auth required)
+app.get('/api/public/status', (req, res) => {
+    res.json({
+        connected: isReady,
+        clientReady: !!client,
+        uptime: process.uptime()
+    });
+});
+
+// ============================================
+// Phase 4: Graceful Shutdown Handler
+// ============================================
+
+async function gracefulShutdown(signal) {
+    console.log(`\n[SHUTDOWN] Received ${signal}. Starting graceful shutdown...`);
+
+    // Stop accepting new connections
+    const srv = server;
+
+    // Give time for in-flight requests
+    console.log('[SHUTDOWN] Waiting for in-flight requests to complete...');
+    await new Promise(resolve => setTimeout(resolve, 5000));
+
+    // Close server
+    if (srv) {
+        srv.close(() => {
+            console.log('[SHUTDOWN] HTTP server closed');
+        });
+    }
+
+    // Close Redis connection
+    if (healthCheck.redis) {
+        await healthCheck.redis.quit();
+        console.log('[SHUTDOWN] Redis connection closed');
+    }
+
+    // Close client if active
+    if (client && client.pupPage) {
+        try {
+            await client.destroy();
+            console.log('[SHUTDOWN] WhatsApp client destroyed');
+        } catch (err) {
+            console.error('[SHUTDOWN] Error destroying client:', err.message);
+        }
+    }
+
+    console.log('[SHUTDOWN] Graceful shutdown complete');
+    process.exit(0);
+}
+
+// Register shutdown handlers
+process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
+process.on('SIGINT', () => gracefulShutdown('SIGINT'));
+
+// PM2 graceful reload support
+if (process.env.pm_id) {
+    process.on('message', (msg) => {
+        if (msg === 'shutdown') {
+            gracefulShutdown('PM2_SHUTDOWN');
+        }
+    });
+}
+
+// ============================================
 // Start server
 const PORT = process.env.PORT || 3000;
 const HOST = process.env.HOST || '0.0.0.0';  // Bind to all interfaces
