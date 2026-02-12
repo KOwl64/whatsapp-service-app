@@ -257,6 +257,10 @@ function initWhatsApp() {
     client.on('disconnected', (reason) => {
         console.log('[DISCONNECT] Client disconnected:', reason);
         isReady = false;
+
+        // Emit connection status
+        eventEmitter.emitConnectionStatus('disconnected', { reason });
+
         stability.lastErrorTime = new Date().toISOString();
         stability.lastErrorMessage = reason;
         stability.consecutiveFailures++;
