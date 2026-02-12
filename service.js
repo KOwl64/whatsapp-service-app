@@ -183,6 +183,9 @@ function initWhatsApp() {
         } catch (err) {
             console.error('Error generating QR for web:', err.message);
         }
+
+        // Emit connection status
+        eventEmitter.emitConnectionStatus('qr', { qrGenerated: true });
     });
 
     client.on('ready', () => {
