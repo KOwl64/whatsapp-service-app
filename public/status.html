@@ -2,6 +2,8 @@
 <html>
 <head>
   <title>WhatsApp Status</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
   <style>
     body { font-family: Arial, sans-serif; padding: 20px; background: #1a1a2e; color: #eee; }
     h1 { color: #00d4ff; }
@@ -46,13 +48,145 @@
     .metric-detail { color: #aaa; }
     .metric-detail span { color: #00d4ff; font-weight: bold; }
 
-    /* Queue Panel Styles */
+    /* Queue Panel Styles (Enhanced) */
     .queue-panel { margin-top: 20px; padding: 20px; background: #16213e; border-radius: 10px; display: none; }
     .queue-panel.visible { display: block; }
     .queue-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-top: 15px; }
-    .queue-card { background: #0f3460; padding: 15px; border-radius: 8px; text-align: center; }
-    .queue-value { font-size: 32px; font-weight: bold; color: #00d4ff; }
-    .queue-label { font-size: 12px; color: #888; margin-top: 5px; }
+    .queue-card {
+      background: linear-gradient(135deg, #0f3460 0%, #16213e 100%);
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(0, 212, 255, 0.2);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .queue-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    }
+    .queue-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+    }
+    .queue-card.waiting::before { background: #ffa502; }
+    .queue-card.active::before { background: #00d4ff; }
+    .queue-card.completed::before { background: #00ff88; }
+    .queue-card.failed::before { background: #ff4757; }
+    .queue-icon { font-size: 24px; margin-bottom: 8px; }
+    .queue-value { font-size: 36px; font-weight: bold; color: #fff; font-family: 'Courier New', monospace; }
+    .queue-label { font-size: 12px; color: #888; margin-top: 5px; text-transform: uppercase; letter-spacing: 1px; }
+    .queue-trend { font-size: 11px; margin-top: 8px; opacity: 0.7; }
+    .queue-trend.up { color: #ff4757; }
+    .queue-trend.down { color: #00ff88; }
+    .queue-trend.stable { color: #888; }
+
+    /* Queue Health Bar */
+    .queue-health { margin-top: 20px; padding: 15px; background: #0f3460; border-radius: 8px; }
+    .health-label { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 12px; color: #888; }
+    .health-bar { height: 8px; background: #1a1a2e; border-radius: 4px; overflow: hidden; }
+    .health-fill { height: 100%; background: linear-gradient(90deg, #00ff88, #00d4ff); transition: width 0.5s ease; }
+    .health-fill.warning { background: linear-gradient(90deg, #ffa502, #ff6b6b); }
+    .health-fill.danger { background: linear-gradient(90deg, #ff4757, #ff3838); }
+
+    /* Chart Panel Styles */
+    .chart-panel { margin-top: 30px; padding: 20px; background: #16213e; border-radius: 10px; display: none; }
+    .chart-panel.visible { display: block; }
+    .chart-container { position: relative; height: 300px; margin-top: 20px; }
+    .chart-controls { display: flex; gap: 10px; justify-content: center; margin-top: 15px; }
+    .chart-controls button {
+      padding: 8px 16px;
+      background: #0f3460;
+      border: 1px solid #00d4ff;
+      color: #00d4ff;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .chart-controls button:hover,
+    .chart-controls button.active {
+      background: #00d4ff;
+      color: #1a1a2e;
+    }
+
+    /* Failures Panel Styles */
+    .failures-panel { margin-top: 30px; padding: 20px; background: #16213e; border-radius: 10px; display: none; }
+    .failures-panel.visible { display: block; }
+    .failure-count {
+      font-size: 14px;
+      color: #ff4757;
+      background: rgba(255, 71, 87, 0.2);
+      padding: 4px 12px;
+      border-radius: 12px;
+      margin-left: 10px;
+    }
+    .failures-toolbar { display: flex; gap: 15px; margin-top: 15px; flex-wrap: wrap; align-items: center; }
+    .filter-group { display: flex; align-items: center; gap: 8px; }
+    .filter-group label { color: #888; font-size: 12px; }
+    .filter-group select,
+    .filter-group input {
+      padding: 8px 12px;
+      background: #0f3460;
+      border: 1px solid #333;
+      border-radius: 5px;
+      color: #eee;
+    }
+    .filter-group button {
+      padding: 8px 16px;
+      background: #0f3460;
+      border: 1px solid #00d4ff;
+      color: #00d4ff;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .filter-group button:hover { background: #00d4ff; color: #1a1a2e; }
+    .failures-table-container { margin-top: 15px; overflow-x: auto; }
+    .failures-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .failures-table th {
+      text-align: left;
+      padding: 12px;
+      background: #0f3460;
+      color: #00d4ff;
+      font-weight: normal;
+      border-bottom: 1px solid #333;
+    }
+    .failures-table td { padding: 10px 12px; border-bottom: 1px solid #1a1a2e; color: #ccc; }
+    .failures-table tr:hover td { background: rgba(0, 212, 255, 0.05); }
+    .error-code {
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: bold;
+    }
+    .error-code.TIMEOUT { background: rgba(255, 165, 2, 0.3); color: #ffa502; }
+    .error-code.NETWORK_ERROR { background: rgba(255, 71, 87, 0.3); color: #ff4757; }
+    .error-code.SERVER_ERROR { background: rgba(255, 71, 87, 0.3); color: #ff4757; }
+    .error-code.RATE_LIMIT { background: rgba(255, 165, 2, 0.3); color: #ffa502; }
+    .error-code.UNKNOWN { background: rgba(136, 136, 136, 0.3); color: #888; }
+    .retry-btn {
+      padding: 4px 8px;
+      background: #00ff88;
+      color: #1a1a2e;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 11px;
+    }
+    .failures-pagination { display: flex; justify-content: center; align-items: center; gap: 20px; margin-top: 20px; }
+    .failures-pagination button {
+      padding: 8px 16px;
+      background: #0f3460;
+      border: 1px solid #333;
+      color: #eee;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .failures-pagination button:disabled { opacity: 0.5; cursor: not-allowed; }
   </style>
 </head>
 <body>
@@ -119,26 +253,106 @@
     </div>
   </div>
 
-  <!-- Queue Panel -->
+  <!-- Chart Panel (Phase 3) -->
+  <div id="chartPanel" class="chart-panel">
+    <h2>24-Hour Message Trends</h2>
+    <div class="chart-controls">
+      <button onclick="loadChartData('1h', this)">1H</button>
+      <button onclick="loadChartData('6h', this)">6H</button>
+      <button class="active" onclick="loadChartData('24h', this)">24H</button>
+      <button onclick="loadChartData('7d', this)">7D</button>
+    </div>
+    <div class="chart-container">
+      <canvas id="messageChart"></canvas>
+    </div>
+  </div>
+
+  <!-- Queue Panel (Enhanced - Phase 3) -->
   <div id="queuePanel" class="queue-panel">
-    <h2>Queue Status</h2>
+    <h2>
+      Message Queue Status
+      <span id="queueLastUpdate" style="float: right; font-size: 12px; color: #666;"></span>
+    </h2>
     <div class="queue-grid">
-      <div class="queue-card">
+      <div class="queue-card waiting">
+        <div class="queue-icon">⏳</div>
         <div id="queue-waiting" class="queue-value">--</div>
         <div class="queue-label">Waiting</div>
+        <div id="queue-waiting-trend" class="queue-trend">--</div>
       </div>
-      <div class="queue-card">
+      <div class="queue-card active">
+        <div class="queue-icon">⚡</div>
         <div id="queue-active" class="queue-value">--</div>
         <div class="queue-label">Active</div>
+        <div id="queue-active-trend" class="queue-trend">--</div>
       </div>
-      <div class="queue-card">
+      <div class="queue-card completed">
+        <div class="queue-icon">✓</div>
         <div id="queue-completed" class="queue-value">--</div>
         <div class="queue-label">Completed</div>
+        <div id="queue-completed-trend" class="queue-trend">--</div>
       </div>
-      <div class="queue-card">
+      <div class="queue-card failed">
+        <div class="queue-icon">✗</div>
         <div id="queue-failed" class="queue-value">--</div>
         <div class="queue-label">Failed</div>
+        <div id="queue-failed-trend" class="queue-trend">--</div>
       </div>
+    </div>
+    <div class="queue-health">
+      <div class="health-label">
+        <span>Queue Health</span>
+        <span id="queue-health-percent">--</span>
+      </div>
+      <div class="health-bar">
+        <div id="queue-health-fill" class="health-fill" style="width: 0%"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Failures Panel (Phase 3) -->
+  <div id="failuresPanel" class="failures-panel">
+    <h2>
+      Failed Messages
+      <span id="failureCount" class="failure-count">--</span>
+    </h2>
+    <div class="failures-toolbar">
+      <div class="filter-group">
+        <label>Error Code:</label>
+        <select id="failureCodeFilter" onchange="loadFailures()">
+          <option value="">All Codes</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label>Search:</label>
+        <input type="text" id="failureSearch" placeholder="Recipient number..." onkeyup="debounceSearch()">
+      </div>
+      <div class="filter-group">
+        <button onclick="loadFailures()">Refresh</button>
+        <button onclick="exportFailures()">Export</button>
+      </div>
+    </div>
+    <div class="failures-table-container">
+      <table class="failures-table">
+        <thead>
+          <tr>
+            <th>Time</th>
+            <th>ID</th>
+            <th>Recipient</th>
+            <th>Error Code</th>
+            <th>Error</th>
+            <th>Retry</th>
+          </tr>
+        </thead>
+        <tbody id="failuresTableBody">
+          <tr><td colspan="6" class="loading">Loading...</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="failures-pagination">
+      <button id="prevPage" onclick="prevFailurePage()">Previous</button>
+      <span id="pageInfo">Page 1 of 1</span>
+      <button id="nextPage" onclick="nextFailurePage()">Next</button>
     </div>
   </div>
 
@@ -149,6 +363,7 @@
 
   <script src="/socket.io/socket.io.js"></script>
   <script src="/js/metrics-client.js"></script>
+  <script src="/js/chart-component.js"></script>
   <script>
     const socket = io();
     const statusEl = document.getElementById('status');
@@ -162,6 +377,23 @@
 
     let messagesReceived = 0;
     let messagesFailed = 0;
+
+    // Queue visualization state (Phase 3)
+    let queueHistory = {
+      waiting: [],
+      active: [],
+      completed: [],
+      failed: []
+    };
+    const maxHistoryPoints = 20;
+
+    // Message chart (Phase 3)
+    let messageChart;
+
+    // Failures state (Phase 3)
+    let failurePage = 0;
+    const failurePageSize = 20;
+    let failureFilters = { code: '', search: '' };
 
     // Initialize MetricsClient
     const metricsClient = new MetricsClient(socket);
@@ -221,27 +453,269 @@
       }
     }
 
-    function updateQueueDisplay(data) {
+    // Enhanced queue display (Phase 3)
+    function updateQueueDisplayEnhanced(data) {
       if (!data) return;
 
       queuePanel.classList.add('visible');
 
+      // Update values with trend
       const waitingEl = document.getElementById('queue-waiting');
       const activeEl = document.getElementById('queue-active');
       const completedEl = document.getElementById('queue-completed');
       const failedEl = document.getElementById('queue-failed');
 
-      if (waitingEl) waitingEl.textContent = data.waiting || 0;
-      if (activeEl) activeEl.textContent = data.active || 0;
-      if (completedEl) completedEl.textContent = data.completed || 0;
-      if (failedEl) failedEl.textContent = data.failed || 0;
+      if (waitingEl) {
+        const oldValue = parseInt(waitingEl.textContent) || 0;
+        waitingEl.textContent = data.waiting || 0;
+        updateTrend('queue-waiting-trend', oldValue, data.waiting || 0);
+        queueHistory.waiting.push({ value: data.waiting || 0, time: Date.now() });
+      }
+      if (activeEl) {
+        const oldValue = parseInt(activeEl.textContent) || 0;
+        activeEl.textContent = data.active || 0;
+        updateTrend('queue-active-trend', oldValue, data.active || 0);
+        queueHistory.active.push({ value: data.active || 0, time: Date.now() });
+      }
+      if (completedEl) {
+        const oldValue = parseInt(completedEl.textContent) || 0;
+        completedEl.textContent = data.completed || 0;
+        updateTrend('queue-completed-trend', oldValue, data.completed || 0);
+        queueHistory.completed.push({ value: data.completed || 0, time: Date.now() });
+      }
+      if (failedEl) {
+        const oldValue = parseInt(failedEl.textContent) || 0;
+        failedEl.textContent = data.failed || 0;
+        updateTrend('queue-failed-trend', oldValue, data.failed || 0);
+        queueHistory.failed.push({ value: data.failed || 0, time: Date.now() });
+      }
+
+      // Trim history
+      for (const key of Object.keys(queueHistory)) {
+        if (queueHistory[key].length > maxHistoryPoints) {
+          queueHistory[key] = queueHistory[key].slice(-maxHistoryPoints);
+        }
+      }
+
+      // Update timestamp
+      const lastUpdate = document.getElementById('queueLastUpdate');
+      if (lastUpdate && data.timestamp) {
+        lastUpdate.textContent = new Date(data.timestamp).toLocaleTimeString();
+      }
+
+      // Update health bar
+      updateQueueHealth(data);
+    }
+
+    function updateTrend(elementId, oldValue, newValue) {
+      const el = document.getElementById(elementId);
+      if (!el) return;
+
+      el.className = 'queue-trend';
+      if (newValue > oldValue) {
+        el.textContent = 'Increasing';
+        el.classList.add('up');
+      } else if (newValue < oldValue) {
+        el.textContent = 'Decreasing';
+        el.classList.add('down');
+      } else {
+        el.textContent = 'Stable';
+        el.classList.add('stable');
+      }
+    }
+
+    function updateQueueHealth(data) {
+      const waiting = data.waiting || 0;
+      const active = data.active || 0;
+      const failed = data.failed || 0;
+      const completed = data.completed || 0;
+
+      const total = waiting + active + completed + failed;
+      if (total === 0) return;
+
+      const failureRate = failed / total * 100;
+      const waitingRatio = waiting / Math.max(active, 1);
+
+      let healthScore = 100;
+      healthScore -= Math.max(0, failureRate - 5) * 2;
+      if (waitingRatio > 2) healthScore -= 10;
+      if (waitingRatio > 5) healthScore -= 20;
+      healthScore = Math.max(0, Math.min(100, healthScore));
+
+      const healthPercent = document.getElementById('queue-health-percent');
+      const healthFill = document.getElementById('queue-health-fill');
+
+      if (healthPercent) healthPercent.textContent = Math.round(healthScore) + '%';
+      if (healthFill) {
+        healthFill.style.width = healthScore + '%';
+        healthFill.className = 'health-fill';
+        if (healthScore < 50) healthFill.classList.add('danger');
+        else if (healthScore < 80) healthFill.classList.add('warning');
+      }
+    }
+
+    // Chart functions (Phase 3)
+    function loadChartData(window, btn) {
+      if (!messageChart) return;
+      messageChart.loadData(window);
+
+      // Update button states
+      document.querySelectorAll('.chart-controls button').forEach(b => {
+        b.classList.remove('active');
+      });
+      if (btn) btn.classList.add('active');
+    }
+
+    // Failures panel functions (Phase 3)
+    async function loadErrorCodes() {
+      try {
+        const response = await fetch('/api/failures/codes');
+        const result = await response.json();
+
+        if (result.success) {
+          const select = document.getElementById('failureCodeFilter');
+          select.innerHTML = '<option value="">All Codes</option>';
+
+          for (const { code, count } of result.codes) {
+            const option = document.createElement('option');
+            option.value = code;
+            option.textContent = `${code} (${count})`;
+            select.appendChild(option);
+          }
+        }
+      } catch (err) {
+        console.error('Failed to load error codes:', err);
+      }
+    }
+
+    async function loadFailures() {
+      const tbody = document.getElementById('failuresTableBody');
+      tbody.innerHTML = '<tr><td colspan="6" class="loading">Loading...</td></tr>';
+
+      try {
+        const params = new URLSearchParams({
+          limit: failurePageSize,
+          offset: failurePage * failurePageSize
+        });
+
+        if (failureFilters.code) params.append('errorCode', failureFilters.code);
+        if (failureFilters.search) params.append('recipient', failureFilters.search);
+
+        const response = await fetch(`/api/failures?${params}`);
+        const result = await response.json();
+
+        if (result.success) {
+          renderFailuresTable(result.failures);
+          updateFailurePagination(result);
+        }
+      } catch (err) {
+        tbody.innerHTML = `<tr><td colspan="6" class="error">Failed to load: ${err.message}</td></tr>`;
+      }
+    }
+
+    function renderFailuresTable(failures) {
+      const tbody = document.getElementById('failuresTableBody');
+
+      if (!failures || failures.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" class="loading">No failures recorded</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = failures.map(f => `
+        <tr>
+          <td>${formatTime(f.timestamp)}</td>
+          <td><code>${f.id ? f.id.substring(0, 8) + '...' : 'N/A'}</code></td>
+          <td>${escapeHtml(f.recipient)}</td>
+          <td><span class="error-code ${f.errorCode}">${f.errorCode}</span></td>
+          <td title="${escapeHtml(f.error)}">${escapeHtml(f.error || '').substring(0, 50)}</td>
+          <td>
+            <button class="retry-btn" onclick="retryMessage('${escapeHtml(f.recipient)}')">Retry</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function updateFailurePagination(result) {
+      const totalPages = Math.ceil(result.total / failurePageSize);
+      document.getElementById('pageInfo').textContent = `Page ${failurePage + 1} of ${totalPages}`;
+      document.getElementById('prevPage').disabled = failurePage === 0;
+      document.getElementById('nextPage').disabled = failurePage >= totalPages - 1;
+    }
+
+    function prevFailurePage() {
+      if (failurePage > 0) {
+        failurePage--;
+        loadFailures();
+      }
+    }
+
+    function nextFailurePage() {
+      failurePage++;
+      loadFailures();
+    }
+
+    let searchTimeout;
+    function debounceSearch() {
+      clearTimeout(searchTimeout);
+      searchTimeout = setTimeout(() => {
+        failureFilters.search = document.getElementById('failureSearch').value;
+        failurePage = 0;
+        loadFailures();
+      }, 300);
+    }
+
+    function exportFailures() {
+      window.open('/api/failures?limit=1000', '_blank');
+    }
+
+    function formatTime(timestamp) {
+      const date = new Date(timestamp);
+      return date.toLocaleString();
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    function retryMessage(recipient) {
+      console.log('Retry message for:', recipient);
     }
 
     // Metrics event handler
     metricsClient.onMetrics(updateMetricsDisplay);
 
-    // Queue event handler
-    metricsClient.onQueue(updateQueueDisplay);
+    // Queue event handler (enhanced)
+    metricsClient.onQueue(updateQueueDisplayEnhanced);
+
+    // Connected handler - initialize all panels (Phase 3)
+    metricsClient.onConnected(async () => {
+      // Show and initialize chart panel
+      document.getElementById('chartPanel').classList.add('visible');
+      if (typeof Chart !== 'undefined') {
+        messageChart = new MessageChart('messageChart');
+        await messageChart.loadData('24h');
+
+        // Subscribe to live updates
+        metricsClient.onMetrics((data) => {
+          if (data && data.windows && data.windows['24h'] && messageChart) {
+            messageChart.updateFromSocket({
+              timestamp: data.timestamp,
+              successRate: data.windows['24h'].successRate
+            });
+          }
+        });
+      }
+
+      // Show failures panel
+      document.getElementById('failuresPanel').classList.add('visible');
+      await loadErrorCodes();
+      await loadFailures();
+    });
 
     socket.on('connect', () => {
       console.log('Connected to event stream');
