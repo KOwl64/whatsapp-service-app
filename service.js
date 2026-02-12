@@ -193,6 +193,11 @@ function initWhatsApp() {
         isReady = true;
         currentQRCode = null; // Clear QR after successful auth
 
+        // Emit connection status
+        eventEmitter.emitConnectionStatus('connected', {
+            uptime: Date.now() - stability.startTime
+        });
+
         // Reset circuit breaker on successful connection
         if (stability.circuitState !== 'closed') {
             console.log('[CIRCUIT] Closed - connection restored');
